@@ -1,0 +1,24 @@
+<svg width="120" height="200" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- antenna - sharp straight up -->
+  <line x1="60" y1="20" x2="60" y2="43" stroke="#F97316" stroke-width="3" stroke-linecap="round"/>
+  <polygon points="60,13 56,23 64,23" fill="#F97316"/>
+  <!-- body -->
+  <ellipse cx="60" cy="115" rx="42" ry="36" fill="#F97316"/>
+  <!-- head dome -->
+  <ellipse cx="60" cy="90" rx="34" ry="30" fill="#F97316"/>
+  <!-- face plate -->
+  <ellipse cx="60" cy="93" rx="22" ry="20" fill="white" opacity="0.95"/>
+  <!-- eyes - wide alert -->
+  <ellipse cx="52" cy="91" rx="6" ry="7" fill="#1a1a1a"/>
+  <ellipse cx="68" cy="91" rx="6" ry="7" fill="#1a1a1a"/>
+  <!-- eye shine -->
+  <circle cx="54" cy="88" r="2" fill="white"/>
+  <circle cx="70" cy="88" r="2" fill="white"/>
+  <!-- legs -->
+  <rect x="34" y="143" width="10" height="18" rx="5" fill="#F97316"/>
+  <rect x="48" y="145" width="10" height="16" rx="5" fill="#F97316"/>
+  <rect x="62" y="145" width="10" height="16" rx="5" fill="#F97316"/>
+  <rect x="76" y="143" width="10" height="18" rx="5" fill="#F97316"/>
+  <!-- shadow -->
+  <ellipse cx="60" cy="167" rx="36" ry="5" fill="#F97316" opacity="0.15"/>
+</svg>

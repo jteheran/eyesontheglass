@@ -1,0 +1,24 @@
+<svg width="120" height="200" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- antenna - broken/dotted -->
+  <line x1="60" y1="43" x2="60" y2="30" stroke="#16A34A" stroke-width="3" stroke-linecap="round" stroke-dasharray="3,4"/>
+  <circle cx="60" cy="23" r="5" fill="#16A34A" opacity="0.4"/>
+  <!-- body - slightly desaturated -->
+  <ellipse cx="60" cy="115" rx="42" ry="36" fill="#16A34A" opacity="0.7"/>
+  <!-- head dome -->
+  <ellipse cx="60" cy="90" rx="34" ry="30" fill="#16A34A" opacity="0.7"/>
+  <!-- face plate -->
+  <ellipse cx="60" cy="93" rx="22" ry="20" fill="white" opacity="0.95"/>
+  <!-- eyes - closed -->
+  <line x1="46" y1="92" x2="58" y2="92" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="62" y1="92" x2="74" y2="92" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- zzz -->
+  <text x="72" y="80" fill="#16A34A" font-size="10px" opacity="0.6">z</text>
+  <text x="78" y="74" fill="#16A34A" font-size="12px" opacity="0.4">z</text>
+  <!-- legs -->
+  <rect x="34" y="143" width="10" height="18" rx="5" fill="#16A34A" opacity="0.7"/>
+  <rect x="48" y="145" width="10" height="16" rx="5" fill="#16A34A" opacity="0.7"/>
+  <rect x="62" y="145" width="10" height="16" rx="5" fill="#16A34A" opacity="0.7"/>
+  <rect x="76" y="143" width="10" height="18" rx="5" fill="#16A34A" opacity="0.7"/>
+  <!-- shadow -->
+  <ellipse cx="60" cy="167" rx="36" ry="5" fill="#16A34A" opacity="0.1"/>
+</svg>

@@ -1,0 +1,28 @@
+<svg width="120" height="200" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- antenna - branching -->
+  <line x1="60" y1="43" x2="60" y2="23" stroke="#7C3AED" stroke-width="3" stroke-linecap="round"/>
+  <line x1="60" y1="27" x2="50" y2="15" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"/>
+  <line x1="60" y1="27" x2="70" y2="15" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="50" cy="13" r="4" fill="#7C3AED"/>
+  <circle cx="70" cy="13" r="4" fill="#7C3AED"/>
+  <circle cx="60" cy="21" r="3" fill="#7C3AED" opacity="0.5"/>
+  <!-- body -->
+  <ellipse cx="60" cy="115" rx="42" ry="36" fill="#7C3AED"/>
+  <!-- head dome -->
+  <ellipse cx="60" cy="90" rx="34" ry="30" fill="#7C3AED"/>
+  <!-- face plate -->
+  <ellipse cx="60" cy="93" rx="22" ry="20" fill="white" opacity="0.95"/>
+  <!-- eyes - one larger -->
+  <ellipse cx="52" cy="91" rx="8" ry="8" fill="#1a1a1a"/>
+  <ellipse cx="68" cy="92" rx="5" ry="5" fill="#1a1a1a"/>
+  <!-- eye shine -->
+  <circle cx="54" cy="88" r="2.5" fill="white"/>
+  <circle cx="69" cy="90" r="1.5" fill="white"/>
+  <!-- legs -->
+  <rect x="34" y="143" width="10" height="18" rx="5" fill="#7C3AED"/>
+  <rect x="48" y="145" width="10" height="16" rx="5" fill="#7C3AED"/>
+  <rect x="62" y="145" width="10" height="16" rx="5" fill="#7C3AED"/>
+  <rect x="76" y="143" width="10" height="18" rx="5" fill="#7C3AED"/>
+  <!-- shadow -->
+  <ellipse cx="60" cy="167" rx="36" ry="5" fill="#7C3AED" opacity="0.15"/>
+</svg>

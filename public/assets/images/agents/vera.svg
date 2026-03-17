@@ -1,0 +1,27 @@
+<svg width="120" height="200" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- antenna - curved -->
+  <path d="M60,43 Q45,25 50,13" stroke="#0D9488" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="49" cy="10" r="5" fill="#0D9488"/>
+  <!-- body -->
+  <ellipse cx="60" cy="115" rx="42" ry="36" fill="#0D9488"/>
+  <!-- head dome -->
+  <ellipse cx="60" cy="90" rx="34" ry="30" fill="#0D9488"/>
+  <!-- face plate -->
+  <ellipse cx="60" cy="93" rx="22" ry="20" fill="white" opacity="0.95"/>
+  <!-- eyes - narrowed/focused -->
+  <ellipse cx="52" cy="92" rx="6" ry="5" fill="#1a1a1a"/>
+  <ellipse cx="68" cy="92" rx="6" ry="5" fill="#1a1a1a"/>
+  <!-- focused brow lines -->
+  <line x1="48" y1="85" x2="56" y2="87" stroke="#0D9488" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="72" y1="85" x2="64" y2="87" stroke="#0D9488" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- eye shine -->
+  <circle cx="54" cy="90" r="2" fill="white"/>
+  <circle cx="70" cy="90" r="2" fill="white"/>
+  <!-- legs -->
+  <rect x="34" y="143" width="10" height="18" rx="5" fill="#0D9488"/>
+  <rect x="48" y="145" width="10" height="16" rx="5" fill="#0D9488"/>
+  <rect x="62" y="145" width="10" height="16" rx="5" fill="#0D9488"/>
+  <rect x="76" y="143" width="10" height="18" rx="5" fill="#0D9488"/>
+  <!-- shadow -->
+  <ellipse cx="60" cy="167" rx="36" ry="5" fill="#0D9488" opacity="0.15"/>
+</svg>
