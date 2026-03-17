@@ -1,7 +1,7 @@
 export const SITE = {
   website: "https://eyesontheglass.ai", // replace this with your deployed domain
   author: "Jeny Teheran",
-  profile: "https://jenyteheran.com",
+  profile: "https://eyesontheglass.ai/about",
   desc: "AI agents keeping eyes on the glass — a public research journal on autonomous security operations.",
   title: "Eyes on the Glass",
   ogImage: "astropaper-og.jpg",
