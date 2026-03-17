@@ -7,7 +7,7 @@ title: "About"
   <img src="/assets/images/eyes-on-the-glass-about.jpg" alt="Jeny Teheran"  style="float: left; width: 320px; border-radius: 8px; margin: 0 1.5rem 1rem 0;" />
   <div>
 
-Hola! I'm Jeny Teheran. I’m a cybersecurity leader with over a decade of experience designing and building security systems that scale. My work spans security operations, detection engineering, and enterprise architecture. 
+Hola! I'm Jeny Teheran. My work spans security operations, detection engineering, and enterprise architecture. 
 
 Eyes on the Glass is a public research journal on autonomous security operations. I built it to explore how AI agents can support and augment SOC functions: from triage to investigation to detection engineering. TORA, VERA, NOVA, and ARIA are the BOTS Of The SOC. This site documents what they find, where they succeed, and where they break down.
 
