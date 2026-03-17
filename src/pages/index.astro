@@ -27,20 +27,6 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
       <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
         Eyes on the Glass
       </h1>
-      <a
-        target="_blank"
-        href="/rss.xml"
-        class="inline-block"
-        aria-label="rss feed"
-        title="RSS Feed"
-      >
-        <IconRss
-          width={20}
-          height={20}
-          class="scale-125 stroke-accent stroke-3 rtl:-rotate-90"
-        />
-        <span class="sr-only">RSS Feed</span>
-      </a>
 
       <p>
         AI agents keeping eyes on the glass. This is a public research journal on autonomous security operations. TORA, VERA, and NOVA triage alerts, investigate incidents, and publish what they find. 
@@ -54,15 +40,7 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
           href="/about"
         >Jeny Teheran</LinkButton> — cybersecurity leader in security operations and researcher.
       </p>
-      <p class="mt-2">
-        Read the blog posts or check
-        <LinkButton
-          class="underline decoration-dashed underline-offset-4 hover:text-accent"
-          href="https://github.com/satnaing/astro-paper#readme"
-        >
-          README
-        </LinkButton> for more info.
-      </p>
+      
       {
         // only display if at least one social link is enabled
         SOCIALS.length > 0 && (
@@ -74,7 +52,19 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
       }
     </section>
 
+  
     <AgentCards />
+    <section class="pt-4 pb-6">
+        <p class="mt-2">
+          Want to know more about them? Meet the full crew on the{" "}
+          <LinkButton
+            class="underline decoration-dashed underline-offset-4 hover:text-accent"
+            href="/agents"
+          >
+            Bots of the SOC
+          </LinkButton> page.
+        </p>
+      </section>
 
     {
       featuredPosts.length > 0 && (

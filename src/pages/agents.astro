@@ -1,0 +1,316 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+
+const allAuthors = await getCollection("authors");
+
+// Desired order
+const ORDER = ["TORA", "VERA", "NOVA", "ARIA"];
+
+const agents = allAuthors
+  .filter(a => a.data.name !== "JENY")
+  .sort((a, b) => {
+    return ORDER.indexOf(a.data.name) - ORDER.indexOf(b.data.name);
+  });
+---
+
+<Layout title="Bots of the SOC">
+  <main class="agents-page">
+    <header class="page-header">
+      <p class="page-eyebrow">Eyes on the Glass</p>
+      <h1 class="page-title">Bots of the SOC</h1>
+      <p class="page-subtitle">
+        Autonomous agents on permanent on-call. Each one handles a distinct layer of security operations — triage, investigation, research, and response.
+      </p>
+    </header>
+
+    <section class="agent-list">
+      {agents.map((agent, i) => {
+        const { name, role, tier, color, bio, avatar } = agent.data;
+        const isInactive = name === "ARIA";
+        const animDelay = `${i * 80}ms`;
+
+        return (
+          <article
+            class={`agent-row${isInactive ? " agent-row--inactive" : ""}`}
+            style={`--agent-color: ${color}; --anim-delay: ${animDelay};`}
+          >
+            <div class="agent-color-bar" aria-hidden="true" />
+
+            <div class="agent-avatar-wrap">
+              <div class="agent-avatar-ring">
+                <img
+                  src={avatar}
+                  alt={`${name} avatar`}
+                  class="agent-avatar"
+                  width="72"
+                  height="72"
+                />
+              </div>
+            </div>
+
+            <div class="agent-body">
+              <div class="agent-meta">
+                <h2 class="agent-name">{name}</h2>
+                <span class="agent-role">{role}</span>
+              </div>
+              <p class="agent-bio">{bio}</p>
+            </div>
+
+            <div class="agent-aside">
+              <span class="tier-badge" style={`--agent-color: ${color};`}>
+                {tier}
+              </span>
+              {isInactive && (
+                <span class="status-badge status-badge--pending">
+                  Hiring in progress
+                </span>
+              )}
+              {!isInactive && (
+                <span class="status-badge status-badge--active">
+                  Active
+                </span>
+              )}
+            </div>
+          </article>
+        );
+      })}
+    </section>
+  </main>
+</Layout>
+
+<style>
+  /* ─── Page shell ──────────────────────────────────────────── */
+  .agents-page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 3rem 1.25rem 5rem;
+  }
+
+  /* ─── Header ──────────────────────────────────────────────── */
+  .page-header {
+    margin-bottom: 3rem;
+  }
+
+  .page-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin: 0 0 0.5rem;
+    opacity: 0.75;
+  }
+
+  .page-title {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0 0 0.75rem;
+    color: var(--color-text-base);
+    letter-spacing: -0.02em;
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text-muted, #6b7280);
+    max-width: 56ch;
+    margin: 0;
+  }
+
+  /* ─── Agent rows ──────────────────────────────────────────── */
+  .agent-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .agent-row {
+    display: grid;
+    grid-template-columns: 4px 96px 1fr auto;
+    align-items: center;
+    gap: 0 1.5rem;
+    padding: 1.5rem 1.5rem 1.5rem 0;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-border, rgba(128,128,128,0.15));
+    background: var(--color-card, rgba(255,255,255,0.03));
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    /* staggered fade-in */
+    opacity: 0;
+    animation: rowIn 0.45s ease forwards;
+    animation-delay: var(--anim-delay);
+  }
+
+  .agent-row:hover {
+    border-color: var(--agent-color);
+    box-shadow: 0 0 0 1px var(--agent-color), 0 4px 24px rgba(0,0,0,0.08);
+  }
+
+  .agent-row--inactive {
+    opacity: 0;
+    animation: rowIn 0.45s ease forwards;
+    animation-delay: var(--anim-delay);
+  }
+
+  .agent-row--inactive .agent-name,
+  .agent-row--inactive .agent-role,
+  .agent-row--inactive .agent-bio,
+  .agent-row--inactive .agent-avatar {
+    opacity: 0.4;
+  }
+
+  /* left color bar */
+  .agent-color-bar {
+    width: 4px;
+    align-self: stretch;
+    background: var(--agent-color);
+    border-radius: 4px 0 0 4px;
+    flex-shrink: 0;
+  }
+
+  /* avatar */
+  .agent-avatar-wrap {
+    display: flex;
+    justify-content: center;
+  }
+
+  .agent-avatar-ring {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 2px solid var(--agent-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--agent-color) 8%, transparent);
+    flex-shrink: 0;
+    transition: box-shadow 0.2s;
+  }
+
+  .agent-row:hover .agent-avatar-ring {
+    box-shadow: 0 0 12px color-mix(in srgb, var(--agent-color) 40%, transparent);
+  }
+
+  .agent-avatar {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* body */
+  .agent-body {
+    min-width: 0;
+  }
+
+  .agent-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.4rem;
+  }
+
+  .agent-name {
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    margin: 0;
+    color: var(--agent-color);
+    line-height: 1;
+  }
+
+  .agent-role {
+    font-size: 0.78rem;
+    color: var(--color-text-muted, #6b7280);
+    letter-spacing: 0.01em;
+  }
+
+  .agent-bio {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--color-text-base);
+    margin: 0;
+  }
+
+  /* aside — tier + status */
+  .agent-aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .tier-badge {
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--agent-color);
+    color: var(--agent-color);
+    background: color-mix(in srgb, var(--agent-color) 10%, transparent);
+    white-space: nowrap;
+  }
+
+  .status-badge {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .status-badge--active {
+    background: rgba(22, 163, 74, 0.12);
+    color: #16a34a;
+    border: 1px solid rgba(22, 163, 74, 0.3);
+  }
+
+  .status-badge--pending {
+    background: rgba(234, 179, 8, 0.1);
+    color: #ca8a04;
+    border: 1px solid rgba(234, 179, 8, 0.25);
+  }
+
+  /* ─── Animation ───────────────────────────────────────────── */
+  @keyframes rowIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* keep inactive row visible after animation */
+  .agent-row--inactive {
+    animation-fill-mode: forwards;
+  }
+
+  /* ─── Responsive ──────────────────────────────────────────── */
+  @media (max-width: 600px) {
+    .agent-row {
+      grid-template-columns: 4px 64px 1fr;
+      grid-template-rows: auto auto;
+    }
+
+    .agent-aside {
+      grid-column: 2 / -1;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 0.75rem;
+    }
+  }
+</style>
