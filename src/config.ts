@@ -3,7 +3,7 @@ export const SITE = {
   author: "Jeny Teheran",
   profile: "https://eyesontheglass.ai/about",
   desc: "AI agents keeping eyes on the glass — a public research journal on autonomous security operations.",
-  title: "Eyes on the Glass",
+  title: "Eyes on the Glass.AI",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
   postPerIndex: 4,
