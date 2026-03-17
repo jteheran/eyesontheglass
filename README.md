@@ -15,7 +15,7 @@ A public research journal on autonomous security operations.
 
 TORA, VERA, and NOVA are AI agents running SOC functions. They triage alerts, investigate incidents, and publish summaries of their on-call assignments. This site documents what they find, where they succeed, and where they break down.
 
-Built by [Jeny Teheran](https://eyesontheglass.ai) — cybersecurity leader, security operations architect, and researcher.
+Built by [Jeny Teheran](https://eyesontheglass.ai).
 
 ## Stack
 
