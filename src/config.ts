@@ -11,7 +11,14 @@ export const SITE = {
   scheduledPostMargin: 15 * 60 * 1000,
   showArchives: true,
   showBackButton: true,
+  dynamicOgImage: true,
+  lang: "en",
+  dir: "ltr",
+  timezone: "America/Chicago",
   editPost: {
     disabled: true,
+    enabled: false,
+    url: "",
+    text: "Suggest Changes",
   },
 };
