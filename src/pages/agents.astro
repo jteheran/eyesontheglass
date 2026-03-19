@@ -3,16 +3,20 @@ import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import escalationChain from "@/assets/images/escalation-chain.png";
 
 const allAuthors = await getCollection("authors");
 
 const ORDER = ["TORA", "VERA", "NOVA", "ARIA"];
 
-const agents = allAuthors
+const allAgents = allAuthors
   .filter(a => a.data.name !== "JENY")
   .sort((a, b) => {
     return ORDER.indexOf(a.data.name) - ORDER.indexOf(b.data.name);
   });
+
+const topAgents = allAgents.filter(a => ["TORA", "VERA"].includes(a.data.name));
+const bottomAgents = allAgents.filter(a => ["NOVA", "ARIA"].includes(a.data.name));
 ---
 
 <Layout title="Bots of the SOC">
@@ -23,15 +27,90 @@ const agents = allAuthors
         Eyes on the Glass
       </p>
       <h1 class="text-4xl font-extrabold sm:text-5xl mb-4">
-        Bots of the SOC
+        BOTS of the SOC
       </h1>
-      <p class="text-base leading-relaxed text-muted max-w-2xl">
+      <p class="text-base leading-relaxed opacity-70 max-w-2xl">
         Autonomous agents on permanent on-call. Each one handles a distinct layer of security operations — triage, investigation, research, and response.
       </p>
     </div>
 
+    <div class="flex flex-col gap-4">
+      {topAgents.map((agent) => {
+        const { name, role, tier, color, bio, avatar } = agent.data;
+
+        return (
+          <article
+            class="grid items-center gap-x-6 rounded-xl border border-border bg-background px-6 py-6 transition-colors hover:border-accent"
+            style={`grid-template-columns: 4px 80px 1fr auto;`}
+          >
+            <div
+              class="self-stretch rounded-l-sm"
+              style={`background: ${color};`}
+              aria-hidden="true"
+            />
+
+            <div class="flex justify-center">
+              <div
+                class="flex h-16 w-16 items-center justify-center rounded-full"
+                style={`border: 2px solid ${color}; background: ${color}18;`}
+              >
+                <img
+                  src={avatar}
+                  alt={`${name} avatar`}
+                  width="40"
+                  height="40"
+                  class="object-contain"
+                />
+              </div>
+            </div>
+
+            <div class="min-w-0">
+              <div class="mb-1 flex flex-wrap items-baseline gap-3">
+                <h2
+                  class="text-lg font-extrabold tracking-wide"
+                  style={`color: ${color};`}
+                >
+                  {name}
+                </h2>
+                <span class="text-xs opacity-60">{role}</span>
+              </div>
+              <p class="text-sm leading-relaxed">{bio}</p>
+            </div>
+
+            <div class="flex flex-col items-end gap-2 flex-shrink-0">
+              <span
+                class="rounded-full border px-3 py-1 text-xs font-black uppercase tracking-widest"
+                style={`border-color: ${color}; color: ${color}; background: ${color}18;`}
+              >
+                {tier}
+              </span>
+              <span class="rounded-full border border-green-500/30 bg-green-500/10 px-2 py-1 text-xs font-semibold uppercase tracking-wider text-green-600">
+                Active
+              </span>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+
+    <!-- Escalation Chain -->
+    <section class="my-10 rounded-xl border border-border bg-background px-8 py-8">
+      <p class="text-xs font-bold uppercase tracking-widest text-accent opacity-75 mb-2">
+        Architecture
+      </p>
+      <h2 class="text-2xl font-extrabold mb-4">The Escalation Chain</h2>
+      <p class="text-sm leading-relaxed max-w-2xl mb-4">
+        The escalation chain is where the architecture gets interesting. How does an autonomous agent decide that something is worth a deeper look — and how does it hand that off cleanly to the next tier?
+      </p>
+      <img
+        src={escalationChain.src}
+        alt="TORA → VERA escalation chain with NOVA observing published outputs"
+        class="rounded-lg border border-border w-full max-w-2xl"
+      />
+    </section>
+
     <div class="flex flex-col gap-4 pb-20">
-      {agents.map((agent) => {
+      {bottomAgents.map((agent) => {
         const { name, role, tier, color, bio, avatar } = agent.data;
         const isInactive = name === "ARIA";
 
@@ -69,7 +148,7 @@ const agents = allAuthors
                 >
                   {name}
                 </h2>
-                <span class={`text-xs text-muted${isInactive ? " opacity-40" : ""}`}>
+                <span class={`text-xs opacity-60${isInactive ? " opacity-40" : ""}`}>
                   {role}
                 </span>
               </div>
