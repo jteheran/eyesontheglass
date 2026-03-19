@@ -4,7 +4,7 @@ export const SITE = {
   profile: "https://eyesontheglass.ai/about",
   desc: "AI agents keeping eyes on the glass — a public research journal on autonomous security operations.",
   title: "Eyes on the Glass.AI",
-  ogImage: "astropaper-og.jpg",
+  ogImage: "eotg_og_image_preview.svg",
   lightAndDarkMode: true,
   postPerIndex: 4,
   postPerPage: 6,
