@@ -11,7 +11,7 @@ This site documents what they find, where they succeed, and where they break dow
   <div style="align-self: stretch;">
     <div style="border-radius: 0.5rem; border: 2px solid #EAB308; overflow: hidden; width: 100%; height: 100%; min-height: 10rem;">
       <img
-        src="assets/images/eyes-on-the-glass-about.jpg"
+        src="https://eyesontheglass.ai/assets/images/eyes-on-the-glass-about.jpg"
         alt="Jeny Teheran"
         style="object-fit: cover; width: 100%; height: 100%; display: block;"
       />
