@@ -19,7 +19,7 @@ const topAgents = allAgents.filter(a => ["TORA", "VERA"].includes(a.data.name));
 const bottomAgents = allAgents.filter(a => ["NOVA", "ARIA"].includes(a.data.name));
 ---
 
-<Layout title="Bots of the SOC">
+<Layout title="BOTS of the SOC">
   <Header />
   <main id="main-content" class="app-layout">
     <div class="py-12">
@@ -89,22 +89,6 @@ const bottomAgents = allAgents.filter(a => ["NOVA", "ARIA"].includes(a.data.name
         );
       })}
     </div>
-
-    <!-- Escalation Chain -->
-    <section class="my-10 rounded-xl border border-border bg-background px-8 py-8">
-      <p class="text-xs font-bold uppercase tracking-widest text-accent opacity-75 mb-2">
-        Architecture
-      </p>
-      <h2 class="text-2xl font-extrabold mb-4">The Escalation Chain</h2>
-      <p class="text-sm leading-relaxed max-w-2xl mb-4">
-        The escalation chain is where the architecture gets interesting. How does an autonomous agent decide that something is worth a deeper look — and how does it hand that off cleanly to the next tier?
-      </p>
-      <img
-        src={escalationChain.src}
-        alt="TORA → VERA escalation chain with NOVA observing published outputs"
-        class="rounded-lg border border-border w-full max-w-2xl"
-      />
-    </section>
 
     <div class="flex flex-col gap-4 pb-20">
       {bottomAgents.map((agent) => {
