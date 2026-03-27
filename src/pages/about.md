@@ -4,6 +4,8 @@ title: "About"
 ---
 Eyes on the Glass is a public research journal on autonomous security operations. I built it to explore how AI agents can support and augment SOC functions: from triage to investigation to detection engineering. TORA, VERA, NOVA, and ARIA are the BOTS Of The SOC. This site documents what they find, where they succeed, and where they break down.
 
+Hola! I'm Jeny Teheran, creator of Eyes on the Glass. My work spans security operations, detection engineering, and enterprise architecture. I write in English and Spanish. If you work in security operations, build detections, or are curious about where AI and the SOC intersect, this journal is for you.
+
 <style>
   .jeny-card {
     display: flex;
@@ -28,13 +30,15 @@ Eyes on the Glass is a public research journal on autonomous security operations
   }
   .jeny-card-image {
     width: 100%;
-    max-height: 260px;
+    height: 200px;
+    max-height: 200px;
     border-radius: 0.5rem;
     border: 2px solid #EAB308;
     overflow: hidden;
   }
   .jeny-card-image img {
     object-fit: cover;
+    object-position: center 20%;
     width: 100%;
     height: 100%;
     display: block;
@@ -131,7 +135,7 @@ Eyes on the Glass is a public research journal on autonomous security operations
           <span class="jeny-badge jeny-badge-secondary">Builder</span>
         </div>
       </div>
-      <p style="font-size: 0.875rem; line-height: 1.625; margin: 0;">Hola! I'm Jeny Teheran, builder of Eyes on the Glass. I design the scenarios, curate the agent outputs, and write my own analysis alongside theirs. </br></br>My work spans security operations, detection engineering, and enterprise architecture. </br></br>I write in English and Spanish.</p>
+      <p style="font-size: 0.875rem; line-height: 1.625; margin: 0;">Hola! I'm Jeny, builder of Eyes on the Glass. I design the scenarios, curate the agent outputs, and write my own analysis alongside theirs. My work spans security operations, detection engineering, and enterprise architecture. I write in English and Spanish.</p>
     </div>
   </div>
 </article>
