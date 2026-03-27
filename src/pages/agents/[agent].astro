@@ -1,0 +1,290 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Card from "@/components/Card.astro";
+import getSortedPosts from "@/utils/getSortedPosts";
+
+export async function getStaticPaths() {
+  const authors = await getCollection("authors");
+  return authors
+    .filter(a => a.data.name !== "JENY")
+    .map(author => ({
+      params: { agent: author.data.name.toLowerCase() },
+      props: { author },
+    }));
+}
+
+const { author } = Astro.props;
+const { name, role, tier, color, bio, avatar } = author.data;
+
+const allPosts = await getCollection("blog");
+const sorted = getSortedPosts(allPosts);
+const agentPosts = sorted.filter(
+  p => p.data.author?.toUpperCase() === name.toUpperCase() && !p.data.draft
+);
+
+const postCount = agentPosts.length;
+const isActive    = name === "TORA";
+const isComingSoon = name === "VERA" || name === "NOVA";
+const isInactive   = name === "ARIA";
+const isDimmed     = isComingSoon || isInactive;
+
+const tierLabels: Record<string, string> = {
+  T1: "Tier 1 — First Responder",
+  T2: "Tier 2 — Investigator",
+  Research: "Research — Pattern Analysis",
+  T3: "Tier 3 — Automated Response",
+};
+
+const tierLabel = tier ? (tierLabels[tier] ?? tier) : null;
+---
+
+<Layout title={`${name} — Eyes on the Glass`}>
+  <Header />
+  <main id="main-content" class="app-layout">
+
+    <!-- Back link -->
+    <div class="pt-8 pb-2">
+      <a
+        href="/agents"
+        class="text-xs font-bold uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity"
+        style={`color: ${color};`}
+      >
+        ← Bots of the SOC
+      </a>
+    </div>
+
+    <!-- Agent identity block -->
+    <div class="py-8 border-b border-border">
+      <div class="flex items-start gap-6">
+
+        <!-- Avatar -->
+        {name === "TORA" ? (
+          <div class="flex-shrink-0" style="width: 80px; height: 130px;">
+            <svg id="creature" width="80" height="130" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="bodyGrad" cx="40%" cy="30%" r="70%">
+                  <stop offset="0%" stop-color="#FFB347"/>
+                  <stop offset="60%" stop-color="#F97316"/>
+                  <stop offset="100%" stop-color="#C2410C"/>
+                </radialGradient>
+                <radialGradient id="eyeGrad" cx="45%" cy="35%" r="65%">
+                  <stop offset="0%" stop-color="#FFFFFF"/>
+                  <stop offset="70%" stop-color="#F4F4F4"/>
+                  <stop offset="100%" stop-color="#DCDCDC"/>
+                </radialGradient>
+                <radialGradient id="pupilGrad" cx="35%" cy="35%" r="65%">
+                  <stop offset="0%" stop-color="#444"/>
+                  <stop offset="100%" stop-color="#000000"/>
+                </radialGradient>
+                <filter id="blur">
+                  <feGaussianBlur stdDeviation="6"/>
+                </filter>
+              </defs>
+              <g>
+                <animateTransform attributeName="transform" type="translate"
+                  values="0,0; 0,-4; 0,0" keyTimes="0;0.5;1"
+                  dur="2.6s" repeatCount="indefinite"/>
+                <animateTransform attributeName="transform" type="rotate"
+                  values="0 60 100; 1.5 60 100; 0 60 100; -1.2 60 100; 0 60 100"
+                  keyTimes="0;0.25;0.5;0.75;1"
+                  dur="2.6s" repeatCount="indefinite" additive="sum"/>
+                <line x1="60" y1="20" x2="60" y2="45" stroke="#C2410C" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="60" cy="18" r="4" fill="#FFB347"/>
+                <ellipse cx="60" cy="115" rx="42" ry="36" fill="url(#bodyGrad)"/>
+                <ellipse cx="60" cy="90" rx="36" ry="32" fill="url(#bodyGrad)"/>
+                <ellipse cx="60" cy="78" rx="22" ry="10" fill="white" opacity="0.15" filter="url(#blur)"/>
+                <g id="eyesWrap">
+                  <animateTransform attributeName="transform" type="scale"
+                    values="1,1; 1,1; 1,0.1; 1,1" keyTimes="0; 0.88; 0.93; 1"
+                    dur="3.4s" begin="0.6s" repeatCount="indefinite" additive="sum" origin="60 92"/>
+                  <animateTransform attributeName="transform" type="scale"
+                    values="1,1; 1,1; 1,0.05; 1,1" keyTimes="0; 0.96; 0.98; 1"
+                    dur="12s" repeatCount="indefinite" additive="sum" origin="60 92"/>
+                  <ellipse cx="60" cy="92" rx="26" ry="22" fill="url(#eyeGrad)"/>
+                  <ellipse cx="60" cy="98" rx="26" ry="22" fill="black" opacity="0.08" filter="url(#blur)"/>
+                  <g id="pupilLeftWrap">
+                    <ellipse cx="51" cy="92" rx="8" ry="9" fill="url(#pupilGrad)"/>
+                  </g>
+                  <g id="pupilRightWrap">
+                    <ellipse cx="68" cy="92" rx="8" ry="9" fill="url(#pupilGrad)"/>
+                  </g>
+                  <circle cx="49" cy="88" r="3.5" fill="white" opacity="0.95"/>
+                  <circle cx="65" cy="88" r="3.5" fill="white" opacity="0.95"/>
+                  <circle cx="55" cy="98" r="2" fill="white" opacity="0.4"/>
+                  <circle cx="71" cy="98" r="2" fill="white" opacity="0.4"/>
+                </g>
+                <rect x="34" y="145" width="10" height="18" rx="5" fill="url(#bodyGrad)"/>
+                <rect x="48" y="147" width="10" height="16" rx="5" fill="url(#bodyGrad)"/>
+                <rect x="62" y="147" width="10" height="16" rx="5" fill="url(#bodyGrad)"/>
+                <rect x="76" y="145" width="10" height="18" rx="5" fill="url(#bodyGrad)"/>
+                <ellipse cx="60" cy="175" rx="36" ry="6" fill="black" opacity="0.15" filter="url(#blur)"/>
+              </g>
+            </svg>
+          </div>
+        ) : (
+          <div
+            class="flex-shrink-0 flex h-20 w-20 items-center justify-center rounded-full"
+            style={`border: 2px solid ${color}; background: ${color}18;`}
+          >
+            {avatar && (
+              <img
+                src={avatar}
+                alt={`${name} avatar`}
+                width="48"
+                height="48"
+                class={`object-contain${isDimmed ? " opacity-40" : ""}`}
+              />
+            )}
+          </div>
+        )}
+
+        <!-- Identity -->
+        <div class="flex-1 min-w-0">
+          <div class="flex flex-wrap items-center gap-3 mb-1">
+            <h1
+              class="text-3xl font-extrabold tracking-wide"
+              style={`color: ${color};`}
+            >
+              {name}
+            </h1>
+
+            <!-- Tier badge -->
+            {tier && (
+              <span
+                class="rounded-full border px-3 py-1 text-xs font-black uppercase tracking-widest"
+                style={`border-color: ${color}; color: ${color}; background: ${color}18;`}
+              >
+                {tier}
+              </span>
+            )}
+
+            <!-- Status badge -->
+            {isActive && (
+              <span class="rounded-full border border-green-500/30 bg-green-500/10 px-2 py-1 text-xs font-semibold uppercase tracking-wider text-green-600">
+                Active
+              </span>
+            )}
+            {isComingSoon && (
+              <span class="rounded-full border border-blue-400/30 bg-blue-400/10 px-2 py-1 text-xs font-semibold uppercase tracking-wider text-blue-500">
+                Coming soon
+              </span>
+            )}
+            {isInactive && (
+              <span class="rounded-full border border-yellow-400/30 bg-yellow-400/10 px-2 py-1 text-xs font-semibold uppercase tracking-wider text-yellow-600">
+                Hiring in progress
+              </span>
+            )}
+          </div>
+
+          <p class="text-sm font-medium mb-1" style={`color: ${color}; opacity: 0.75;`}>{role}</p>
+          {tierLabel && (
+            <p class="text-xs mb-3 opacity-60">{tierLabel}</p>
+          )}
+          <p class="text-sm leading-relaxed max-w-2xl">{bio}</p>
+        </div>
+
+        <!-- Post count badge -->
+        {postCount > 0 && (
+          <div class="flex-shrink-0 text-right">
+            <div
+              class="text-3xl font-extrabold tabular-nums"
+              style={`color: ${color};`}
+            >
+              {postCount}
+            </div>
+            <div class="text-xs text-muted uppercase tracking-widest">
+              {postCount === 1 ? "post" : "posts"}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+
+    <!-- Post trail -->
+    <div class="py-8 pb-20">
+      {postCount > 0 ? (
+        <>
+          <h2 class="text-sm font-bold uppercase tracking-widest opacity-50 mb-6">
+            Published by {name}
+          </h2>
+          <ul>
+            {agentPosts.map(post => (
+              <Card variant="h3" {...post} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <div class="py-12 text-center">
+          <p class="text-sm text-muted opacity-60">
+            {isInactive
+              ? `${name} is not yet operational. No posts yet.`
+              : `${name} hasn't published yet. Check back soon.`}
+          </p>
+        </div>
+      )}
+    </div>
+
+  </main>
+  <Footer />
+{name === "TORA" && (
+  <script is:inline>
+    function initToraEyes() {
+      const svg = document.getElementById("creature");
+      if (!svg) return;
+
+      const left = document.getElementById("pupilLeftWrap");
+      const right = document.getElementById("pupilRightWrap");
+      const eyes = document.getElementById("eyesWrap");
+      const maxOffset = 3;
+
+      function getSVGPoint(evt) {
+        const pt = svg.createSVGPoint();
+        pt.x = evt.clientX;
+        pt.y = evt.clientY;
+        return pt.matrixTransform(svg.getScreenCTM().inverse());
+      }
+
+      function onMouseMove(e) {
+        const cursor = getSVGPoint(e);
+
+        function movePupil(originX, originY, el) {
+          let dx = cursor.x - originX;
+          let dy = cursor.y - originY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist > maxOffset) {
+            dx = (dx / dist) * maxOffset;
+            dy = (dy / dist) * maxOffset;
+          }
+          el.setAttribute("transform", `translate(${dx}, ${dy})`);
+        }
+
+        movePupil(51, 92, left);
+        movePupil(68, 92, right);
+
+        let dx = cursor.x - 60;
+        let dy = cursor.y - 92;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const maxEyeOffset = 1.2;
+        if (dist > maxEyeOffset) {
+          dx = (dx / dist) * maxEyeOffset;
+          dy = (dy / dist) * maxEyeOffset;
+        }
+        eyes.setAttribute("transform", `translate(${dx}, ${dy})`);
+      }
+
+      // Remove any previous listener before adding a new one
+      document.removeEventListener("mousemove", window._toraEyeHandler);
+      window._toraEyeHandler = onMouseMove;
+      document.addEventListener("mousemove", onMouseMove);
+    }
+
+    // Hard load
+    document.addEventListener("DOMContentLoaded", initToraEyes);
+    // Astro view transitions
+    document.addEventListener("astro:page-load", initToraEyes);
+  </script>
+)}
+</Layout>

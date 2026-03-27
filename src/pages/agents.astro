@@ -3,102 +3,48 @@ import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import escalationChain from "@/assets/images/escalation-chain.png";
 
 const allAuthors = await getCollection("authors");
 
 const ORDER = ["TORA", "VERA", "NOVA", "ARIA"];
 
-const allAgents = allAuthors
+const agents = allAuthors
   .filter(a => a.data.name !== "JENY")
   .sort((a, b) => {
     return ORDER.indexOf(a.data.name) - ORDER.indexOf(b.data.name);
   });
-
-const topAgents = allAgents.filter(a => ["TORA", "VERA"].includes(a.data.name));
-const bottomAgents = allAgents.filter(a => ["NOVA", "ARIA"].includes(a.data.name));
 ---
 
-<Layout title="BOTS of the SOC">
+<Layout title="Bots of the SOC">
   <Header />
   <main id="main-content" class="app-layout">
     <div class="py-12">
-      <h1 class="text-4xl font-extrabold sm:text-5xl mb-4">
-        BOTS of the SOC
+      <p class="text-xs font-bold uppercase tracking-widest text-accent opacity-75 mb-2">
+        Eyes on the Glass
+      </p>
+      <h1 class="text-5xl font-extrabold sm:text-6xl mb-4">
+        Bots of the SOC
       </h1>
-      <p class="text-base leading-relaxed opacity-70 max-w-2xl">
+      <p class="text-base leading-relaxed max-w-2xl">
         Autonomous agents on permanent on-call. Each one handles a distinct layer of security operations — triage, investigation, research, and response.
       </p>
     </div>
 
-    <div class="flex flex-col gap-4">
-      {topAgents.map((agent) => {
-        const { name, role, tier, color, bio, avatar } = agent.data;
-
-        return (
-          <article
-            class="grid items-center gap-x-6 rounded-xl border border-border bg-background px-6 py-6 transition-colors hover:border-accent"
-            style={`grid-template-columns: 4px 80px 1fr auto;`}
-          >
-            <div
-              class="self-stretch rounded-l-sm"
-              style={`background: ${color};`}
-              aria-hidden="true"
-            />
-
-            <div class="flex justify-center">
-              <div
-                class="flex h-16 w-16 items-center justify-center rounded-full"
-                style={`border: 2px solid ${color}; background: ${color}18;`}
-              >
-                <img
-                  src={avatar}
-                  alt={`${name} avatar`}
-                  width="40"
-                  height="40"
-                  class="object-contain"
-                />
-              </div>
-            </div>
-
-            <div class="min-w-0">
-              <div class="mb-1 flex flex-wrap items-baseline gap-3">
-                <h2
-                  class="text-lg font-extrabold tracking-wide"
-                  style={`color: ${color};`}
-                >
-                  {name}
-                </h2>
-                <span class="text-xs opacity-60">{role}</span>
-              </div>
-              <p class="text-sm leading-relaxed">{bio}</p>
-            </div>
-
-            <div class="flex flex-col items-end gap-2 flex-shrink-0">
-              <span
-                class="rounded-full border px-3 py-1 text-xs font-black uppercase tracking-widest"
-                style={`border-color: ${color}; color: ${color}; background: ${color}18;`}
-              >
-                {tier}
-              </span>
-              <span class="rounded-full border border-green-500/30 bg-green-500/10 px-2 py-1 text-xs font-semibold uppercase tracking-wider text-green-600">
-                Active
-              </span>
-            </div>
-          </article>
-        );
-      })}
-    </div>
-
     <div class="flex flex-col gap-4 pb-20">
-      {bottomAgents.map((agent) => {
+      {agents.map((agent) => {
         const { name, role, tier, color, bio, avatar } = agent.data;
-        const isInactive = name === "ARIA";
+        const isActive    = name === "TORA";
+        const isComingSoon = name === "VERA" || name === "NOVA";
+        const isInactive   = name === "ARIA";
+        const isDimmed     = isComingSoon || isInactive;
 
-        return (
+        const articleClass = "grid items-center gap-x-6 rounded-xl border border-border bg-background px-6 py-6 transition-colors hover:border-accent";
+        const articleStyle = "grid-template-columns: 4px 80px 1fr auto;";
+
+        const inner = (
           <article
-            class="grid items-center gap-x-6 rounded-xl border border-border bg-background px-6 py-6 transition-colors hover:border-accent"
-            style={`grid-template-columns: 4px 80px 1fr auto;`}
+            class={articleClass}
+            style={articleStyle}
           >
             <div
               class="self-stretch rounded-l-sm"
@@ -116,7 +62,7 @@ const bottomAgents = allAgents.filter(a => ["NOVA", "ARIA"].includes(a.data.name
                   alt={`${name} avatar`}
                   width="40"
                   height="40"
-                  class={`object-contain${isInactive ? " opacity-40" : ""}`}
+                  class={`object-contain${isDimmed ? " opacity-40" : ""}`}
                 />
               </div>
             </div>
@@ -124,16 +70,16 @@ const bottomAgents = allAgents.filter(a => ["NOVA", "ARIA"].includes(a.data.name
             <div class="min-w-0">
               <div class="mb-1 flex flex-wrap items-baseline gap-3">
                 <h2
-                  class={`text-lg font-extrabold tracking-wide${isInactive ? " opacity-40" : ""}`}
+                  class={`text-lg font-extrabold tracking-wide${isDimmed ? " opacity-40" : ""}`}
                   style={`color: ${color};`}
                 >
                   {name}
                 </h2>
-                <span class={`text-xs opacity-60${isInactive ? " opacity-40" : ""}`}>
+                <span class={`text-xs text-muted${isDimmed ? " opacity-40" : ""}`}>
                   {role}
                 </span>
               </div>
-              <p class={`text-sm leading-relaxed${isInactive ? " opacity-40" : ""}`}>
+              <p class={`text-sm leading-relaxed${isDimmed ? " opacity-40" : ""}`}>
                 {bio}
               </p>
             </div>
@@ -145,17 +91,31 @@ const bottomAgents = allAgents.filter(a => ["NOVA", "ARIA"].includes(a.data.name
               >
                 {tier}
               </span>
-              {isInactive ? (
-                <span class="rounded-full border border-yellow-400/30 bg-yellow-400/10 px-2 py-1 text-xs font-semibold uppercase tracking-wider text-yellow-600">
-                  Hiring in progress
-                </span>
-              ) : (
+              {isActive && (
                 <span class="rounded-full border border-green-500/30 bg-green-500/10 px-2 py-1 text-xs font-semibold uppercase tracking-wider text-green-600">
                   Active
                 </span>
               )}
+              {isComingSoon && (
+                <span class="rounded-full border border-blue-400/30 bg-blue-400/10 px-2 py-1 text-xs font-semibold uppercase tracking-wider text-blue-500">
+                  Coming soon
+                </span>
+              )}
+              {isInactive && (
+                <span class="rounded-full border border-yellow-400/30 bg-yellow-400/10 px-2 py-1 text-xs font-semibold uppercase tracking-wider text-yellow-600">
+                  Hiring in progress
+                </span>
+              )}
             </div>
           </article>
+        );
+
+        return isActive ? (
+          <a href={`/agents/${name.toLowerCase()}`} class="block no-underline">
+            {inner}
+          </a>
+        ) : (
+          inner
         );
       })}
     </div>

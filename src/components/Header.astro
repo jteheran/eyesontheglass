@@ -44,8 +44,7 @@ const isActive = (path: string) => {
   >
     <a
       href="/"
-      class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
-  style="background: linear-gradient(135deg, #3f6291 0%, #4a1a6b 25%, #8b2a6b 50%, #d4a5c9 75%, #f5c6a5 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;"
+      class="site-logo absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
     >
       {SITE.title}
     </a>
@@ -136,6 +135,22 @@ const isActive = (path: string) => {
     </nav>
   </div>
 </header>
+
+<style>
+  .site-logo {
+    background: linear-gradient(135deg, #3f6291 0%, #4a1a6b 25%, #8b2a6b 50%, #d4a5c9 75%, #f5c6a5 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  :global([data-theme="dark"]) .site-logo {
+    background: linear-gradient(135deg, #7eb3e8 0%, #b07fd4 30%, #d4689e 55%, #e8a8d0 78%, #f5c6a5 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+</style>
 
 <script>
   function toggleNav() {

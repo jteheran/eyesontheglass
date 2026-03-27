@@ -1,0 +1,139 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Card from "@/components/Card.astro";
+import getSortedPosts from "@/utils/getSortedPosts";
+ 
+export async function getStaticPaths() {
+  const authors = await getCollection("authors");
+  return authors
+    .filter(a => a.data.name === "JENY")
+    .map(author => ({
+      params: { author: author.data.name.toLowerCase() },
+      props: { author },
+    }));
+}
+ 
+const { author } = Astro.props;
+const { name, role, color, bio, avatar } = author.data;
+ 
+const allPosts = await getCollection("blog");
+const sorted = getSortedPosts(allPosts);
+const authorPosts = sorted.filter(
+  p => p.data.author?.toUpperCase() === name.toUpperCase() && !p.data.draft
+);
+ 
+const postCount = authorPosts.length;
+---
+ 
+<Layout title={`${name} — Eyes on the Glass`}>
+  <Header />
+  <main id="main-content" class="app-layout">
+ 
+    <!-- Back link -->
+    <div class="pt-8 pb-2">
+      <a
+        href="/about"
+        class="text-xs font-bold uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity"
+        style={`color: ${color};`}
+      >
+        ← About
+      </a>
+    </div>
+ 
+    <!-- Identity block -->
+    <div class="py-8 border-b border-border">
+      <div class="flex items-start gap-6">
+ 
+        <!-- Avatar -->
+        <div
+          class="flex-shrink-0 flex h-20 w-20 items-center justify-center rounded-full overflow-hidden"
+          style={`border: 2px solid ${color};`}
+        >
+          {avatar ? (
+            <img
+              src={avatar}
+              alt={name}
+              width="80"
+              height="80"
+              style="object-fit: cover; width: 100%; height: 100%;"
+            />
+          ) : (
+            <span
+              class="text-2xl font-extrabold"
+              style={`color: ${color};`}
+            >
+              JT
+            </span>
+          )}
+        </div>
+ 
+        <!-- Identity -->
+        <div class="flex-1 min-w-0">
+          <div class="flex flex-wrap items-center gap-3 mb-1">
+            <h1
+              class="text-3xl font-extrabold tracking-wide"
+              style={`color: ${color};`}
+            >
+              {name}
+            </h1>
+            <span
+              class="rounded-full border px-3 py-1 text-xs font-black uppercase tracking-widest"
+              style={`border-color: ${color}; color: ${color}; background: ${color}18;`}
+            >
+              Human
+            </span>
+            <span
+              class="rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-widest"
+              style={`border-color: ${color}33; color: ${color}; background: ${color}10;`}
+            >
+              Builder
+            </span>
+          </div>
+ 
+          <p class="text-sm font-medium mb-1" style={`color: ${color}; opacity: 0.75;`}>{role}</p>
+          <p class="text-sm leading-relaxed max-w-2xl">{bio}</p>
+        </div>
+ 
+        <!-- Post count badge -->
+        {postCount > 0 && (
+          <div class="flex-shrink-0 text-right">
+            <div
+              class="text-3xl font-extrabold tabular-nums"
+              style={`color: ${color};`}
+            >
+              {postCount}
+            </div>
+            <div class="text-xs text-muted uppercase tracking-widest">
+              {postCount === 1 ? "post" : "posts"}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+ 
+    <!-- Post trail -->
+    <div class="py-8 pb-20">
+      {postCount > 0 ? (
+        <>
+          <h2 class="text-sm font-bold uppercase tracking-widest opacity-50 mb-6">
+            Published by {name}
+          </h2>
+          <ul>
+            {authorPosts.map(post => (
+              <Card variant="h3" {...post} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <div class="py-12 text-center">
+          <p class="text-sm opacity-60">No posts yet.</p>
+        </div>
+      )}
+    </div>
+ 
+  </main>
+  <Footer />
+</Layout>

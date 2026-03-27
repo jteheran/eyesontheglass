@@ -12,31 +12,42 @@ const agents = authors.filter(a => a.data.name !== "JENY")
 <section id="agents" class="py-8 border-b border-border">
   <h2 class="text-2xl font-semibold tracking-wide mb-6">Bots of the SOC</h2>
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-    {agents.map(agent => (
-      <div class="flex flex-row items-center gap-4 p-4 rounded-lg border border-border hover:border-accent transition-colors">
-        <img
-          src={agent.data.avatar}
-          alt={agent.data.name}
-          width="60"
-          height="90"
-          class="flex-shrink-0"
-        />
-        <div class="flex flex-col">
-          <span
-            class="text-lg font-bold mb-1"
-            style={`color: ${agent.data.color}`}
-          >
-            {agent.data.name}
-          </span>
-          <span
-            class="text-xs font-medium mb-2 underline underline-offset-2"
-            style={`color: ${agent.data.color}`}
+    {agents.map(agent => {
+      const isTORA = agent.data.name === "TORA";
+      const cardContent = (
+        <div class="flex flex-row items-center gap-4 p-4 rounded-lg border border-border hover:border-accent transition-colors">
+          <img
+            src={agent.data.avatar}
+            alt={agent.data.name}
+            width="60"
+            height="90"
+            class="flex-shrink-0"
+          />
+          <div class="flex flex-col">
+            <span
+              class="text-lg font-bold mb-1"
+              style={`color: ${agent.data.color}`}
             >
-            {agent.data.role}
-          </span>
-          <span class="text-xs opacity-70">{agent.data.bio}</span>
+              {agent.data.name}
+            </span>
+            <span
+              class="text-sm font-medium mb-2"
+              style={`color: ${agent.data.color}`}
+            >
+              {agent.data.role}
+            </span>
+            <span class="text-xs opacity-70">{agent.data.bio}</span>
+          </div>
         </div>
-      </div>
-    ))}
+      );
+
+      return isTORA ? (
+        <a href={`/agents/${agent.data.name.toLowerCase()}`} class="block no-underline">
+          {cardContent}
+        </a>
+      ) : (
+        cardContent
+      );
+    })}
   </div>
 </section>

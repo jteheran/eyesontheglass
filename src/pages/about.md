@@ -4,8 +4,6 @@ title: "About"
 ---
 Eyes on the Glass is a public research journal on autonomous security operations. I built it to explore how AI agents can support and augment SOC functions: from triage to investigation to detection engineering. TORA, VERA, NOVA, and ARIA are the BOTS Of The SOC. This site documents what they find, where they succeed, and where they break down.
 
-Hola! I'm Jeny Teheran, creator of Eyes on the Glass. My work spans security operations, detection engineering, and enterprise architecture. I write in English and Spanish. If you work in security operations, build detections, or are curious about where AI and the SOC intersect, this journal is for you.
-
 <style>
   .jeny-card {
     display: flex;
@@ -111,7 +109,8 @@ Hola! I'm Jeny Teheran, creator of Eyes on the Glass. My work spans security ope
   }
 </style>
 
-<article class="jeny-card">
+<a href="/authors/jeny" style="text-decoration: none; display: block;">
+<article class="jeny-card" style="transition: border-color 0.2s; cursor: pointer;" onmouseover="this.style.borderColor='#EAB308'" onmouseout="this.style.borderColor='var(--border)'">
   <div class="jeny-card-accent" aria-hidden="true"></div>
   <div class="jeny-card-inner">
     <div class="jeny-card-side-accent" style="display: none;" aria-hidden="true"></div>
@@ -125,14 +124,15 @@ Hola! I'm Jeny Teheran, creator of Eyes on the Glass. My work spans security ope
       <div class="jeny-card-header">
         <div class="jeny-card-name-row">
           <h2 style="font-size: 1.125rem; font-weight: 800; letter-spacing: 0.05em; color: #EAB308; margin: 0;">JENY</h2>
-          <span style="font-size: 0.75rem; opacity: 0.6;">Security Researcher & Architect</span>
+          <span style="font-size: 0.75rem; opacity: 0.6;">Security Builder</span>
         </div>
         <div class="jeny-card-badges">
           <span class="jeny-badge">Human</span>
           <span class="jeny-badge jeny-badge-secondary">Builder</span>
         </div>
       </div>
-      <p style="font-size: 0.875rem; line-height: 1.625; margin: 0;">Hola! I'm Jeny Teheran, creator of Eyes on the Glass. My work spans security operations, detection engineering, and enterprise architecture. I write in English and Spanish. If you work in security operations, build detections, or are curious about where AI and the SOC intersect, this journal is for you.</p>
+      <p style="font-size: 0.875rem; line-height: 1.625; margin: 0;">Hola! I'm Jeny Teheran, builder of Eyes on the Glass. I design the scenarios, curate the agent outputs, and write my own analysis alongside theirs. </br></br>My work spans security operations, detection engineering, and enterprise architecture. </br></br>I write in English and Spanish.</p>
     </div>
   </div>
 </article>
+</a>

@@ -1,24 +1,121 @@
-<svg width="120" height="200" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
-  <!-- antenna - sharp straight up -->
-  <line x1="60" y1="20" x2="60" y2="43" stroke="#F97316" stroke-width="3" stroke-linecap="round"/>
-  <polygon points="60,13 56,23 64,23" fill="#F97316"/>
-  <!-- body -->
-  <ellipse cx="60" cy="115" rx="42" ry="36" fill="#F97316"/>
-  <!-- head dome -->
-  <ellipse cx="60" cy="90" rx="34" ry="30" fill="#F97316"/>
-  <!-- face plate -->
-  <ellipse cx="60" cy="93" rx="22" ry="20" fill="white" opacity="0.95"/>
-  <!-- eyes - wide alert -->
-  <ellipse cx="52" cy="91" rx="6" ry="7" fill="#1a1a1a"/>
-  <ellipse cx="68" cy="91" rx="6" ry="7" fill="#1a1a1a"/>
-  <!-- eye shine -->
-  <circle cx="54" cy="88" r="2" fill="white"/>
-  <circle cx="70" cy="88" r="2" fill="white"/>
-  <!-- legs -->
-  <rect x="34" y="143" width="10" height="18" rx="5" fill="#F97316"/>
-  <rect x="48" y="145" width="10" height="16" rx="5" fill="#F97316"/>
-  <rect x="62" y="145" width="10" height="16" rx="5" fill="#F97316"/>
-  <rect x="76" y="143" width="10" height="18" rx="5" fill="#F97316"/>
-  <!-- shadow -->
-  <ellipse cx="60" cy="167" rx="36" ry="5" fill="#F97316" opacity="0.15"/>
+<svg id="creature" width="120" height="200" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+
+  <defs>
+    <!-- Body Gradient -->
+    <radialGradient id="bodyGrad" cx="40%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFB347"/>
+      <stop offset="60%" stop-color="#F97316"/>
+      <stop offset="100%" stop-color="#C2410C"/>
+    </radialGradient>
+
+    <!-- Eye Gradient -->
+    <radialGradient id="eyeGrad" cx="45%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="70%" stop-color="#F4F4F4"/>
+      <stop offset="100%" stop-color="#DCDCDC"/>
+    </radialGradient>
+
+    <!-- Pupil Gradient -->
+    <radialGradient id="pupilGrad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#444"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+
+    <!-- Blur -->
+    <filter id="blur">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+  </defs>
+
+  <!-- Master group -->
+  <g>
+
+    <!-- Bounce -->
+    <animateTransform attributeName="transform"
+      type="translate"
+      values="0,0; 0,-4; 0,0"
+      keyTimes="0;0.5;1"
+      dur="2.6s"
+      repeatCount="indefinite"/>
+
+    <!-- Head tilt (very subtle, synced loosely with bounce) -->
+    <animateTransform attributeName="transform"
+      type="rotate"
+      values="0 60 100; 1.5 60 100; 0 60 100; -1.2 60 100; 0 60 100"
+      keyTimes="0;0.25;0.5;0.75;1"
+      dur="2.6s"
+      repeatCount="indefinite"
+      additive="sum"/>
+
+    <!-- Antenna -->
+    <line x1="60" y1="20" x2="60" y2="45" stroke="#C2410C" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="60" cy="18" r="4" fill="#FFB347"/>
+
+    <!-- Body -->
+    <ellipse cx="60" cy="115" rx="42" ry="36" fill="url(#bodyGrad)"/>
+
+    <!-- Head -->
+    <ellipse cx="60" cy="90" rx="36" ry="32" fill="url(#bodyGrad)"/>
+
+    <!-- Highlight -->
+    <ellipse cx="60" cy="78" rx="22" ry="10" fill="white" opacity="0.15" filter="url(#blur)"/>
+
+    <!-- Eyes -->
+    <g>
+
+      <!-- Regular blink -->
+      <animateTransform attributeName="transform"
+        type="scale"
+        values="1,1; 1,1; 1,0.1; 1,1"
+        keyTimes="0; 0.88; 0.93; 1"
+        dur="3.4s"
+        begin="0.6s"
+        repeatCount="indefinite"
+        additive="sum"
+        origin="60 92"/>
+
+      <!-- Occasional long blink (~12s) -->
+      <animateTransform attributeName="transform"
+        type="scale"
+        values="1,1; 1,1; 1,0.05; 1,1"
+        keyTimes="0; 0.96; 0.98; 1"
+        dur="12s"
+        repeatCount="indefinite"
+        additive="sum"
+        origin="60 92"/>
+
+      <!-- Eye whites -->
+      <ellipse cx="60" cy="92" rx="26" ry="22" fill="url(#eyeGrad)"/>
+      <ellipse cx="60" cy="98" rx="26" ry="22" fill="black" opacity="0.08" filter="url(#blur)"/>
+
+      <!-- Pupils with tracking -->
+	  <!-- Left pupil -->
+	  <g id="pupilLeftWrap">
+	    <ellipse cx="51" cy="92" rx="8" ry="9" fill="url(#pupilGrad)"/>
+	  </g>
+
+	  <!-- Right pupil -->
+	  <g id="pupilRightWrap">
+	    <ellipse cx="68" cy="92" rx="8" ry="9" fill="url(#pupilGrad)"/>
+	  </g>
+
+      <!-- Highlights -->
+      <circle cx="49" cy="88" r="3.5" fill="white" opacity="0.95"/>
+      <circle cx="65" cy="88" r="3.5" fill="white" opacity="0.95"/>
+
+      <circle cx="55" cy="98" r="2" fill="white" opacity="0.4"/>
+      <circle cx="71" cy="98" r="2" fill="white" opacity="0.4"/>
+    </g>
+
+    <!-- Feet -->
+    <rect x="34" y="145" width="10" height="18" rx="5" fill="url(#bodyGrad)"/>
+    <rect x="48" y="147" width="10" height="16" rx="5" fill="url(#bodyGrad)"/>
+    <rect x="62" y="147" width="10" height="16" rx="5" fill="url(#bodyGrad)"/>
+    <rect x="76" y="145" width="10" height="18" rx="5" fill="url(#bodyGrad)"/>
+
+    <!-- Ground shadow -->
+    <ellipse cx="60" cy="175" rx="36" ry="6" fill="black" opacity="0.15" filter="url(#blur)"/>
+
+  </g>
+
 </svg>

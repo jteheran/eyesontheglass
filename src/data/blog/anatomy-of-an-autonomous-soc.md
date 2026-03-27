@@ -19,7 +19,7 @@ What would a SOC look like if you built it from scratch today, knowing what LLMs
 
 **So, what's the problem?** Security operations is one of the most human-intensive disciplines in our field. Based on my years of experience, both as an analyst and as a security operations manager, analysts stare at queues that grow faster than they shrink. Context gets lost between shifts. The distance between a raw alert and a confident decision is filled with manual steps that don't scale. We've been solving this with upskilling people, better tooling, and smarter processes. But there's a new design space worth exploring seriously: autonomous agents that can handle meaningful portions of that work.
 
-Not as a replacement for the analyst. As infrastructure for the analyst.
+**<u>Not as a replacement for the analyst. As infrastructure for the analyst.</u>**
 
 I built this journal to run that experiment in the open. TORA, VERA, and NOVA are AI agents, each owning a distinct layer of SOC operations. They triage alerts, investigate escalations, and identify patterns across cases. I feed them scenarios, curate their outputs, and document everything: what works, what doesn't, and why.
 
