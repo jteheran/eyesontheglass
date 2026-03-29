@@ -14,15 +14,20 @@ description: "Why Phase 1 starts with synthetic inputs, why every TORA decision 
 lang: en
 ---
 
-Phase 1 of Eyes on the Glass is running. TORA is triaging synthetic alerts. Cases are being documented. Before I get into what TORA is finding, I want to explain three design decisions that shape the entire experiment — because they're not obvious, and they matter more than the technology.
+Phase 1 of Eyes on the Glass is running. TORA is triaging synthetic alerts. Cases are being documented. Before I get into what TORA is finding, I want to explain three design decisions that shape the entire experiment because they're not obvious, and they matter more than the technology.
 
 ## Why context is the variable that determines everything
 
 The most common framing I hear about AI in security operations is about speed. The agent can triage faster than a human analyst. That's true, and it's also almost beside the point.
 
-Speed without context produces fast wrong answers. In security operations, a fast wrong answer — a closed alert that was real, an escalation that was baseless — has consequences. The analyst who works the case TORA escalated wasted an hour. The threat that TORA closed without sufficient context persisted undetected. Neither of those outcomes is better because they happened quickly.
+Speed without context produces fast wrong answers. In security operations:
+- a fast wrong answer, 
+- a closed alert that was real, 
+- an escalation that was baseless has consequences. 
 
-What actually determines whether TORA is useful is whether TORA has enough context to make a good decision — and whether TORA knows the difference between having enough context and not having it.
+The analyst who works the case TORA escalated wasted an hour. The threat that TORA closed without sufficient context persisted undetected. Neither of those outcomes is better because they happened quickly.
+
+What actually determines whether TORA is useful is whether TORA has enough context to make a good decision. It is part of the evolving design that TORA knows the difference between having enough context and not having it.
 
 ![TORA Triaging Input](@/assets/images/TORA_Triaging_Input.png)
 
@@ -54,11 +59,11 @@ The honest answer is: because I do not yet know what TORA gets wrong, and I need
 
 Synthetic inputs let me design the scenarios. I can construct an alert that should force escalation and verify that TORA escalates. I can construct an alert with a stale IOC and low source count on a development host with a valid suppression match and verify that TORA closes it with the right rationale. I can construct an alert with missing asset criticality and verify that TORA names the blocking field correctly and does not guess.
 
-These are not cherry-picked scenarios designed to make TORA look good. They are the cases that reveal whether the triage logic is correctly implemented — the edge cases, the ambiguous signals, the alerts where reasonable analysts might disagree. I am specifically generating cases where the decision is not obvious, because those are the cases that matter.
+These are not cherry-picked scenarios designed to make TORA look good. They are the cases that reveal whether the triage logic is correctly implemented. These are the edge cases, the ambiguous signals, the alerts where analysts might disagree. I am specifically generating cases where the decision is not obvious, because those are the cases that matter.
 
 The alternative? connecting TORA to live telemetry in Phase 1 would tell me whether TORA produces output. It would not tell me whether the output is correct, because I would not have ground truth. With synthetic inputs, I know what the right answer is before I see what TORA says. That gap between what TORA should do and what TORA does is the research data.
 
-There is also a practical reason. Live telemetry introduces noise, incomplete data, and edge cases I have not designed for. Before TORA encounters those, I want to understand her behavior on inputs where I control the variables. Phase 2 introduces simulated telemetry from multiple sources. Phase 3 introduces honeypots and real-world attack data. The sequence is intentional — each phase expands the complexity of the environment after the previous phase has established a baseline of how the agents reason.
+There is also a practical reason. Live telemetry introduces noise, incomplete data, and edge cases I have not designed for. Before TORA encounters those, I want to understand her behavior on inputs where I control the variables. Phase 2 introduces simulated telemetry from multiple sources. Phase 3 introduces honeypots and real-world attack data. The sequence is intentional: each phase expands the complexity of the environment after the previous phase has established a baseline of how the agents reason.
 
 Phase 1 is not a demo. It is the calibration run.
 

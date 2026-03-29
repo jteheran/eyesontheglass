@@ -39,7 +39,7 @@ Which means I can't evaluate TORA's outcomes yet. What I can evaluate is the rea
 
 The most concrete finding this week isn't about TORA. It's about the environment TORA is operating in.
 
-An unidentified VM at `10.10.6.200` generated C2 queries across three separate days this week. Every time it appeared, asset and identity context were completely absent — no hostname, no owner, no criticality, no environment. TORA made three separate judgment calls about the same unidentified asset across five days.
+An unidentified VM at `10.10.6.200` generated C2 queries across three separate days this week. Every time it appeared, asset and identity context were completely absent; no hostname, no owner, no criticality, no environment. TORA made three separate judgment calls about the same unidentified asset across five days.
 
 TORA named this correctly: that's a process failure, not a triage success.
 
@@ -57,7 +57,7 @@ I don't have a complete answer yet. But this week gave me a starting point.
 
 TORA's reasoning is visible. Every escalation decision comes with a confidence score, a rationale, a set of focus points for the next agent in the chain. That's more than most human analysts are asked to produce under alert volume pressure. It's also more than I can fully verify right now. I don't have the ground truth yet to know if the reasoning that produced a 91% confidence P1 escalation was actually sound, or just confidently wrong.
 
-What I'm watching for: whether TORA's self-reported uncertainty correlates with actual error. The two P2 escalations from `10.10.6.200` came in at 72% and 67% confidence. The `INSUFFICIENT_CONTEXT` case was 42%. If VERA's outcomes show that lower confidence scores track with weaker cases, TORA's calibration is real. If they don't, I have a different problem — an agent that sounds uncertain for the right reasons but isn't actually uncertain about the right things.
+What I'm watching for: whether TORA's self-reported uncertainty correlates with actual error. The two P2 escalations from `10.10.6.200` came in at 72% and 67% confidence. The `INSUFFICIENT_CONTEXT` case was 42%. If VERA's outcomes show that lower confidence scores track with weaker cases, TORA's calibration is real. If they don't, I have a different problem: an agent that sounds uncertain for the right reasons but isn't actually uncertain about the right things.
 
 That's what week two is for.
 
@@ -89,9 +89,9 @@ I know what broke in the input: `10.10.6.200` had no asset context. I can descri
 ```
 
 
-One operational note worth documenting: TORA's shift summary runs as a separate API call after the triage engine finishes. The first run hit the 4096 token limit and cut off mid-sentence in the For ARIA section. The limit was raised to 8192 and the second run produced the complete post. That's a calibration detail, not a failure — but it's the kind of thing that matters when you're building toward automation.
+One operational note worth documenting: TORA's shift summary runs as a separate API call after the triage engine finishes. The first run hit the 4096 token limit and cut off mid-sentence in the For ARIA section. The limit was raised to 8192 and the second run produced the complete post. That's a calibration detail, not a failure, but it's the kind of thing that matters when you're building toward automation.
 
-Before AI does anything meaningful in a SOC, the environment has to be ready for it. Not perfectly ready — I don't believe you have to solve everything before AI adds value. But you have to be honest about where you are. Deploying AI agents isn't going to fix incomplete data pipelines, inconsistent asset context, or alert taxonomies that don't reflect the actual threat picture.
+Before AI does anything meaningful in a SOC, the environment has to be ready for it. Not perfectly ready. I don't believe you have to solve everything before AI adds value. But you have to be honest about where you are. Deploying AI agents isn't going to fix incomplete data pipelines, inconsistent asset context, or alert taxonomies that don't reflect the actual threat picture.
 
 What AI can do is expose those gaps faster than any audit ever did, because it keeps running into them and logging what it can't find. That's the argument I'm building toward. For now, I'm publishing the gap alongside the finding.
 
