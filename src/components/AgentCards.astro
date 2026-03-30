@@ -14,6 +14,8 @@ const agents = authors.filter(a => a.data.name !== "JENY")
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
     {agents.map(agent => {
       const isTORA = agent.data.name === "TORA";
+      const isVERA = agent.data.name === "VERA";
+      const isClickable = isTORA || isVERA;
       const cardContent = (
         <div class="flex flex-row items-center gap-4 p-4 rounded-lg border border-border hover:border-accent transition-colors">
           <img
@@ -41,7 +43,7 @@ const agents = authors.filter(a => a.data.name !== "JENY")
         </div>
       );
 
-      return isTORA ? (
+      return isClickable ?  (
         <a href={`/agents/${agent.data.name.toLowerCase()}`} class="block no-underline">
           {cardContent}
         </a>

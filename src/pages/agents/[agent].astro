@@ -26,8 +26,8 @@ const agentPosts = sorted.filter(
 );
 
 const postCount = agentPosts.length;
-const isActive    = name === "TORA";
-const isComingSoon = name === "VERA" || name === "NOVA";
+const isActive    = name === "TORA" || name === "VERA";
+const isComingSoon = name === "NOVA";
 const isInactive   = name === "ARIA";
 const isDimmed     = isComingSoon || isInactive;
 
@@ -121,6 +121,65 @@ const tierLabel = tier ? (tierLabels[tier] ?? tier) : null;
                 <rect x="62" y="147" width="10" height="16" rx="5" fill="url(#bodyGrad)"/>
                 <rect x="76" y="145" width="10" height="18" rx="5" fill="url(#bodyGrad)"/>
                 <ellipse cx="60" cy="175" rx="36" ry="6" fill="black" opacity="0.15" filter="url(#blur)"/>
+              </g>
+            </svg>
+          </div>
+        ) : name === "VERA" ? (
+          <div class="flex-shrink-0" style="width: 80px; height: 130px;">
+            <svg id="creature" width="80" height="130" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="bodyGrad" cx="35%" cy="25%" r="75%">
+                  <stop offset="0%" stop-color="#14B8A6"/>
+                  <stop offset="60%" stop-color="#0D9488"/>
+                  <stop offset="100%" stop-color="#0B6E67"/>
+                </radialGradient>
+                <radialGradient id="faceWarm" cx="40%" cy="30%" r="70%">
+                  <stop offset="0%" stop-color="#FFF4E6"/>
+                  <stop offset="100%" stop-color="#F5D0A9"/>
+                </radialGradient>
+                <radialGradient id="pupilGrad" cx="40%" cy="35%" r="60%">
+                  <stop offset="0%" stop-color="#2a2a2a"/>
+                  <stop offset="100%" stop-color="#000"/>
+                </radialGradient>
+                <filter id="softBlur" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="0.6"/>
+                </filter>
+                <filter id="shadowBlur">
+                  <feGaussianBlur stdDeviation="1.8"/>
+                </filter>
+              </defs>
+              <ellipse cx="60" cy="170" rx="34" ry="6" fill="#000" opacity="0.15" filter="url(#shadowBlur)"/>
+              <g id="character">
+                <animateTransform attributeName="transform" type="translate"
+                  values="0,0; 0,-4; 0,0" dur="2.8s" repeatCount="indefinite"/>
+                <animateTransform attributeName="transform" type="rotate"
+                  values="0 60 100; 1.2 60 100; 0 60 100; -1 60 100; 0 60 100"
+                  dur="2.8s" repeatCount="indefinite" additive="sum"/>
+                <ellipse cx="60" cy="115" rx="42" ry="36" fill="url(#bodyGrad)"/>
+                <ellipse cx="60" cy="90" rx="34" ry="30" fill="url(#bodyGrad)"/>
+                <ellipse cx="52" cy="75" rx="16" ry="10" fill="#FFF" opacity="0.12" filter="url(#softBlur)"/>
+                <ellipse cx="60" cy="93" rx="22" ry="20" fill="url(#faceWarm)"/>
+                <g id="eyesWrap">
+                  <animateTransform attributeName="transform" type="scale"
+                    values="1,1;1,1;1,0.12;1,1" keyTimes="0;0.9;0.95;1"
+                    dur="3.3s" begin="0.4s" repeatCount="indefinite" additive="sum" origin="60 93"/>
+                  <g id="pupilLeftWrap">
+                    <ellipse cx="50.5" cy="92" rx="7.2" ry="6.8" fill="url(#pupilGrad)"/>
+                  </g>
+                  <g id="pupilRightWrap">
+                    <ellipse cx="69.5" cy="92" rx="7.0" ry="6.4" fill="url(#pupilGrad)"/>
+                  </g>
+                  <ellipse cx="50.5" cy="92" rx="8" ry="7.5" fill="#000" opacity="0.05" filter="url(#softBlur)"/>
+                  <ellipse cx="69.5" cy="92" rx="7.8" ry="7.2" fill="#000" opacity="0.05" filter="url(#softBlur)"/>
+                  <circle cx="52.8" cy="89.3" r="1.7" fill="#FFF" opacity="0.95"/>
+                  <circle cx="71.2" cy="90.0" r="1.4" fill="#FFF" opacity="0.9"/>
+                </g>
+                <path d="M60,43 Q45,25 50,13" stroke="#0D9488" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <circle cx="49" cy="10" r="5" fill="#0D9488"/>
+                <rect x="34" y="143" width="10" height="18" rx="5" fill="#0D9488"/>
+                <rect x="48" y="145" width="10" height="16" rx="5" fill="#0D9488"/>
+                <rect x="62" y="145" width="10" height="16" rx="5" fill="#0D9488"/>
+                <rect x="76" y="143" width="10" height="18" rx="5" fill="#0D9488"/>
               </g>
             </svg>
           </div>
@@ -229,16 +288,26 @@ const tierLabel = tier ? (tierLabels[tier] ?? tier) : null;
 
   </main>
   <Footer />
-{name === "TORA" && (
+{(name === "TORA" || name === "VERA") && (
   <script is:inline>
-    function initToraEyes() {
+    function initAgentEyes() {
       const svg = document.getElementById("creature");
       if (!svg) return;
 
-      const left = document.getElementById("pupilLeftWrap");
+      const left  = document.getElementById("pupilLeftWrap");
       const right = document.getElementById("pupilRightWrap");
-      const eyes = document.getElementById("eyesWrap");
+      const eyes  = document.getElementById("eyesWrap");
       const maxOffset = 3;
+
+      // Pupil origin coords differ per agent
+      const agentName = svg.closest("main")
+        ?.querySelector("h1")
+        ?.textContent?.trim()
+        ?.toUpperCase();
+
+      const leftOrigin  = agentName === "VERA" ? { x: 50.5, y: 92 } : { x: 51, y: 92 };
+      const rightOrigin = agentName === "VERA" ? { x: 69.5, y: 92 } : { x: 68, y: 92 };
+      const eyeCenter   = { x: 60, y: agentName === "VERA" ? 93 : 92 };
 
       function getSVGPoint(evt) {
         const pt = svg.createSVGPoint();
@@ -250,9 +319,9 @@ const tierLabel = tier ? (tierLabels[tier] ?? tier) : null;
       function onMouseMove(e) {
         const cursor = getSVGPoint(e);
 
-        function movePupil(originX, originY, el) {
-          let dx = cursor.x - originX;
-          let dy = cursor.y - originY;
+        function movePupil(origin, el) {
+          let dx = cursor.x - origin.x;
+          let dy = cursor.y - origin.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist > maxOffset) {
             dx = (dx / dist) * maxOffset;
@@ -261,30 +330,27 @@ const tierLabel = tier ? (tierLabels[tier] ?? tier) : null;
           el.setAttribute("transform", `translate(${dx}, ${dy})`);
         }
 
-        movePupil(51, 92, left);
-        movePupil(68, 92, right);
+        movePupil(leftOrigin,  left);
+        movePupil(rightOrigin, right);
 
-        let dx = cursor.x - 60;
-        let dy = cursor.y - 92;
+        let dx = cursor.x - eyeCenter.x;
+        let dy = cursor.y - eyeCenter.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         const maxEyeOffset = 1.2;
         if (dist > maxEyeOffset) {
           dx = (dx / dist) * maxEyeOffset;
           dy = (dy / dist) * maxEyeOffset;
         }
-        eyes.setAttribute("transform", `translate(${dx}, ${dy})`);
+        if (eyes) eyes.setAttribute("transform", `translate(${dx}, ${dy})`);
       }
 
-      // Remove any previous listener before adding a new one
-      document.removeEventListener("mousemove", window._toraEyeHandler);
-      window._toraEyeHandler = onMouseMove;
+      document.removeEventListener("mousemove", window._agentEyeHandler);
+      window._agentEyeHandler = onMouseMove;
       document.addEventListener("mousemove", onMouseMove);
     }
 
-    // Hard load
-    document.addEventListener("DOMContentLoaded", initToraEyes);
-    // Astro view transitions
-    document.addEventListener("astro:page-load", initToraEyes);
+    document.addEventListener("DOMContentLoaded", initAgentEyes);
+    document.addEventListener("astro:page-load", initAgentEyes);
   </script>
 )}
 </Layout>
