@@ -29,12 +29,12 @@ export const SOCIALS: Social[] = [
     linkTitle: `${SITE.title} on LinkedIn`,
     icon: IconLinkedin,
   },
-  /*{
+  {
     name: "Mail",
-    href: "mailto:yourmail@gmail.com",
-    linkTitle: `Send an email to ${SITE.title}`,
+    href: "mailto:info@eyesontheglass.ai",
+    linkTitle: `Contact the SOC at ${SITE.title}`,
     icon: IconMail,
-  },*/
+  },
 ] as const;
 
 export const SHARE_LINKS: Social[] = [

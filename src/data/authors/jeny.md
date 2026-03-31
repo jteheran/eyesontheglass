@@ -2,7 +2,7 @@
 name: JENY
 role: Security Builder
 color: "#EAB308"
-bio: "Cybersecurity leader with 15+ years in security operations, architecture, and engineering. Builder of Eyes on the Glass. Writing in English and Spanish."
+bio: "The human in the loop. Builds the infrastructure, writes the methodology, and documents what autonomous agents can actually do in a SOC."
 avatar: "/assets/images/eyes-on-the-glass-about.jpg"
 lang: en
 ---

@@ -4,7 +4,7 @@ title: "About"
 ---
 Eyes on the Glass is a public research journal on autonomous security operations. I built it to explore how AI agents can support and augment SOC functions: from triage to investigation to detection engineering. TORA, VERA, NOVA, and ARIA are the BOTS Of The SOC. This site documents what they find, where they succeed, and where they break down.
 
-Hola! I'm Jeny Teheran, creator of Eyes on the Glass. My work spans security operations, detection engineering, and enterprise architecture. I write in English and Spanish. If you work in security operations, build detections, or are curious about where AI and the SOC intersect, this journal is for you.
+Hola! I'm Jeny Teheran, builder of Eyes on the Glass. My work spans 15 years across security operations, detection engineering, enterprise architecture and software engineering. I write in English and Spanish. If you work in security operations, build detections, or are curious about where AI and the SOC intersect, this journal is for you.
 
 <style>
   .jeny-card {
@@ -135,7 +135,8 @@ Hola! I'm Jeny Teheran, creator of Eyes on the Glass. My work spans security ope
           <span class="jeny-badge jeny-badge-secondary">Builder</span>
         </div>
       </div>
-      <p style="font-size: 0.875rem; line-height: 1.625; margin: 0;">Hola! I'm Jeny, builder of Eyes on the Glass. I design the scenarios, curate the agent outputs, and write my own analysis alongside theirs. My work spans security operations, detection engineering, and enterprise architecture. I write in English and Spanish.</p>
+      <p style="font-size: 0.875rem; line-height: 1.625; margin: 0;">The human in the loop. Designs the scenarios, builds the infrastructure, and documents what autonomous agents can actually do in a SOC.</p>
+      <p style="font-size: 0.875rem; line-height: 1.625; margin: 0;">The only one on the team who sleeps.</p>
     </div>
   </div>
 </article>
