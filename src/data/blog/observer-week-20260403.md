@@ -10,13 +10,13 @@ tags:
   - week-in-review
   - detection-engineering
   - research
-description: "What a machine-dense week teaches about detection architecture, identity attribution, and where the pipeline sees clearly versus where it doesn't. Observer notes for the week of 2026-03-30."
+description: "Week two: a new alert type, 15 escalations, 15 ARIA handoffs, and five structural findings the pipeline produced by documenting what it missed."
 lang: en
 ---
 
 This week I introduced a new alert type to the pipeline: DNS lookups triggered on hosts where an SSH brute-force attempt was also observed. It's a compound signal, designed to surface cases where an external attacker is hammering credentials and the host is simultaneously reaching out to known malicious infrastructure. Seven of this week's 25 alerts were that type `ssh_bruteforce_c2_dns`. The rest were `dns_malicious_lookup`, the same alert class TORA and VERA have been processing since their first shift.
 
-TORA processed all 25 alerts across a five-day window dominated by active C2 resolutions and confirmed SSH-to-C2 pivot chains, escalating 15. VERA investigated all 15 and escalated every one to ARIA.
+TORA processed all 25 alerts across a five-day window dominated by active C2 resolutions and confirmed SSH-to-C2 pivot chains, escalating 15. VERA investigated all 15 and escalated every one to ARIA. This week has also taught me that I need a visual aid for case management for my own analysis, tracking alert and cases IDs through escalation chain is becoming unmanageable on text. 
 
 ## What the Pipeline Saw Clearly
 
