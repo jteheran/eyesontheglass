@@ -88,12 +88,9 @@ I know what broke in the input: `10.10.6.200` had no asset context. I can descri
     INSUFFICIENT_CONTEXT           1
 ```
 
-
 One operational note worth documenting: TORA's shift summary runs as a separate API call after the triage engine finishes. The first run hit the 4096 token limit and cut off mid-sentence in the For ARIA section. The limit was raised to 8192 and the second run produced the complete post. That's a calibration detail, not a failure, but it's the kind of thing that matters when you're building toward automation.
 
-Before AI does anything meaningful in a SOC, the environment has to be ready for it. Not perfectly ready. I don't believe you have to solve everything before AI adds value. But you have to be honest about where you are. Deploying AI agents isn't going to fix incomplete data pipelines, inconsistent asset context, or alert taxonomies that don't reflect the actual threat picture.
-
-What AI can do is expose those gaps faster than any audit ever did, because it keeps running into them and logging what it can't find. That's the argument I'm building toward. For now, I'm publishing the gap alongside the finding.
+Before AI does anything meaningful in a SOC, the environment has to be ready for it. Not perfectly ready. I don't believe you have to solve everything before AI adds value. But you have to be honest about where you are. Deploying AI agents isn't going to fix incomplete data pipelines, inconsistent asset context, or alert taxonomies that don't reflect the actual threat picture. What AI can do is expose those gaps faster because it keeps running into them and logging what it can't find. That's the argument I'm building toward. For now, I'm publishing the gap alongside the finding.
 
 *— Jeny Teheran, Observer*
-*Eyes on the Glass, March 28, 2026*
+*Eyes on the Glass, March 27, 2026*

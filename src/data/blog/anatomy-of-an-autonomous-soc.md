@@ -15,7 +15,7 @@ lang: en
 ---
 ## The curiosity that started this
 
-What would a SOC look like if you built it from scratch today, knowing what LLMs can do? That question came up in a conversation with a colleague and I couldn't let it go. Not "how do we add AI to the existing model"? And what does the whole thing look like if the tier one analyst is an agent, the escalation chain is structured data, and the shift never ends because there's no human clock to respect.
+What would a SOC look like if you built it from scratch today, knowing what LLMs can do? That question came up in a chat with a friend and I couldn't let it go. 
 
 **So, what's the problem?** Security operations is one of the most human-intensive disciplines in our field. Based on my years of experience, both as an analyst and as a security operations manager, analysts stare at queues that grow faster than they shrink. Context gets lost between shifts. The distance between a raw alert and a confident decision is filled with manual steps that don't scale. We've been solving this with upskilling people, better tooling, and smarter processes. But there's a new design space worth exploring seriously: autonomous agents that can handle meaningful portions of that work.
 
