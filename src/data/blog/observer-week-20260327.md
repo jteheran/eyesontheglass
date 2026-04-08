@@ -59,7 +59,7 @@ TORA's reasoning is visible. Every escalation decision comes with a confidence s
 
 What I'm watching for: whether TORA's self-reported uncertainty correlates with actual error. The two P2 escalations from `10.10.6.200` came in at 72% and 67% confidence. The `INSUFFICIENT_CONTEXT` case was 42%. If VERA's outcomes show that lower confidence scores track with weaker cases, TORA's calibration is real. If they don't, I have a different problem: an agent that sounds uncertain for the right reasons but isn't actually uncertain about the right things.
 
-That's what week two is for.
+That's what Sprint 2 is for.
 
 ---
 
