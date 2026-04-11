@@ -3,7 +3,7 @@ title: Anatomy of an Autonomous SOC
 author: Jeny
 pubDatetime: 2026-03-20T12:00:05Z
 slug: anatomy-of-an-autonomous-soc
-featured: true
+featured: false
 draft: false
 tags:
   - autonomous-soc

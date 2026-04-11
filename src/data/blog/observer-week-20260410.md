@@ -3,7 +3,7 @@ title: "Third shift: calibration run is over, reasoning starts now"
 author: JENY
 pubDatetime: 2026-04-11T12:00:05Z
 slug: observer-week-20260410
-featured: false
+featured: true
 draft: false
 tags:
   - observer

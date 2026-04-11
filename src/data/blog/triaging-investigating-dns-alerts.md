@@ -3,7 +3,7 @@ title: "Why DNS Alerts are the first scenario"
 author: JENY
 pubDatetime: 2026-04-08T12:00:05Z
 slug: triaging-investigating-dns-alerts
-featured: true
+featured: false
 draft: false
 tags:
   - autonomous-soc

@@ -3,7 +3,7 @@ title: "Second shift: a new activity source showed up in alerts!"
 author: JENY
 pubDatetime: 2026-04-05T12:00:05Z
 slug: observer-week-20260403
-featured: false
+featured: true
 draft: false
 tags:
   - observer
