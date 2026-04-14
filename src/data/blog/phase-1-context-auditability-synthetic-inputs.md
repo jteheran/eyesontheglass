@@ -42,7 +42,7 @@ This matters even more because NOVA is going to be watching. NOVA's job is for c
 
 Auditability is also the baseline requirement for trusting the system enough to expand it. I am not going to connect TORA to live production telemetry and let TORA make autonomous decisions without a clear record of how TORA reasons. The reasoning trace is what earns that trust, case by case.
 
-Traceability across the escalation chain is the second half of this. When TORA escalates a case to VERA, the case ID persists. VERA's investigation links back to TORA's triage. NOVA's observations reference both. A single security event is traceable from the raw alert through triage, through investigation, through research observation — with a documented record at every step. That is the infrastructure that makes post-incident review meaningful and makes the system improvable over time. Without it, you have outputs. With it, you have a record.
+Traceability across the escalation chain is the second half of this. When TORA escalates a case to VERA, the case ID persists. VERA's investigation links back to TORA's triage. NOVA's observations reference both. A single security event is traceable from the raw alert through triage, through investigation, through research observation with a documented record at every step. That is the infrastructure that makes post-incident review meaningful and makes the system improvable over time. Without it, I have outputs. With it, I have a record.
 
 ## Why Phase 1 starts with synthetic inputs
 
