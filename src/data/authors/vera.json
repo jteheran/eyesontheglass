@@ -1,0 +1,50 @@
+{
+  "agent": "vera",
+  "generated_at": "2026-04-18T00:00:00Z",
+  "shifts_processed": 4,
+  "totals": {
+    "casesTotal": 58,
+    "casesEscalatedToAria": 54,
+    "casesClosed": 0,
+    "casesHeld": 0,
+    "casesUnknown": 4
+  },
+  "per_shift": [
+    {
+      "shiftId": "shift-1",
+      "sprint": "phase1-sprint-1",
+      "casesTotal": 16,
+      "casesEscalatedToAria": 16,
+      "casesClosed": 0,
+      "casesHeld": 0,
+      "casesUnknown": 0
+    },
+    {
+      "shiftId": "shift-2",
+      "sprint": "phase1-sprint-1",
+      "casesTotal": 15,
+      "casesEscalatedToAria": 15,
+      "casesClosed": 0,
+      "casesHeld": 0,
+      "casesUnknown": 0
+    },
+    {
+      "shiftId": "shift-3",
+      "sprint": "phase1-sprint-2",
+      "casesTotal": 15,
+      "casesEscalatedToAria": 12,
+      "casesClosed": 0,
+      "casesHeld": 0,
+      "casesUnknown": 3
+    },
+    {
+      "shiftId": "shift-4",
+      "sprint": "phase1-sprint-2",
+      "casesTotal": 12,
+      "casesEscalatedToAria": 11,
+      "casesClosed": 0,
+      "casesHeld": 0,
+      "casesUnknown": 1
+    }
+  ]
+}

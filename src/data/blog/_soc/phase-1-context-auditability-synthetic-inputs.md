@@ -10,6 +10,7 @@ tags:
   - research
   - phase-1
   - eyes-on-the-glass
+section: soc
 description: "Why Phase 1 starts with synthetic inputs, why every TORA and VERA decision carries a full reasoning trace, and why context is the variable that determines whether an AI agent is useful or dangerous in a SOC."
 lang: en
 ---

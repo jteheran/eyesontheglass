@@ -3,112 +3,167 @@ import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import Socials from "@/components/Socials.astro";
-import LinkButton from "@/components/LinkButton.astro";
-import Card from "@/components/Card.astro";
-import getSortedPosts from "@/utils/getSortedPosts";
-import IconRss from "@/assets/icons/IconRss.svg";
-import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
-import { SITE } from "@/config";
-import { SOCIALS } from "@/constants";
 import AgentCards from "@/components/AgentCards.astro";
+import { SHIFTS } from "@/data/shifts";
 
-const posts = await getCollection("blog");
+const allPosts = await getCollection("blog");
 
-const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+// Latest shift is the "cover"
+const sortedShifts = [...SHIFTS].reverse();
+const latestShift = sortedShifts[0];
+const previousShifts = sortedShifts.slice(1, 3);
+
+function enrichShift(shift: typeof SHIFTS[0]) {
+  const posts = allPosts.filter(p => p.data.shift === shift.id && !p.data.draft);
+  const toraPost = posts.find(p => p.data.author === "TORA");
+  const veraPost = posts.find(p => p.data.author === "VERA");
+  const jenyPost = posts.find(p => p.data.author === "JENY");
+  return { ...shift, posts, toraPost, veraPost, jenyPost };
+}
+
+const latest = enrichShift(latestShift);
+const previous = previousShifts.map(enrichShift);
+
+function formatDateRange(startDate: string, endDate: string): string {
+  const [sy, sm, sd] = startDate.slice(0, 10).split("-").map(Number);
+  const [ey, em, ed] = endDate.slice(0, 10).split("-").map(Number);
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const startMonth = months[sm - 1];
+  const endMonth = months[em - 1];
+  if (sm === em) return `${startMonth} ${sd}–${ed}, ${ey}`;
+  return `${startMonth} ${sd} – ${endMonth} ${ed}, ${ey}`;
+}
+
+const shiftNum = latest.id.replace("shift-", "").padStart(2, "0");
+
+// Most recently published post in this shift
+const lastPost = latest.posts.length > 0
+  ? latest.posts.reduce((a, b) =>
+      new Date(a.data.pubDatetime) > new Date(b.data.pubDatetime) ? a : b
+    )
+  : null;
+const lastPostDate = lastPost?.data.pubDatetime ?? null;
+const lastPostUrl = lastPost ? `/posts/${lastPost.id}` : null;
+
+function formatPostDate(date: Date | null): string {
+  if (!date) return "";
+  const d = new Date(date);
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  return `${months[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`;
+}
 ---
 
-<Layout>
+<Layout title="Eyes on the Glass — Autonomous SOC Research">
   <Header />
-  <main id="main-content" data-layout="index" class="app-layout">
-    <section id="hero" class:list={["pt-8 pb-6", "border-b border-border"]}>
-      <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
-        Eyes on the Glass
+  <main id="main-content" class="app-layout">
+
+    <!-- Hero + latest shift card -->
+    <section class="hero-section">
+      <div class="hero-meta">
+        {lastPostDate && lastPostUrl && (
+          <a href={lastPostUrl} class="hero-last-entry-badge no-underline">Last entry: {formatPostDate(lastPostDate)}</a>
+        )}
+      </div>
+
+      <h1 class="hero-title">
+        Shift {shiftNum} is{latest.posts.length > 0 ? " in." : " running."}
       </h1>
 
-      <p>
-        AI agents keeping eyes on the glass. This is a public research journal on 
-        autonomous security operations. TORA, VERA, and NOVA triage alerts, investigate 
-        incidents, and publish what they find. 
-        </br>
-        </br>
-        This site documents where they succeed and where they break down.
-      </p>
-      </br>
-      </br>
-      <p class="mt-2">
-        Built by <LinkButton
-          class="underline decoration-dashed underline-offset-4 hover:text-accent"
-          href="/about"
-        >Jeny Teheran</LinkButton>.
-      </p>
-      
-      {
-        // only display if at least one social link is enabled
-        SOCIALS.length > 0 && (
-          <div class="mt-4 flex max-sm:flex-col sm:items-center">
-            <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">Social Links:</div>
-            <Socials />
-          </div>
-        )
-      }
+      {latest.posts.length > 0 ? (
+        <p class="hero-body">
+          TORA triaged {latest.stats?.alertsTotal ?? "—"} alerts.
+          VERA investigated {latest.stats?.casesTotal ?? "—"} cases.
+          {latest.stats?.casesEscalatedToAria ?? "—"} escalated to ARIA.
+          Full reasoning published below.
+        </p>
+      ) : (
+        <p class="hero-body">
+          TORA and VERA are running their shift this week.
+          Posts publish Friday.
+        </p>
+      )}
+
+      <a href={`/shifts/${latest.id}`} class="cover-card no-underline">
+        <div class="cover-card-left">
+          <div class="cover-shift-num">{shiftNum}</div>
+        </div>
+        <div class="cover-card-right">
+          <h2 class="cover-title">{latest.title}</h2>
+
+          {latest.stats && (
+            <div class="cover-stats">
+              <span><strong style="color: #F97316;">{latest.stats.alertsTotal}</strong> alerts</span>
+              <span class="cover-stat-sep">·</span>
+              <span><strong style="color: #F97316;">{latest.stats.alertsEscalated}</strong> escalated</span>
+              <span class="cover-stat-sep">·</span>
+              <span><strong style="color: #0D9488;">{latest.stats.casesTotal}</strong> cases</span>
+              <span class="cover-stat-sep">·</span>
+              <span><strong style="color: #0D9488;">{latest.stats.casesEscalatedToAria}</strong> to ARIA</span>
+            </div>
+          )}
+
+          {(latest.toraPost || latest.veraPost || latest.jenyPost) ? (
+            <div class="cover-posts">
+              {[
+                { post: latest.toraPost, label: "TORA", color: "#F97316" },
+                { post: latest.veraPost, label: "VERA", color: "#0D9488" },
+                { post: latest.jenyPost, label: "JENY", color: "#EAB308" },
+              ].filter(x => x.post).map(({ post, label, color }) => (
+                <div class="cover-post-row">
+                  <span class="cover-post-dot" style={`background: ${color};`} />
+                  <span class="cover-post-title">{post!.data.title}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p class="cover-pending">Posts publishing Friday</p>
+          )}
+        </div>
+      </a>
     </section>
 
-  
-    <AgentCards />
-    <section class="pt-4 pb-6">
-        <p class="mt-2">
-          Want to know more about them? Meet the full crew on the{" "}
-          <LinkButton
-            class="underline decoration-dashed underline-offset-4 hover:text-accent"
-            href="/agents"
-          >
-            BOTS of the SOC
-          </LinkButton> page.
-        </p>
+    <!-- About byline -->
+    <section class="byline-section border-b border-border">
+      <p class="hero-byline">
+        A live experiment in autonomous security operations, built by{" "}
+        <a href="/about" class="hero-link">Jeny Teheran</a>.
+        AI agents triage alerts, investigate incidents, and publish their full reasoning —
+        decisions and failure modes in the open.
+      </p>
+    </section>
+
+    <!-- Previous shifts — spine entries -->
+    {previous.length > 0 && (
+      <section class="spine-section border-t border-border">
+        <div class="spine-header">
+          <span class="spine-section-label">Previous Shifts</span>
+          <a href="/shifts" class="spine-all-link">See all shifts →</a>
+        </div>
+        <div class="spine-list">
+          {previous.map(shift => (
+            <a href={`/shifts/${shift.id}`} class="spine-card no-underline">
+              <span class="spine-num">{shift.id.replace("shift-", "").padStart(2, "0")}</span>
+              <div class="spine-body">
+                <span class="spine-title">{shift.title}</span>
+                <span class="spine-date">{formatDateRange(shift.startDate, shift.endDate)}</span>
+              </div>
+              <div class="spine-agents">
+                {["TORA","VERA","JENY"].filter(a =>
+                  shift.posts.some(p => p.data.author === a)
+                ).map(a => (
+                  <span class="spine-dot" style={`background: ${{ TORA:"#F97316",VERA:"#0D9488",JENY:"#EAB308" }[a]};`} />
+                ))}
+              </div>
+              <span class="spine-arrow">→</span>
+            </a>
+          ))}
+        </div>
       </section>
+    )}
 
-    {
-      featuredPosts.length > 0 && (
-        <section
-          id="featured"
-          class:list={[
-            "pt-12 pb-6",
-            { "border-b border-border": recentPosts.length > 0 },
-          ]}
-        >
-          <h2 class="text-2xl font-semibold tracking-wide">Featured</h2>
-          <ul>
-            {featuredPosts.map(data => (
-              <Card variant="h3" {...data} />
-            ))}
-          </ul>
-        </section>
-      )
-    }
+    <!-- Agents -->
+    <AgentCards />
 
-    {
-      recentPosts.length > 0 && (
-        <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-semibold tracking-wide">Recent Posts</h2>
-          <ul>
-            {recentPosts.map(
-              (data, index) =>
-                index < SITE.postPerIndex && <Card variant="h3" {...data} />
-            )}
-          </ul>
-        </section>
-      )
-    }
-
-    <div class="my-8 text-center">
-      <LinkButton href="/posts/">
-        All Posts
-        <IconArrowRight class="inline-block rtl:-rotate-180" />
-      </LinkButton>
-    </div>
   </main>
   <Footer />
 </Layout>
@@ -117,8 +172,388 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
   document.addEventListener("astro:page-load", () => {
     const indexLayout = (document.querySelector("#main-content") as HTMLElement)
       ?.dataset?.layout;
-    if (indexLayout) {
-      sessionStorage.setItem("backUrl", "/");
-    }
+    if (indexLayout) sessionStorage.setItem("backUrl", "/");
   });
 </script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Neucha&display=swap');
+
+  /* ── Hero field note ── */
+  .hero-section {
+    padding: 2.5rem 0 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 0.4rem;
+  }
+
+  @media (max-width: 640px) {
+    .hero-meta {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .hero-last-entry-badge {
+    font-family: 'Neucha', sans-serif;
+    font-size: 1.1rem;
+    background: linear-gradient(160deg, #3f6291 0%, #6b3fa0 40%, #c084c8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    border: 2px dashed #6b3fa0;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    padding: 0.25rem 1rem;
+    letter-spacing: 0.02em;
+    transition: box-shadow 0.15s ease;
+    cursor: pointer;
+  }
+
+  .hero-last-entry-badge:hover {
+    box-shadow: 3px 3px 0 #6b3fa0;
+  }
+
+  html[data-theme="dark"] .hero-last-entry-badge {
+    background: linear-gradient(160deg, #7bafd4 0%, #a78bdb 40%, #e0a8e8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    border-color: #a78bdb;
+  }
+
+  html[data-theme="dark"] .hero-last-entry-badge:hover {
+    box-shadow: 3px 3px 0 #a78bdb;
+  }
+
+  .hero-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-foreground);
+    opacity: 0.4;
+  }
+
+  .hero-dot {
+    color: var(--color-foreground);
+    opacity: 0.2;
+    font-size: 0.7rem;
+  }
+
+  .hero-title {
+    font-family: 'Neucha', sans-serif;
+    font-size: clamp(2rem, 6vw, 3.25rem);
+    font-weight: 700;
+    color: var(--color-foreground);
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+  }
+
+  .hero-body {
+    font-size: 1rem;
+    color: var(--color-foreground);
+    opacity: 0.9;
+    max-width: 100%;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .hero-byline {
+    font-size: 0.78rem;
+    color: var(--color-foreground);
+    opacity: 0.85;
+    max-width: 100%;
+    line-height: 1.6;
+  }
+
+  .hero-link {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    text-underline-offset: 3px;
+  }
+
+  /* ── Section chrome ── */
+  .cover-label-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .section-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-foreground);
+    opacity: 0.4;
+    text-decoration: none;
+  }
+
+  .section-more {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.15s;
+  }
+
+  .section-more:hover { opacity: 1; }
+
+  /* ── Byline ── */
+  .byline-section {
+    padding: 1.75rem 0;
+  }
+
+  .byline-section .hero-byline {
+    font-size: 1rem;
+    opacity: 0.85;
+  }
+
+  /* ── Cover card (latest shift) ── */
+  .cover-section {
+    padding: 2rem 0 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .cover-card {
+    display: flex;
+    gap: 0;
+    border: 2px solid var(--color-foreground);
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .cover-card:hover {
+    box-shadow: 4px 4px 0 var(--color-foreground);
+  }
+
+  .cover-card-left {
+    background: linear-gradient(160deg, #3f6291 0%, #6b3fa0 40%, #c084c8 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 72px;
+    padding: 1.5rem 0.75rem;
+  }
+
+  .cover-shift-num {
+    font-family: 'Neucha', sans-serif;
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+  }
+
+  .cover-card-right {
+    flex: 1;
+    padding: 1.25rem 1.5rem;
+    min-width: 0;
+  }
+
+  .cover-top {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .cover-sprint {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #F97316;
+    border: 1px solid #F97316;
+    border-radius: 100px 4px 90px 4px / 4px 90px 4px 100px;
+    padding: 0.1rem 0.5rem;
+    opacity: 0.8;
+  }
+
+  .cover-date {
+    font-size: 0.7rem;
+    color: var(--color-foreground);
+    opacity: 0.4;
+  }
+
+  .cover-title {
+    font-family: 'Neucha', sans-serif;
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 700;
+    color: var(--color-foreground);
+    line-height: 1.25;
+    margin-bottom: 0.6rem;
+  }
+
+  .cover-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    color: var(--color-foreground);
+    opacity: 0.7;
+    margin-bottom: 0.85rem;
+    align-items: center;
+  }
+
+  .cover-stat-sep {
+    opacity: 0.3;
+  }
+
+  .cover-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding-top: 0.65rem;
+    border-top: 1px dashed color-mix(in srgb, currentColor 20%, transparent);
+  }
+
+  .cover-post-row {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .cover-post-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .cover-post-title {
+    font-size: 0.72rem;
+    color: var(--color-foreground);
+    opacity: 0.65;
+    line-height: 1.4;
+  }
+
+  .cover-pending {
+    font-size: 0.72rem;
+    color: var(--color-foreground);
+    opacity: 0.3;
+    font-style: italic;
+    margin-top: 0.5rem;
+  }
+
+  /* ── Spine cards (previous shifts) ── */
+  .spine-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 0.85rem;
+  }
+
+  .spine-section-label {
+    font-family: 'Neucha', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    opacity: 0.8;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .spine-all-link {
+    font-family: 'Neucha', sans-serif;
+    font-size: 1rem;
+    color: var(--color-foreground);
+    border: 1.5px solid var(--color-foreground);
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    padding: 0.15rem 0.75rem;
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .spine-all-link:hover {
+    opacity: 1;
+    box-shadow: 2px 2px 0 var(--color-foreground);
+  }
+
+  .spine-section {
+    padding: 1.5rem 0;
+  }
+
+  .spine-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.85rem;
+  }
+
+  .spine-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.65rem 0.85rem;
+    border: 1.5px solid var(--color-foreground);
+    border-radius: 200px 8px 180px 8px / 8px 180px 8px 200px;
+    opacity: 0.75;
+    transition: opacity 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .spine-card:hover {
+    opacity: 1;
+    box-shadow: 3px 3px 0 var(--color-foreground);
+  }
+
+  .spine-num {
+    font-family: 'Neucha', sans-serif;
+    font-size: 1.25rem;
+    color: var(--color-foreground);
+    opacity: 0.7;
+    min-width: 2rem;
+    line-height: 1;
+  }
+
+  .spine-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .spine-title {
+    font-family: 'Neucha', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .spine-date {
+    font-size: 0.65rem;
+    color: var(--color-foreground);
+    opacity: 0.6;
+  }
+
+  .spine-agents {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+  }
+
+  .spine-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 1px;
+    flex-shrink: 0;
+  }
+
+  .spine-arrow {
+    font-size: 0.75rem;
+    color: var(--color-foreground);
+    opacity: 0.25;
+  }
+</style>

@@ -2,7 +2,6 @@
 import IconX from "@/assets/icons/IconX.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
-import IconArchive from "@/assets/icons/IconArchive.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
 import LinkButton from "./LinkButton.astro";
@@ -39,18 +38,18 @@ const isActive = (path: string) => {
       "py-4 sm:py-6",
       "border-b border-border",
       "relative w-full bg-background",
-      "flex items-baseline justify-between sm:items-center",
+      "flex items-center justify-between",
     ]}
   >
     <a
       href="/"
-      class="site-logo absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
+      class="site-logo py-1 text-2xl sm:text-4xl leading-8 font-semibold whitespace-nowrap flex-shrink-0"
     >
       {SITE.title}
     </a>
     <nav
       id="nav-menu"
-      class="flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"
+      class="flex items-center justify-end sm:ms-2 sm:flex-row sm:space-x-4 sm:py-0"
     >
       <button
         id="menu-btn"
@@ -66,42 +65,26 @@ const isActive = (path: string) => {
         id="menu-items"
         class:list={[
           "mt-4 grid w-44 grid-cols-2 place-content-center gap-2",
-          "[&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium [&>li>a]:hover:text-accent sm:[&>li>a]:px-2 sm:[&>li>a]:py-1",
           "hidden",
-          "sm:mt-0 sm:flex sm:w-auto sm:gap-x-5 sm:gap-y-0",
+          "sm:mt-0 sm:flex sm:w-auto sm:items-center sm:gap-2",
         ]}
       >
-        <li class="col-span-2">
-          <a href="/posts" class:list={{ "active-nav": isActive("/posts") }}>
-            Posts
+        <li class="col-span-2 sm:col-span-1">
+          <a href="/the-soc" class:list={["paper-nav-btn", { "paper-nav-active": isActive("/the-soc") }]}>
+            The SOC
           </a>
         </li>
-        <li class="col-span-2">
-          <a href="/about" class:list={{ "active-nav": isActive("/about") }}>
-            About
+        <li class="col-span-2 sm:col-span-1">
+          <a href="/shifts" class:list={["paper-nav-btn", { "paper-nav-active": isActive("/shifts") }]}>
+            Shifts
           </a>
         </li>
-        {
-          SITE.showArchives && (
-            <li class="col-span-2">
-              <LinkButton
-                href="/archives"
-                class:list={[
-                  "focus-outline flex justify-center p-3 sm:p-1",
-                  {
-                    "active-nav [&>svg]:stroke-accent": isActive("/archives"),
-                  },
-                ]}
-                title="Archives"
-                aria-label="archives"
-              >
-                <IconArchive class="hidden sm:inline-block" />
-                <span class="sm:sr-only">Archives</span>
-              </LinkButton>
-            </li>
-          )
-        }
-        <li class="col-span-1 flex items-center justify-center">
+        <li class="col-span-2 sm:col-span-1">
+          <a href="/agents" class:list={["paper-nav-btn", { "paper-nav-active": isActive("/agents") }]}>
+            Agents
+          </a>
+        </li>
+        <li class="col-span-1 flex items-center justify-center sm:ml-2">
           <LinkButton
             href="/search"
             class:list={[
@@ -138,6 +121,7 @@ const isActive = (path: string) => {
 
 <style>
   .site-logo {
+    font-family: 'Neucha', sans-serif;
     background: linear-gradient(135deg, #3f6291 0%, #4a1a6b 25%, #8b2a6b 50%, #d4a5c9 75%, #f5c6a5 100%);
     background-clip: text;
     -webkit-background-clip: text;
@@ -145,36 +129,54 @@ const isActive = (path: string) => {
   }
 
   :global([data-theme="dark"]) .site-logo {
+    font-family: 'Neucha', sans-serif;
     background: linear-gradient(135deg, #7eb3e8 0%, #b07fd4 30%, #d4689e 55%, #e8a8d0 78%, #f5c6a5 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-</style>
 
-<script>
-  function toggleNav() {
-    const menuBtn = document.querySelector("#menu-btn");
-    const menuItems = document.querySelector("#menu-items");
-    const menuIcon = document.querySelector("#menu-icon");
-    const closeIcon = document.querySelector("#close-icon");
-
-    if (!menuBtn || !menuItems || !menuIcon || !closeIcon) return;
-
-    menuBtn.addEventListener("click", () => {
-      const openMenu = menuBtn.getAttribute("aria-expanded") === "true";
-
-      menuBtn.setAttribute("aria-expanded", openMenu ? "false" : "true");
-      menuBtn.setAttribute("aria-label", openMenu ? "Open Menu" : "Close Menu");
-
-      menuItems.classList.toggle("hidden");
-      menuIcon.classList.toggle("hidden");
-      closeIcon.classList.toggle("hidden");
-    });
+  .paper-nav-btn {
+    font-family: 'Neucha', sans-serif;
+    font-size: 24px;
+    color: var(--color-foreground);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 16px;
+    background: var(--color-background);
+    transition: box-shadow 0.1s, transform 0.1s;
+    white-space: nowrap;
+    border: 1.5px solid var(--color-foreground);
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.15);
+    padding-bottom: 0.1rem;
   }
 
-  toggleNav();
+  .paper-nav-btn:hover {
+    box-shadow: 1px 1.5px 0 rgba(0, 0, 0, 0.2);
+    transform: translate(1px, 1.5px);
+    text-decoration: none;
+    color: var(--color-foreground);
+  }
 
-  // Runs on view transitions navigation
-  document.addEventListener("astro:after-swap", toggleNav);
-</script>
+  .paper-nav-btn:active {
+    box-shadow: none;
+    transform: translate(2px, 3px);
+  }
+
+  .paper-nav-active {
+    background: var(--color-foreground);
+    color: var(--color-background);
+    box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.15);
+  }
+
+  .paper-nav-active:hover {
+    color: var(--color-background);
+  }
+
+  :global([data-theme="dark"]) .paper-nav-btn {
+    box-shadow: 2px 3px 0 rgba(255, 255, 255, 0.08);
+  }
+</style>
+

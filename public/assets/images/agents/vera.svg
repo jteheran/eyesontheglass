@@ -117,10 +117,10 @@
     <circle cx="49" cy="10" r="5" fill="#0D9488"/>
 
     <!-- Legs -->
-    <rect x="34" y="143" width="10" height="18" rx="5" fill="#0D9488"/>
-    <rect x="48" y="145" width="10" height="16" rx="5" fill="#0D9488"/>
-    <rect x="62" y="145" width="10" height="16" rx="5" fill="#0D9488"/>
-    <rect x="76" y="143" width="10" height="18" rx="5" fill="#0D9488"/>
+    <rect x="34" y="143" width="10" height="18" rx="5" fill="url(#bodyGrad)"/>
+    <rect x="48" y="145" width="10" height="16" rx="5" fill="url(#bodyGrad)"/>
+    <rect x="62" y="145" width="10" height="16" rx="5" fill="url(#bodyGrad)"/>
+    <rect x="76" y="143" width="10" height="18" rx="5" fill="url(#bodyGrad)"/>
 
   </g>
 </svg>

@@ -1,0 +1,35 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Card from "@/components/Card.astro";
+import getSortedPosts from "@/utils/getSortedPosts";
+
+const allPosts = await getCollection("blog");
+const sorted = getSortedPosts(allPosts);
+const socPosts = sorted.filter(
+  p => p.data.section === "soc" && !p.data.draft
+);
+---
+
+<Layout title="The SOC — EOTG">
+  <Header />
+  <main id="main-content" class="app-layout">
+
+    <div class="py-8">
+      {socPosts.length > 0 ? (
+        <ul class="flex flex-col">
+          {socPosts.map(post => (
+            <Card variant="h3" {...post} />
+          ))}
+        </ul>
+        </ul>
+      ) : (
+        <p class="text-sm text-muted italic">No posts yet in this section.</p>
+      )}
+    </div>
+
+  </main>
+  <Footer />
+</Layout>

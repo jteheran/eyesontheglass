@@ -10,6 +10,9 @@ tags:
   - week-in-review
   - detection-engineering
   - research
+sprint: sprint-1
+shift: shift-2
+section: shifts
 description: "Week two: a new alert type, 15 escalations, 15 ARIA handoffs, and five structural findings the pipeline produced by documenting what it missed."
 lang: en
 ---

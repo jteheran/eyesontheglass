@@ -1,0 +1,261 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+
+const images = [
+  {
+    file: "/assets/images/gallery/EOTG_CalibrationRun.png",
+    title: "TORA and VERA calibrating pipelines",
+    prompt: "AI agents (TORA, VERA) triage alerts, investigate incidents, and publish their full reasoning, decisions, and failure modes in the open. The goal is simple: expose what actually works — and what breaks — when you try to run a SOC with autonomous systems. Generate a picture where these two characters are plugging cables and data pipelines",
+    sprint: "Sprint 1",
+    shifts: "Shifts 1 & 2",
+    agents: ["TORA", "VERA"],
+    colors: ["#F97316", "#0D9488"],
+  },
+  {
+    file: "/assets/images/gallery/EOTG_Sprint2.png",
+    title: "TORA and VERA escalating events through EOTG",
+    prompt: "Now add some labels with SOC terms like Detection, Triage, Investigation. Use a background image I'm attaching",
+    sprint: "Sprint 2",
+    shifts: "Shift 3",
+    agents: ["TORA", "VERA"],
+    colors: ["#F97316", "#0D9488"],
+  },
+  {
+    file: "/assets/images/gallery/EOTG_TORA_carrying_alerts.png",
+    title: "TORA carrying alerts and building cases",
+    prompt: "Now, can you generate one image of TORA carrying a load of alerts and putting them in the SOC, she is hardworking and cleans the alerts queue autonomously",
+    sprint: "Sprint 2",
+    shifts: "Shift 4",
+    agents: ["TORA"],
+    colors: ["#F97316"],
+  },
+];
+---
+
+<Layout title="Gallery — Eyes on the Glass">
+  <Header />
+  <main id="main-content" class="app-layout">
+
+    <div class="py-10 border-b border-border">
+      <h1 class="gallery-title">Gallery</h1>
+      <p class="text-sm mt-3 text-foreground/60 max-w-xl">
+        AI-generated images of TORA and VERA. Generated with ChatGPT.
+      </p>
+    </div>
+
+    <div class="gallery-grid py-10">
+      {images.map(img => (
+        <div class="gallery-card">
+          <button class="gallery-img-wrap" onclick={`openLightbox('${img.file}', '${img.title}')`} aria-label={`View full image: ${img.title}`}>
+            <img
+              src={img.file}
+              alt={img.title}
+              class="gallery-img"
+              loading="lazy"
+            />
+          </button>
+          <div class="gallery-body">
+            <div class="gallery-meta">
+              <span class="gallery-sprint">{img.sprint} · {img.shifts}</span>
+              <div class="gallery-agents">
+                {img.agents.map((a, i) => (
+                  <span class="gallery-agent-dot" style={`background: ${img.colors[i]};`} title={a} />
+                ))}
+              </div>
+            </div>
+            <h2 class="gallery-card-title">{img.title}</h2>
+            <details class="gallery-prompt-details">
+              <summary class="gallery-prompt-summary">Prompt</summary>
+              <p class="gallery-prompt-text">{img.prompt}</p>
+            </details>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </main>
+  <Footer />
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()" aria-hidden="true">
+    <img id="lightbox-img" src="" alt="" class="lightbox-img" />
+  </div>
+</Layout>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Neucha&display=swap');
+
+  .gallery-title {
+    font-family: 'Neucha', sans-serif;
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 700;
+    color: var(--color-foreground);
+    line-height: 1.2;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .gallery-card {
+    border: 1.5px solid var(--color-foreground);
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .gallery-card:hover {
+    box-shadow: 4px 4px 0 var(--color-foreground);
+  }
+
+  .gallery-img-wrap {
+    width: 100%;
+    aspect-ratio: 16 / 7;
+    overflow: hidden;
+    background: var(--color-muted);
+  }
+
+  .gallery-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .gallery-card:hover .gallery-img {
+    transform: scale(1.03);
+  }
+
+  .gallery-body {
+    padding: 1rem 1.1rem 1.1rem;
+  }
+
+  .gallery-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+  }
+
+  .gallery-sprint {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-foreground);
+    opacity: 0.4;
+  }
+
+  .gallery-agents {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .gallery-agent-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  .gallery-card-title {
+    font-family: 'Neucha', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    line-height: 1.3;
+    margin-bottom: 0.6rem;
+  }
+
+  .gallery-prompt-details {
+    margin-top: 0.25rem;
+  }
+
+  .gallery-prompt-summary {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-foreground);
+    opacity: 0.4;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.15s;
+    list-style: none;
+  }
+
+  .gallery-prompt-summary::-webkit-details-marker { display: none; }
+
+  .gallery-prompt-summary:hover {
+    opacity: 0.7;
+  }
+
+  .gallery-prompt-text {
+    font-size: 0.72rem;
+    color: var(--color-foreground);
+    opacity: 0.55;
+    line-height: 1.55;
+    margin-top: 0.4rem;
+    font-style: italic;
+  }
+
+  .gallery-img-wrap {
+    cursor: zoom-in;
+    background: none;
+    border: none;
+    padding: 0;
+    display: block;
+    width: 100%;
+  }
+
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+  }
+
+  .lightbox.open {
+    display: flex;
+  }
+
+  .lightbox-img {
+    max-width: 95vw;
+    max-height: 95vh;
+    object-fit: contain;
+    border: none;
+    box-shadow: none;
+  }
+</style>
+
+<script is:inline>
+  function openLightbox(src, alt) {
+    const lb = document.getElementById('lightbox');
+    const img = document.getElementById('lightbox-img');
+    img.src = src;
+    img.alt = alt;
+    lb.classList.add('open');
+    lb.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    const lb = document.getElementById('lightbox');
+    lb.classList.remove('open');
+    lb.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>

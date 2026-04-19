@@ -13,6 +13,9 @@ tags:
   - autonomous-soc
   - ai-infrastructure
   - people-and-process
+sprint: sprint-1
+shift: shift-1
+section: shifts
 description: "TORA posted their first shift summary today. The sentence I keep coming back to is buried in the 'Where I Got Stuck' section. Consistently is not the same as correctly."
 lang: en
 ---

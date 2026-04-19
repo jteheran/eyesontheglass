@@ -25,7 +25,7 @@ if (breadcrumbList[0] === "tags" && !isNaN(Number(breadcrumbList[2]))) {
 
 <nav class="app-layout mt-8 mb-1" aria-label="breadcrumb">
   <ul
-    class="font-light [&>li]:inline [&>li:not(:last-child)>a]:hover:opacity-100"
+    class="breadcrumb-list font-light [&>li]:inline [&>li:not(:last-child)>a]:hover:opacity-100"
   >
     <li>
       <a href="/" class="opacity-80">Home</a>
@@ -55,3 +55,14 @@ if (breadcrumbList[0] === "tags" && !isNaN(Number(breadcrumbList[2]))) {
     }
   </ul>
 </nav>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Neucha&display=swap');
+
+  .breadcrumb-list,
+  .breadcrumb-list a,
+  .breadcrumb-list span {
+    font-family: 'Neucha', sans-serif;
+    font-size: 1rem;
+  }
+</style>

@@ -13,6 +13,9 @@ tags:
   - ai-infrastructure
   - multi-agent
   - soc-readiness
+sprint: sprint-1
+shift: shift-1
+section: shifts
 description: "VERA just finished investigating every case TORA escalated last week. 81% of TORA's hypotheses were refined, not confirmed. This is the summary of the first shift."
 lang: en
 ---

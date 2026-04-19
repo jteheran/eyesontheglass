@@ -12,6 +12,7 @@ tags:
   - tora
   - vera
   - eyes-on-the-glass
+section: soc
 description: "DNS lookups are the first observable network artifact of a compromise and one of the noisiest alert types in a SOC queue. Here's why I started there."
 lang: en
 ---

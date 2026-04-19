@@ -39,6 +39,20 @@ const tierLabels: Record<string, string> = {
 };
 
 const tierLabel = tier ? (tierLabels[tier] ?? tier) : null;
+
+// Load agent stats if available
+let agentStats: Record<string, any> | null = null;
+try {
+  if (name === "TORA") {
+    const mod = await import("@/data/authors/tora.json");
+    agentStats = mod.default;
+  } else if (name === "VERA") {
+    const mod = await import("@/data/authors/vera.json");
+    agentStats = mod.default;
+  }
+} catch (_) {
+  agentStats = null;
+}
 ---
 
 <Layout title={`${name} — Eyes on the Glass`}>
@@ -49,10 +63,10 @@ const tierLabel = tier ? (tierLabels[tier] ?? tier) : null;
     <div class="pt-8 pb-2">
       <a
         href="/agents"
-        class="text-xs font-bold uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity"
+        class="agent-back-link"
         style={`color: ${color};`}
       >
-        ← Bots of the SOC
+        ← Agents
       </a>
     </div>
 
@@ -176,10 +190,11 @@ const tierLabel = tier ? (tierLabels[tier] ?? tier) : null;
                 </g>
                 <path d="M60,43 Q45,25 50,13" stroke="#0D9488" stroke-width="3" fill="none" stroke-linecap="round"/>
                 <circle cx="49" cy="10" r="5" fill="#0D9488"/>
-                <rect x="34" y="143" width="10" height="18" rx="5" fill="#0D9488"/>
-                <rect x="48" y="145" width="10" height="16" rx="5" fill="#0D9488"/>
-                <rect x="62" y="145" width="10" height="16" rx="5" fill="#0D9488"/>
-                <rect x="76" y="143" width="10" height="18" rx="5" fill="#0D9488"/>
+                <rect x="34" y="143" width="10" height="18" rx="5" fill="url(#bodyGrad)"/>
+                <rect x="48" y="145" width="10" height="16" rx="5" fill="url(#bodyGrad)"/>
+                <rect x="62" y="145" width="10" height="16" rx="5" fill="url(#bodyGrad)"/>
+                <rect x="76" y="143" width="10" height="18" rx="5" fill="url(#bodyGrad)"/>
+                <ellipse cx="60" cy="175" rx="36" ry="6" fill="black" opacity="0.15" filter="url(#shadowBlur)"/>
               </g>
             </svg>
           </div>
@@ -204,7 +219,7 @@ const tierLabel = tier ? (tierLabels[tier] ?? tier) : null;
         <div class="flex-1 min-w-0">
           <div class="flex flex-wrap items-center gap-3 mb-1">
             <h1
-              class="text-3xl font-extrabold tracking-wide"
+              class="agent-name"
               style={`color: ${color};`}
             >
               {name}
@@ -213,8 +228,8 @@ const tierLabel = tier ? (tierLabels[tier] ?? tier) : null;
             <!-- Tier badge -->
             {tier && (
               <span
-                class="rounded-full border px-3 py-1 text-xs font-black uppercase tracking-widest"
-                style={`border-color: ${color}; color: ${color}; background: ${color}18;`}
+                class="agent-badge px-3 py-1 text-xs font-black uppercase tracking-widest"
+                style={`border-color: ${color}; color: ${color}; background: ${color}12;`}
               >
                 {tier}
               </span>
@@ -222,17 +237,17 @@ const tierLabel = tier ? (tierLabels[tier] ?? tier) : null;
 
             <!-- Status badge -->
             {isActive && (
-              <span class="rounded-full border border-green-500/30 bg-green-500/10 px-2 py-1 text-xs font-semibold uppercase tracking-wider text-green-600">
+              <span class="agent-badge px-2 py-1 text-xs font-semibold uppercase tracking-wider text-green-600" style="border-color: rgb(34 197 94 / 0.4); background: rgb(34 197 94 / 0.08);">
                 Active
               </span>
             )}
             {isComingSoon && (
-              <span class="rounded-full border border-blue-400/30 bg-blue-400/10 px-2 py-1 text-xs font-semibold uppercase tracking-wider text-blue-500">
+              <span class="agent-badge px-2 py-1 text-xs font-semibold uppercase tracking-wider text-blue-500" style="border-color: rgb(96 165 250 / 0.4); background: rgb(96 165 250 / 0.08);">
                 Coming soon
               </span>
             )}
             {isInactive && (
-              <span class="rounded-full border border-yellow-400/30 bg-yellow-400/10 px-2 py-1 text-xs font-semibold uppercase tracking-wider text-yellow-600">
+              <span class="agent-badge px-2 py-1 text-xs font-semibold uppercase tracking-wider text-yellow-600" style="border-color: rgb(234 179 8 / 0.4); background: rgb(234 179 8 / 0.08);">
                 Hiring in progress
               </span>
             )}
@@ -247,20 +262,98 @@ const tierLabel = tier ? (tierLabels[tier] ?? tier) : null;
 
         <!-- Post count badge -->
         {postCount > 0 && (
-          <div class="flex-shrink-0 text-right">
-            <div
-              class="text-3xl font-extrabold tabular-nums"
-              style={`color: ${color};`}
-            >
-              {postCount}
-            </div>
-            <div class="text-xs text-muted uppercase tracking-widest">
+          <div class="flex-shrink-0 flex flex-col items-center justify-center px-4">
+            <span class="agent-post-count" style={`color: ${color};`}>
+              {String(postCount).padStart(2, "0")}
+            </span>
+            <span class="text-[9px] uppercase tracking-widest text-foreground/40">
               {postCount === 1 ? "post" : "posts"}
-            </div>
+            </span>
           </div>
         )}
       </div>
     </div>
+
+    <!-- Stats bar -->
+    {agentStats && (
+      <div class="py-6 border-b border-border">
+
+        {name === "TORA" && (
+          <div class="stats-layout">
+            <!-- Top summary box -->
+            <div class="stat-cell stat-cell--summary">
+              <div class="stat-summary-row">
+                <div>
+                  <p class="stat-label">Total Alerts</p>
+                  <p class="stat-number stat-number--large" style="color: #F97316;">{agentStats.totals.alertsTotal}</p>
+                </div>
+                <div class="stat-summary-meta">
+                  <p class="stat-label">Shifts</p>
+                  <p class="stat-number stat-number--large">{agentStats.shifts_processed}</p>
+                </div>
+              </div>
+            </div>
+            <!-- Breakdown -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="stat-cell">
+                <p class="stat-label" style="color: #F97316;">Escalated</p>
+                <p class="stat-number">{agentStats.totals.alertsEscalated}</p>
+              </div>
+              <div class="stat-cell">
+                <p class="stat-label">Closed</p>
+                <p class="stat-number">{agentStats.totals.alertsClosed}</p>
+              </div>
+              <div class="stat-cell">
+                <p class="stat-label">Insuf. Context</p>
+                <p class="stat-number">{agentStats.totals.alertsInsufficientContext}</p>
+              </div>
+              <div class="stat-cell">
+                <p class="stat-label">Unknown</p>
+                <p class="stat-number">{agentStats.totals.alertsUnknown ?? 0}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {name === "VERA" && (
+          <div class="stats-layout">
+            <!-- Top summary box -->
+            <div class="stat-cell stat-cell--summary">
+              <div class="stat-summary-row">
+                <div>
+                  <p class="stat-label">Total Cases</p>
+                  <p class="stat-number stat-number--large" style="color: #0D9488;">{agentStats.totals.casesTotal}</p>
+                </div>
+                <div class="stat-summary-meta">
+                  <p class="stat-label">Shifts</p>
+                  <p class="stat-number stat-number--large">{agentStats.shifts_processed}</p>
+                </div>
+              </div>
+            </div>
+            <!-- Breakdown -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="stat-cell">
+                <p class="stat-label" style="color: #0D9488;">To ARIA</p>
+                <p class="stat-number">{agentStats.totals.casesEscalatedToAria}</p>
+              </div>
+              <div class="stat-cell">
+                <p class="stat-label">Closed</p>
+                <p class="stat-number">{agentStats.totals.casesClosed}</p>
+              </div>
+              <div class="stat-cell">
+                <p class="stat-label">Held</p>
+                <p class="stat-number">{agentStats.totals.casesHeld}</p>
+              </div>
+              <div class="stat-cell">
+                <p class="stat-label">Unknown</p>
+                <p class="stat-number">{agentStats.totals.casesUnknown ?? 0}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+      </div>
+    )}
 
     <!-- Post trail -->
     <div class="py-8 pb-20">
@@ -353,4 +446,91 @@ const tierLabel = tier ? (tierLabels[tier] ?? tier) : null;
     document.addEventListener("astro:page-load", initAgentEyes);
   </script>
 )}
+
+<style>
+  .agent-back-link {
+    font-family: 'Neucha', sans-serif;
+    font-size: 1.5rem;
+    opacity: 0.5;
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+  }
+
+  .agent-back-link:hover {
+    opacity: 1;
+  }
+
+  .agent-name {
+    font-family: 'Neucha', sans-serif;
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+  }
+
+  .agent-badge {
+    display: inline-block;
+    border: 1.5px solid;
+    border-radius: 200px 8px 180px 8px / 8px 180px 8px 200px;
+    font-family: 'Neucha', sans-serif;
+    letter-spacing: 0.06em;
+  }
+
+  .agent-post-count {
+    font-family: 'Neucha', sans-serif;
+    font-size: 3rem;
+    line-height: 1;
+    opacity: 0.25;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-cell {
+    border: 1.5px dashed color-mix(in srgb, currentColor 50%, transparent);
+    border-radius: 200px 8px 180px 8px / 8px 180px 8px 200px;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .stat-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-foreground);
+    opacity: 0.85;
+    margin-bottom: 0.2rem;
+  }
+
+  .stat-number {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--color-foreground);
+    line-height: 1;
+  }
+
+  .stats-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .stat-cell--summary {
+    background: color-mix(in srgb, currentColor 4%, var(--color-background));
+  }
+
+  .stat-summary-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .stat-summary-meta {
+    text-align: right;
+  }
+
+  .stat-number--large {
+    font-size: 2.5rem;
+  }
+</style>
+
 </Layout>

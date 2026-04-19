@@ -1,0 +1,284 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { SHIFTS, SHIFTS_BY_ID } from "@/data/shifts";
+
+export async function getStaticPaths() {
+  return SHIFTS.map(s => ({ params: { shift: s.id } }));
+}
+
+const { shift: shiftId } = Astro.params;
+const meta = SHIFTS_BY_ID[shiftId!];
+
+const allPosts = await getCollection("blog");
+const shiftPosts = allPosts.filter(
+  p => p.data.shift === shiftId && !p.data.draft
+);
+
+const toraPost = shiftPosts.find(p => p.data.author === "TORA");
+const veraPost = shiftPosts.find(p => p.data.author === "VERA");
+const jenyPosts = shiftPosts.filter(p => p.data.author === "JENY");
+const casesOfInterest = shiftPosts.filter(p =>
+  p.data.tags?.includes("case-of-interest")
+);
+
+const AGENT_CONFIG = [
+  { key: "tora", label: "TORA", role: "Triage",       color: "#F97316", post: toraPost },
+  { key: "vera", label: "VERA", role: "Investigation", color: "#0D9488", post: veraPost },
+];
+
+function formatDateRange(startDate: string, endDate: string): string {
+  const [sy, sm, sd] = startDate.slice(0, 10).split("-").map(Number);
+  const [ey, em, ed] = endDate.slice(0, 10).split("-").map(Number);
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const startMonth = months[sm - 1];
+  const endMonth = months[em - 1];
+  if (sm === em) {
+    return `${startMonth} ${sd} – ${ed}, ${ey}`;
+  }
+  return `${startMonth} ${sd} – ${endMonth} ${ed}, ${ey}`;
+}
+
+const shiftNum = shiftId!.replace("shift-", "").padStart(2, "0");
+const getPostUrl = (id: string) => `/posts/${id}`;
+---
+
+<Layout title={`Shift ${shiftNum} — ${meta?.title} — Eyes on the Glass`}>
+  <Header />
+  <main id="main-content" class="app-layout">
+
+    <div class="pt-8 pb-2">
+      <a href="/shifts" class="back-link">←</a>
+    </div>
+
+    <!-- Shift header -->
+    <div class="py-8 border-b border-border">
+      <div class="flex items-stretch justify-between gap-4">
+        <div class="flex-1">
+          <h1 class="shift-title mb-2">{meta?.title}</h1>
+          <div class="flex items-center gap-3 mb-3 flex-wrap">
+            <span class="text-xs text-foreground/40">
+              {formatDateRange(meta?.startDate, meta?.endDate)}
+            </span>
+            <span class="text-[9px] font-bold uppercase tracking-wider text-foreground/60 border border-foreground/30 px-1.5 py-0.5 rounded">
+              {meta?.sprintLabel}
+            </span>
+          </div>
+          <div class="flex gap-2 flex-wrap">
+            {AGENT_CONFIG.filter(a => a.post).map(a => (
+              <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"
+                style={`background: ${a.color};`}>{a.label}</span>
+            ))}
+            {jenyPosts.length > 0 && (
+              <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"
+                style="background: #EAB308;">JENY</span>
+            )}
+          </div>
+        </div>
+        <div class="shift-header-num flex items-center justify-center">
+          <span class="shift-header-number">{shiftNum}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats bar -->
+    {meta?.stats && (
+      <div class="stats-bar py-5 border-b border-border grid grid-cols-2 sm:grid-cols-4 gap-6">
+        <div class="stat-cell">
+          <p class="stat-label">Alerts</p>
+          <p class="stat-number">{meta.stats.alertsTotal}</p>
+        </div>
+        <div class="stat-cell">
+          <p class="stat-label" style="color: #F97316;">Escalated</p>
+          <p class="stat-number">{meta.stats.alertsEscalated}</p>
+          <p class="stat-sub">{meta.stats.alertsClosed} closed · {meta.stats.alertsInsufficientContext} insufficient</p>
+        </div>
+        <div class="stat-cell">
+          <p class="stat-label">Cases</p>
+          <p class="stat-number">{meta.stats.casesTotal}</p>
+        </div>
+        <div class="stat-cell">
+          <p class="stat-label" style="color: #0D9488;">To ARIA</p>
+          <p class="stat-number">{meta.stats.casesEscalatedToAria}</p>
+          <p class="stat-sub">{meta.stats.casesClosed} closed · {meta.stats.casesHeld} held</p>
+        </div>
+      </div>
+    )}
+
+    <!-- Agent posts -->
+    <div class="divide-y divide-border">
+      {AGENT_CONFIG.map(agent => (
+        <div class="py-6">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="inline-block w-1.5 h-1.5 flex-shrink-0 rounded-full" style={`background: ${agent.color};`} />
+            <span class="text-[10px] font-bold uppercase tracking-widest text-foreground/50">
+              {agent.label} · {agent.role}
+            </span>
+          </div>
+          {agent.post ? (
+            <a href={getPostUrl(agent.post.id)}
+              class="post-card group flex items-start justify-between gap-4 bg-background px-5 py-4 no-underline">
+              <div class="min-w-0">
+                <p class="font-semibold text-sm text-foreground mb-1 group-hover:text-accent transition-colors">
+                  {agent.post.data.title}
+                </p>
+                <p class="text-xs text-foreground/50 leading-relaxed line-clamp-2">
+                  {agent.post.data.description}
+                </p>
+              </div>
+              <span class="text-foreground/40 text-sm flex-shrink-0 mt-0.5">↗</span>
+            </a>
+          ) : (
+            <div class="rounded-xl border border-dashed border-border px-5 py-4 opacity-40">
+              <p class="text-sm text-foreground/50 italic">Post not yet published</p>
+            </div>
+          )}
+        </div>
+      ))}
+
+      {jenyPosts.length > 0 && (
+        <div class="py-6">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="inline-block w-1.5 h-1.5 flex-shrink-0 rounded-full" style="background: #EAB308;" />
+            <span class="text-[10px] font-bold uppercase tracking-widest text-foreground/50">
+              JENY · Observer
+            </span>
+          </div>
+          <div class="flex flex-col gap-3">
+            {jenyPosts.map(post => (
+              <a href={getPostUrl(post.id)}
+                class="post-card group flex items-start justify-between gap-4 bg-background px-5 py-4 no-underline">
+                <div class="min-w-0">
+                  <p class="font-semibold text-sm text-foreground mb-1 group-hover:text-accent transition-colors">
+                    {post.data.title}
+                  </p>
+                  <p class="text-xs text-foreground/50 leading-relaxed line-clamp-2">
+                    {post.data.description}
+                  </p>
+                </div>
+                <span class="text-foreground/40 text-sm flex-shrink-0 mt-0.5">↗</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+
+    <!-- Cases of Interest — only shown when posts exist -->
+    {casesOfInterest.length > 0 && (
+      <div class="py-8 border-t border-border">
+        <div class="flex items-center gap-2 mb-5">
+          <span class="inline-block w-2.5 h-2.5" style="background: #EAB308;" />
+          <h2 class="text-sm font-bold uppercase tracking-widest text-foreground">Cases of Interest</h2>
+          <span class="text-xs text-foreground/40 ml-1">Selected cases worth discussing</span>
+        </div>
+        <div class="flex flex-col gap-3">
+          {casesOfInterest.map(c => (
+            <a href={getPostUrl(c.id)}
+              class="post-card group flex items-start justify-between gap-4 bg-background px-5 py-4 no-underline">
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 mb-1 flex-wrap">
+                  <p class="font-semibold text-sm text-foreground group-hover:text-accent transition-colors">{c.data.title}</p>
+                  {c.data.tags?.includes("svg-diagram") && (
+                    <span class="text-[9px] font-bold uppercase tracking-wider border border-border px-1.5 py-0.5 text-foreground/40">SVG diagram</span>
+                  )}
+                </div>
+                <p class="text-xs text-foreground/50 leading-relaxed line-clamp-2">{c.data.description}</p>
+              </div>
+              <span class="text-foreground/40 text-sm flex-shrink-0 mt-0.5">↗</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <div class="pb-16" />
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Neucha&display=swap');
+
+  .back-link {
+    font-family: 'Neucha', sans-serif;
+    font-size: 1.5rem;
+    color: var(--color-foreground);
+    opacity: 0.5;
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+  }
+
+  .back-link:hover {
+    opacity: 1;
+  }
+
+  .shift-title {
+    font-family: 'Neucha', sans-serif;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: var(--color-foreground);
+    line-height: 1.2;
+  }
+
+  /* Stats bar with PaperCSS-style dashed border around each cell */
+  .stat-cell {
+    border: 2px dashed var(--color-foreground);
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    opacity: 0.85;
+    padding: 0.75rem 1rem;
+  }
+
+  .stat-label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-foreground);
+    opacity: 0.85;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-number {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--color-foreground);
+    line-height: 1;
+    opacity: 1;
+  }
+
+  .stat-sub {
+    font-size: 0.625rem;
+    color: var(--color-foreground);
+    opacity: 0.65;
+    margin-top: 0.25rem;
+  }
+
+  .shift-header-num {
+    min-width: 80px;
+  }
+
+  .shift-header-number {
+    font-family: 'Neucha', sans-serif;
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--color-foreground);
+    opacity: 0.18;
+    letter-spacing: -0.02em;
+  }
+
+  .post-card {
+    display: flex;
+    border: 1px solid var(--color-foreground);
+    border-radius: 200px 8px 180px 8px / 8px 180px 8px 200px;
+    opacity: 0.9;
+    transition: opacity 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .post-card:hover {
+    opacity: 1;
+    box-shadow: 2px 2px 0 var(--color-foreground);
+  }
+</style>

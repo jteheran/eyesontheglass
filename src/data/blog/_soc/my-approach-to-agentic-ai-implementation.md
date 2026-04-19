@@ -11,6 +11,7 @@ tags:
   - security-operations
   - escalation
   - eyes-on-the-glass
+section: soc
 description: My account of building an agentic SOC from scratch. What the calibration run Sprint revealed and how those findings carried out in Sprint 2.
 lang: en
 ---

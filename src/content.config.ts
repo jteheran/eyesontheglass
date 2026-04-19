@@ -22,6 +22,10 @@ const blog = defineCollection({
       canonicalURL: z.string().optional(),
       hideEditPost: z.boolean().optional(),
       timezone: z.string().optional(),
+      // EOTG fields
+      shift: z.string().optional(), // e.g. "shift-1", "shift-2"
+      sprint: z.string().optional(), // e.g. "sp1w1", "sp1w2" — metadata only
+      section: z.enum(["soc", "shifts", "agents", "kb"]).optional(),
     }),
 });
 

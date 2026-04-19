@@ -1,0 +1,167 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { SHIFTS } from "@/data/shifts";
+
+const allPosts = await getCollection("blog");
+
+const AGENT_COLORS: Record<string, string> = {
+  TORA: "#F97316",
+  VERA: "#0D9488",
+  JENY: "#EAB308",
+};
+
+const AGENT_LABELS: Record<string, string> = {
+  TORA: "TORA",
+  VERA: "VERA",
+  JENY: "JENY",
+};
+
+const shiftData = [...SHIFTS].reverse().map(shift => {
+  const posts = allPosts.filter(p => p.data.shift === shift.id && !p.data.draft);
+  const agents = ["TORA", "VERA", "JENY"].filter(a =>
+    posts.some(p => p.data.author === a)
+  );
+  const casesOfInterest = posts.filter(p =>
+    p.data.tags?.includes("case-of-interest")
+  );
+  return { ...shift, posts, agents, casesOfInterest };
+});
+
+function formatDateRange(startDate: string, endDate: string): string {
+  // Parse date parts directly to avoid UTC-to-local timezone shift
+  const [sy, sm, sd] = startDate.slice(0, 10).split("-").map(Number);
+  const [ey, em, ed] = endDate.slice(0, 10).split("-").map(Number);
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const startMonth = months[sm - 1];
+  const endMonth = months[em - 1];
+  if (sm === em) {
+    return `${startMonth} ${sd} – ${ed}, ${ey}`;
+  }
+  return `${startMonth} ${sd} – ${endMonth} ${ed}, ${ey}`;
+}
+---
+
+<Layout title="Shifts — Eyes on the Glass">
+  <Header />
+  <main id="main-content" class="app-layout">
+
+    <div class="py-10 border-b border-border">
+      <h1 class="shifts-title">Weekly Operations Log</h1>
+      <p class="text-base mt-4 text-foreground leading-relaxed text-right">
+        Each shift combines TORA's triage report, VERA's investigation report, JENY's observer notes, and selected cases of interest.
+      </p>
+    </div>
+
+    <div class="py-8 flex flex-col gap-4">
+      {shiftData.map(shift => (
+        <a href={`/shifts/${shift.id}`} class="shift-card no-underline block">
+          <div class="flex items-stretch">
+            <div class="flex-1 px-5 py-4">
+              <p class="shift-card-title mb-1">{shift.title}</p>
+              <p class="text-xs text-foreground/50 mb-3">
+                {formatDateRange(shift.startDate, shift.endDate)}
+              </p>
+              {shift.agents.length > 0 && (
+                <div class="flex gap-2 flex-wrap">
+                  {shift.agents.map(a => (
+                    <span class="px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white"
+                      style={`background: ${AGENT_COLORS[a]};`}>{AGENT_LABELS[a]}</span>
+                  ))}
+                </div>
+              )}
+              {shift.stats && (
+                <div class="mt-3 pt-3 flex gap-4 flex-wrap stats-row">
+                  <span class="text-[14px] text-foreground/50">
+                    <span class="font-bold" style="color: #F97316;">{shift.stats.alertsTotal}</span> alerts
+                  </span>
+                  <span class="text-[14px] text-foreground/50">
+                    <span>{shift.stats.alertsEscalated}</span> escalated
+                  </span>
+                  <span class="text-[14px] text-foreground/50">
+                    <span class="font-bold" style="color: #0D9488;">{shift.stats.casesTotal}</span> cases
+                  </span>
+                  <span class="text-[14px] text-foreground/50">
+                    <span>{shift.stats.casesEscalatedToAria}</span> to ARIA
+                  </span>
+                </div>
+              )}
+              {shift.casesOfInterest.length > 0 && (
+                <div class="mt-2 flex items-center gap-2">
+                  <span class="inline-block w-2 h-2 flex-shrink-0" style="background: #EAB308;" />
+                  <span class="text-[10px] text-foreground/50">
+                    {shift.casesOfInterest.length} case{shift.casesOfInterest.length !== 1 ? "s" : ""} of interest
+                  </span>
+                </div>
+              )}
+            </div>
+            <div class="shift-num-col flex items-center justify-center px-5">
+              <span class="shift-num">
+                {shift.id.replace("shift-", "").padStart(2, "0")}
+              </span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .shifts-title {
+    font-family: 'Neucha', sans-serif;
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 700;
+    color: var(--color-foreground);
+    line-height: 1.2;
+    display: block;
+    text-align: right;
+  }
+
+  .shift-card {
+    display: block;
+    border: 2px solid var(--color-foreground);
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    transition: box-shadow 0.2s ease;
+    color: inherit;
+  }
+
+  .shift-card:hover {
+    box-shadow: 4px 4px 0 var(--color-foreground);
+  }
+
+  .shift-num-col {
+    background: var(--color-foreground);
+    border-radius: 0 6px 6px 0;
+    min-width: 80px;
+  }
+
+  .shift-num {
+    font-family: 'Neucha', sans-serif;
+    font-size: 2.5rem;
+    line-height: 1;
+    color: var(--color-background);
+    letter-spacing: -0.02em;
+    opacity: 0.9;
+  }
+
+  .shift-card:hover .shift-num {
+    opacity: 1;
+  }
+
+  .shift-card-title {
+    font-family: 'Neucha', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    line-height: 1.3;
+  }
+
+  .stats-row {
+    border-top: 1px dashed color-mix(in srgb, currentColor 25%, transparent);
+  }
+</style>

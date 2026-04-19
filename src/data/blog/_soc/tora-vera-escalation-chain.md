@@ -13,6 +13,7 @@ tags:
   - escalation-chain
   - schema-driven
   - eyes-on-the-glass
+section: soc
 description: "TORA triages. VERA investigates. The handoff between them is not a queue — it is a structured contract. This is the architecture of the escalation chain and why every field in it is intentional."
 lang: en
 ---

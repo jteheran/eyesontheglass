@@ -10,6 +10,7 @@ tags:
   - ai-agents
   - security-operations
   - eyes-on-the-glass
+section: soc
 description: A public research journal on autonomous security operations. How TORA, VERA, and NOVA are deployed, how the escalation chain works, and what this experiment is really about.
 lang: en
 ---

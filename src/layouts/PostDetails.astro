@@ -7,7 +7,6 @@ import Tag from "@/components/Tag.astro";
 import Datetime from "@/components/Datetime.astro";
 import EditPost from "@/components/EditPost.astro";
 import ShareLinks from "@/components/ShareLinks.astro";
-import BackButton from "@/components/BackButton.astro";
 import BackToTopButton from "@/components/BackToTopButton.astro";
 import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
@@ -33,6 +32,7 @@ const {
   timezone,
   tags,
   hideEditPost,
+  shift,
 } = post.data;
 
 const { Content } = await render(post);
@@ -84,15 +84,22 @@ const nextPost =
 
 <Layout {...layoutProps}>
   <Header />
-  <BackButton />
+  <div class="app-layout pt-6 pb-2">
+    {shift ? (
+      <a href={`/shifts/${shift}`} class="post-back-link">← Shift {shift.replace("shift-", "").padStart(2, "0")}</a>
+    ) : (
+      <a href="/" class="post-back-link">← Home</a>
+    )}
+  </div>
   <main
     id="main-content"
-    class:list={["app-layout pb-12", { "mt-8": !SITE.showBackButton }]}
+    class="app-layout pb-12"
     data-pagefind-body
   >
     <h1
       transition:name={slugifyStr(title.replaceAll(".", "-"))}
-      class="inline-block text-2xl font-bold text-accent sm:text-3xl"
+      class="post-title inline-block"
+      style={author === "TORA" ? "color: #F97316;" : author === "VERA" ? "color: #0D9488;" : undefined}
     >
       {title}
     </h1>
@@ -162,6 +169,30 @@ const nextPost =
   </main>
   <Footer />
 </Layout>
+
+<style>
+  .post-back-link {
+    font-family: 'Neucha', sans-serif;
+    font-size: 1.5rem;
+    color: var(--color-foreground);
+    opacity: 0.5;
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+  }
+
+  .post-back-link:hover {
+    opacity: 1;
+  }
+
+  .post-title {
+    font-family: 'Neucha', sans-serif;
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+    font-weight: 700;
+    color: var(--color-foreground);
+    line-height: 1.2;
+    /* color overridden inline for agent posts */
+  }
+</style>
 
 <script is:inline data-astro-rerun>
   /** Create a progress indicator

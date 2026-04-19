@@ -10,6 +10,9 @@ tags:
   - week-in-review
   - sprint-2
   - pipeline
+sprint: sprint-2
+shift: shift-3
+section: shifts
 description: "The SOC data pipeline did not change, but the agents did. Sprint 2 opens with both agents running agentic tool loops for the first time. This shift produced real findings and failures. Both are worth documenting."
 lang: en
 ---

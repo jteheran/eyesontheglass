@@ -2,54 +2,155 @@
 import { getCollection } from "astro:content";
 
 const authors = await getCollection("authors");
-const agents = authors.filter(a => a.data.name !== "JENY")
-  .sort((a, b) => {
-    const order = ["TORA", "VERA", "NOVA", "ARIA"];
-    return order.indexOf(a.data.name) - order.indexOf(b.data.name);
-  });
+const agents = authors
+  .filter(a => a.data.name === "TORA" || a.data.name === "VERA")
+  .sort((a, b) => a.data.name === "TORA" ? -1 : 1);
+
 ---
 
-<section id="agents" class="py-8 border-b border-border">
-  <h2 class="text-2xl font-semibold tracking-wide mb-6">Bots of the SOC</h2>
-  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-    {agents.map(agent => {
-      const isTORA = agent.data.name === "TORA";
-      const isVERA = agent.data.name === "VERA";
-      const isClickable = isTORA || isVERA;
-      const cardContent = (
-        <div class="flex flex-row items-center gap-4 p-4 rounded-lg border border-border hover:border-accent transition-colors">
-          <img
-            src={agent.data.avatar}
-            alt={agent.data.name}
-            width="60"
-            height="90"
-            class="flex-shrink-0"
-          />
-          <div class="flex flex-col">
-            <span
-              class="text-lg font-bold mb-1"
-              style={`color: ${agent.data.color}`}
-            >
-              {agent.data.name}
-            </span>
-            <span
-              class="text-sm font-medium mb-2"
-              style={`color: ${agent.data.color}`}
-            >
-              {agent.data.role}
-            </span>
-            <span class="text-xs opacity-70">{agent.data.bio}</span>
-          </div>
-        </div>
-      );
+<section id="agents" class="agents-section">
+  <div class="spine-header">
+    <span class="spine-section-label">Agents</span>
+    <a href="/agents" class="spine-all-link">Meet the crew →</a>
+  </div>
 
-      return isClickable ?  (
-        <a href={`/agents/${agent.data.name.toLowerCase()}`} class="block no-underline">
-          {cardContent}
+  <div class="agents-grid">
+    {agents.map(agent => {
+      const { name, color, avatar, tier, role } = agent.data;
+      return (
+        <a href={`/agents/${name.toLowerCase()}`} class="agent-home-card no-underline" style={`--agent-color: ${color};`}>
+          <div class="agent-card-content">
+            <div class="agent-home-top">
+              <span class="agent-home-badge" style={`color: ${color};`}>
+                {tier} · Active
+              </span>
+            </div>
+            <h3 class="agent-home-name" style={`color: ${color};`}>{name}</h3>
+            <p class="agent-home-role">{role}</p>
+          </div>
+          <div class="agent-creature-wrap">
+            <img src={avatar} alt={name} class="agent-creature-img" />
+          </div>
         </a>
-      ) : (
-        cardContent
       );
     })}
   </div>
 </section>
+
+<style>
+  .agents-section {
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .spine-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+
+  .spine-section-label {
+    font-family: 'Neucha', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    opacity: 0.8;
+  }
+
+  .spine-all-link {
+    font-family: 'Neucha', sans-serif;
+    font-size: 1rem;
+    color: var(--color-foreground);
+    border: 1.5px solid var(--color-foreground);
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    padding: 0.15rem 0.75rem;
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .spine-all-link:hover {
+    opacity: 1;
+    box-shadow: 2px 2px 0 var(--color-foreground);
+  }
+
+  .agents-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  @media (max-width: 500px) {
+    .agents-grid { grid-template-columns: 1fr; }
+  }
+
+  .agent-home-card {
+    display: flex;
+    align-items: stretch;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid var(--agent-color);
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    min-height: 140px;
+    background: color-mix(in srgb, var(--agent-color) 8%, var(--color-background));
+    transition: box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .agent-home-card:hover {
+    box-shadow: 3px 3px 0 var(--agent-color);
+    background: color-mix(in srgb, var(--agent-color) 14%, var(--color-background));
+  }
+
+  .agent-card-content {
+    flex: 1;
+    padding: 1.1rem 1.2rem;
+    padding-right: 0;
+    min-width: 0;
+  }
+
+  .agent-creature-wrap {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 35%;
+    flex-shrink: 0;
+    padding-bottom: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .agent-creature-img {
+    width: 100%;
+    height: 100%;
+    max-height: 130px;
+    object-fit: contain;
+    object-position: bottom center;
+  }
+
+  .agent-home-top {
+    margin-bottom: 0.75rem;
+  }
+
+  .agent-home-badge {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.15rem 0.5rem;
+    font-family: 'Neucha', sans-serif;
+  }
+
+  .agent-home-name {
+    font-family: 'Neucha', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .agent-home-role {
+    font-size: 0.72rem;
+    color: var(--color-foreground);
+    opacity: 0.55;
+    line-height: 1.5;
+  }
+</style>

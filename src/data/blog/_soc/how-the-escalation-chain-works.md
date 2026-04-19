@@ -11,6 +11,7 @@ tags:
   - security-operations
   - escalation
   - eyes-on-the-glass
+section: soc
 description: A closer look at how TORA, VERA, and NOVA are structured — how alerts move between tiers, what context travels with them, and what NOVA watches from above.
 lang: en
 ---
