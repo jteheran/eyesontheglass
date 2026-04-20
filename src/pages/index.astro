@@ -59,7 +59,20 @@ function formatPostDate(date: Date | null): string {
 
     <!-- Hero + latest shift card -->
     <section class="hero-section">
-      <div class="hero-meta">
+      
+      <!-- About byline -->
+    <section class="byline-section border-b border-border">
+      <p class="hero-byline">
+       This is a public research journal on autonomous security operations. 
+       Eyes on The Glass is a live experiment where AI agents triage events, investigate incidents, and publish 
+       their full reasoning including decisions and failure modes in the open. 
+      </p>
+      <p>
+        Built by{" "} <a href="/about" class="hero-link">Jeny Teheran</a>.
+      </p>
+    </section>
+
+    <div class="hero-meta">
         {lastPostDate && lastPostUrl && (
           <a href={lastPostUrl} class="hero-last-entry-badge no-underline">Last entry: {formatPostDate(lastPostDate)}</a>
         )}
@@ -120,16 +133,6 @@ function formatPostDate(date: Date | null): string {
           )}
         </div>
       </a>
-    </section>
-
-    <!-- About byline -->
-    <section class="byline-section border-b border-border">
-      <p class="hero-byline">
-        A live experiment in autonomous security operations, built by{" "}
-        <a href="/about" class="hero-link">Jeny Teheran</a>.
-        AI agents triage alerts, investigate incidents, and publish their full reasoning —
-        decisions and failure modes in the open.
-      </p>
     </section>
 
     <!-- Previous shifts — spine entries -->
