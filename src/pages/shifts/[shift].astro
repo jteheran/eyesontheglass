@@ -19,7 +19,9 @@ const shiftPosts = allPosts.filter(
 
 const toraPost = shiftPosts.find(p => p.data.author === "TORA");
 const veraPost = shiftPosts.find(p => p.data.author === "VERA");
-const jenyPosts = shiftPosts.filter(p => p.data.author === "JENY");
+const jenyPosts = shiftPosts.filter(
+  p => p.data.author === "JENY" && !p.data.tags?.includes("case-of-interest")
+);
 const casesOfInterest = shiftPosts.filter(p =>
   p.data.tags?.includes("case-of-interest")
 );
@@ -89,31 +91,85 @@ const getPostUrl = (id: string) => `/posts/${id}`;
         <div class="stat-cell">
           <p class="stat-label">Alerts</p>
           <p class="stat-number">{meta.stats.alertsTotal}</p>
+          </div>
+         <div class="stat-cell">
+          <p class="stat-label">Closed</p>
+          <p class="stat-number">{meta.stats.alertsClosed}</p>
+           <p class="stat-sub">{meta.stats.alertsInsufficientContext} insufficient · {meta.stats.alertsUnknown} Unknown</p>
         </div>
         <div class="stat-cell">
-          <p class="stat-label" style="color: #F97316;">Escalated</p>
-          <p class="stat-number">{meta.stats.alertsEscalated}</p>
-          <p class="stat-sub">{meta.stats.alertsClosed} closed · {meta.stats.alertsInsufficientContext} insufficient</p>
-        </div>
+          <p class="stat-label" style="color: #F97316;">Alerts Escalated</p>
+          <p class="stat-number" style="color: #F97316;">{meta.stats.alertsEscalated}</p>
+         </div>
         <div class="stat-cell">
-          <p class="stat-label">Cases</p>
-          <p class="stat-number">{meta.stats.casesTotal}</p>
-        </div>
-        <div class="stat-cell">
-          <p class="stat-label" style="color: #0D9488;">To ARIA</p>
-          <p class="stat-number">{meta.stats.casesEscalatedToAria}</p>
+          <p class="stat-label" style="color: #0D9488;">Cases Escalated</p>
+          <p class="stat-number" style="color: #0D9488;">{meta.stats.casesEscalatedToAria}</p>
           <p class="stat-sub">{meta.stats.casesClosed} closed · {meta.stats.casesHeld} held</p>
         </div>
       </div>
     )}
 
-    <!-- Agent posts -->
     <div class="divide-y divide-border">
+
+      <!-- 1. Cases of Interest -->
+      {casesOfInterest.length > 0 && (
+        <div class="py-6">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="inline-block w-1.5 h-1.5 flex-shrink-0 rounded-full" style="background: #EAB308;" />
+            <span class="section-label" style="color: #EAB308;">Cases of Interest</span>
+          </div>
+          <div class="flex flex-col gap-3">
+            {casesOfInterest.map(c => (
+              <a href={getPostUrl(c.id)}
+                class="post-card group flex items-start justify-between gap-4 bg-background px-5 py-4 no-underline">
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 mb-1 flex-wrap">
+                    <p class="font-semibold text-sm text-foreground group-hover:text-accent transition-colors">{c.data.title}</p>
+                    {c.data.tags?.includes("svg-diagram") && (
+                      <span class="text-[9px] font-bold uppercase tracking-wider border border-border px-1.5 py-0.5 text-foreground/40">SVG diagram</span>
+                    )}
+                  </div>
+                  <p class="text-xs text-foreground/50 leading-relaxed line-clamp-2">{c.data.description}</p>
+                </div>
+                <span class="text-foreground/40 text-sm flex-shrink-0 mt-0.5">↗</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- 2. JENY Observer -->
+      {jenyPosts.length > 0 && (
+        <div class="py-6">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="inline-block w-1.5 h-1.5 flex-shrink-0 rounded-full" style="background: #EAB308;" />
+            <span class="section-label" style="color: #EAB308;">JENY · Observer</span>
+          </div>
+          <div class="flex flex-col gap-3">
+            {jenyPosts.map(post => (
+              <a href={getPostUrl(post.id)}
+                class="post-card group flex items-start justify-between gap-4 bg-background px-5 py-4 no-underline">
+                <div class="min-w-0">
+                  <p class="font-semibold text-sm text-foreground mb-1 group-hover:text-accent transition-colors">
+                    {post.data.title}
+                  </p>
+                  <p class="text-xs text-foreground/50 leading-relaxed line-clamp-2">
+                    {post.data.description}
+                  </p>
+                </div>
+                <span class="text-foreground/40 text-sm flex-shrink-0 mt-0.5">↗</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- 3. TORA and VERA -->
       {AGENT_CONFIG.map(agent => (
         <div class="py-6">
-          <div class="flex items-center gap-2 mb-3">
+          <div class="flex items-center gap-2 mb-4">
             <span class="inline-block w-1.5 h-1.5 flex-shrink-0 rounded-full" style={`background: ${agent.color};`} />
-            <span class="text-[10px] font-bold uppercase tracking-widest text-foreground/50">
+            <span class="section-label" style={`color: ${agent.color};`}>
               {agent.label} · {agent.role}
             </span>
           </div>
@@ -138,61 +194,7 @@ const getPostUrl = (id: string) => `/posts/${id}`;
         </div>
       ))}
 
-      {jenyPosts.length > 0 && (
-        <div class="py-6">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="inline-block w-1.5 h-1.5 flex-shrink-0 rounded-full" style="background: #EAB308;" />
-            <span class="text-[10px] font-bold uppercase tracking-widest text-foreground/50">
-              JENY · Observer
-            </span>
-          </div>
-          <div class="flex flex-col gap-3">
-            {jenyPosts.map(post => (
-              <a href={getPostUrl(post.id)}
-                class="post-card group flex items-start justify-between gap-4 bg-background px-5 py-4 no-underline">
-                <div class="min-w-0">
-                  <p class="font-semibold text-sm text-foreground mb-1 group-hover:text-accent transition-colors">
-                    {post.data.title}
-                  </p>
-                  <p class="text-xs text-foreground/50 leading-relaxed line-clamp-2">
-                    {post.data.description}
-                  </p>
-                </div>
-                <span class="text-foreground/40 text-sm flex-shrink-0 mt-0.5">↗</span>
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
-
-    <!-- Cases of Interest — only shown when posts exist -->
-    {casesOfInterest.length > 0 && (
-      <div class="py-8 border-t border-border">
-        <div class="flex items-center gap-2 mb-5">
-          <span class="inline-block w-2.5 h-2.5" style="background: #EAB308;" />
-          <h2 class="text-sm font-bold uppercase tracking-widest text-foreground">Cases of Interest</h2>
-          <span class="text-xs text-foreground/40 ml-1">Selected cases worth discussing</span>
-        </div>
-        <div class="flex flex-col gap-3">
-          {casesOfInterest.map(c => (
-            <a href={getPostUrl(c.id)}
-              class="post-card group flex items-start justify-between gap-4 bg-background px-5 py-4 no-underline">
-              <div class="min-w-0">
-                <div class="flex items-center gap-2 mb-1 flex-wrap">
-                  <p class="font-semibold text-sm text-foreground group-hover:text-accent transition-colors">{c.data.title}</p>
-                  {c.data.tags?.includes("svg-diagram") && (
-                    <span class="text-[9px] font-bold uppercase tracking-wider border border-border px-1.5 py-0.5 text-foreground/40">SVG diagram</span>
-                  )}
-                </div>
-                <p class="text-xs text-foreground/50 leading-relaxed line-clamp-2">{c.data.description}</p>
-              </div>
-              <span class="text-foreground/40 text-sm flex-shrink-0 mt-0.5">↗</span>
-            </a>
-          ))}
-        </div>
-      </div>
-    )}
 
     <div class="pb-16" />
   </main>
@@ -200,8 +202,6 @@ const getPostUrl = (id: string) => `/posts/${id}`;
 </Layout>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Neucha&display=swap');
-
   .back-link {
     font-family: 'Neucha', sans-serif;
     font-size: 1.5rem;
@@ -223,7 +223,16 @@ const getPostUrl = (id: string) => `/posts/${id}`;
     line-height: 1.2;
   }
 
-  /* Stats bar with PaperCSS-style dashed border around each cell */
+  .section-label {
+    font-family: 'Neucha', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 1;
+  }
+
+  .stats-bar {}
+
   .stat-cell {
     border: 2px dashed var(--color-foreground);
     border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;

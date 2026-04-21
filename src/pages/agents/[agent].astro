@@ -355,6 +355,55 @@ try {
       </div>
     )}
 
+    <!-- Prompt section — TORA and VERA only -->
+    {(name === "TORA" || name === "VERA") && (
+      <div class="py-6 border-b border-border">
+        <button
+          class="prompt-toggle w-full flex items-center justify-between gap-3 text-left"
+          onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.prompt-chevron').classList.toggle('rotate-180');"
+        >
+          <span class="flex items-center gap-2">
+            <span class="prompt-section-label">System Prompt</span>
+            <span class="prompt-shift-badge" style={`border-color: ${color}; color: ${color};`}>
+              Shifts 1 – 2
+            </span>
+          </span>
+          <svg class="prompt-chevron w-5 h-5 transition-transform duration-200 flex-shrink-0"
+            style={`color: ${color};`}
+            fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+
+        <div class="hidden mt-5">
+          <p class="prompt-description mb-5 max-w-2xl">
+            {name === "TORA"
+              ? "The system prompt TORA ran for Shifts 1 and 2. The triage decision logic, forced escalation rules, and output schema are published here as a research artifact. The divergences documented in the Cases of Interest posts trace directly to the confidence-based escalation rule in Step 4."
+              : "The system prompt VERA ran for Shifts 1 and 2. The six-step investigation logic, root cause confidence model, and output schema are published here as a research artifact."}
+          </p>
+          <div class="prompt-code-wrap" style={`border-color: ${color}40;`}>
+            <div class="flex items-center justify-between mb-3">
+              <span class="prompt-filepath">
+                {name === "TORA" ? "prompts/tora/triage.md" : "prompts/vera/investigation.md"}
+              </span>
+              <a
+                href={name === "TORA"
+                  ? "https://github.com/jteheran/eyesontheglass/blob/main/prompts/tora/triage.md"
+                  : "https://github.com/jteheran/eyesontheglass/blob/main/prompts/vera/investigation.md"}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="prompt-github-link hover:opacity-100 transition-opacity"
+                style={`color: ${color};`}
+              >
+                View on GitHub ↗
+              </a>
+            </div>
+            <pre class="prompt-pre"><code id={`prompt-${name.toLowerCase()}`}>Loading...</code></pre>
+          </div>
+        </div>
+      </div>
+    )}
+
     <!-- Post trail -->
     <div class="py-8 pb-20">
       {postCount > 0 ? (
@@ -381,6 +430,27 @@ try {
 
   </main>
   <Footer />
+{(name === "TORA" || name === "VERA") && (
+  <script is:inline define:vars={{ agentName: name }}>
+    async function loadPrompt() {
+      const el = document.getElementById(`prompt-${agentName.toLowerCase()}`);
+      if (!el) return;
+      const url = agentName === "TORA"
+        ? "https://raw.githubusercontent.com/jteheran/eyesontheglass/main/prompts/tora/triage.md"
+        : "https://raw.githubusercontent.com/jteheran/eyesontheglass/main/prompts/vera/investigation.md";
+      try {
+        const res = await fetch(url);
+        const text = await res.text();
+        el.textContent = text;
+      } catch {
+        el.textContent = "Prompt could not be loaded. View on GitHub directly.";
+      }
+    }
+    document.addEventListener("DOMContentLoaded", loadPrompt);
+    document.addEventListener("astro:page-load", loadPrompt);
+  </script>
+)}
+
 {(name === "TORA" || name === "VERA") && (
   <script is:inline>
     function initAgentEyes() {
@@ -522,6 +592,85 @@ try {
     align-items: flex-end;
     justify-content: space-between;
     gap: 1rem;
+  }
+
+  .prompt-toggle {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .prompt-section-label {
+    font-family: 'Neucha', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    letter-spacing: 0.01em;
+    line-height: 1;
+  }
+
+  .prompt-shift-badge {
+    font-family: 'Neucha', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 1.5px solid;
+    border-radius: 200px 4px 180px 4px / 4px 180px 4px 200px;
+    padding: 0.15rem 0.6rem;
+    line-height: 1.4;
+  }
+
+  .prompt-description {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--color-foreground);
+    opacity: 0.7;
+  }
+
+  .prompt-chevron {
+    transition: transform 0.2s ease;
+  }
+
+  .prompt-chevron.rotate-180 {
+    transform: rotate(180deg);
+  }
+
+  .prompt-code-wrap {
+    border: 1.5px dashed;
+    border-radius: 8px;
+    padding: 1rem;
+    background: color-mix(in srgb, currentColor 3%, var(--color-background));
+  }
+
+  .prompt-filepath {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--color-foreground);
+    opacity: 0.6;
+    letter-spacing: 0.04em;
+  }
+
+  .prompt-github-link {
+    font-family: 'Neucha', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    opacity: 0.75;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+  }
+
+  .prompt-pre {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.75rem;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--color-foreground);
+    opacity: 0.85;
+    max-height: 480px;
+    overflow-y: auto;
+    margin: 0;
   }
 
   .stat-summary-meta {
