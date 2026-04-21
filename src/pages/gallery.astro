@@ -31,6 +31,15 @@ const images = [
     agents: ["TORA"],
     colors: ["#F97316"],
   },
+  {
+    file: "/assets/images/gallery/EOTG_VERA_Its_always_DNS_JSON.png",
+    title: "It\u2019s always DNS or JSON",
+    prompt: "TORA carrying a stack of alerts labeled ALERT into a CASES pipeline, while VERA receives them on the other side with a thought bubble saying it\u2019s always DNS or JSON \u2014 SOC DATA Pipelines on the left, SOC Context Augmentation on the right.",
+    sprint: "Sprint 2",
+    shifts: "Shifts 1\u20134",
+    agents: ["TORA", "VERA"],
+    colors: ["#F97316", "#0D9488"],
+  },
 ];
 ---
 
@@ -48,7 +57,7 @@ const images = [
     <div class="gallery-grid py-10">
       {images.map(img => (
         <div class="gallery-card">
-          <button class="gallery-img-wrap" onclick={`openLightbox('${img.file}', '${img.title}')`} aria-label={`View full image: ${img.title}`}>
+          <button class="gallery-img-wrap gallery-lightbox-btn" data-src={img.file} data-title={img.title} aria-label={`View full image: ${img.title}`}>
             <img
               src={img.file}
               alt={img.title}
@@ -79,7 +88,7 @@ const images = [
   <Footer />
 
   <!-- Lightbox -->
-  <div id="lightbox" class="lightbox" onclick="closeLightbox()" aria-hidden="true">
+  <div id="lightbox" class="lightbox" aria-hidden="true">
     <img id="lightbox-img" src="" alt="" class="lightbox-img" />
   </div>
 </Layout>
@@ -254,6 +263,19 @@ const images = [
     lb.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
   }
+
+  function initGallery() {
+    document.querySelectorAll('.gallery-lightbox-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        openLightbox(btn.dataset.src, btn.dataset.title);
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initGallery);
+  document.addEventListener('astro:page-load', initGallery);
+
+  document.getElementById('lightbox')?.addEventListener('click', closeLightbox);
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeLightbox();

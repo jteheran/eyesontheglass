@@ -45,6 +45,24 @@ const lastPost = latest.posts.length > 0
 const lastPostDate = lastPost?.data.pubDatetime ?? null;
 const lastPostUrl = lastPost ? `/posts/${lastPost.id}` : null;
 
+// Latest posts for homepage section
+const AUTHOR_COLORS: Record<string, string> = {
+  TORA: "#F97316",
+  VERA: "#0D9488",
+  JENY: "#EAB308",
+  NOVA: "#7C3AED",
+  ARIA: "#16A34A",
+};
+
+const recentPosts = allPosts
+  .filter(p => !p.data.draft)
+  .sort((a, b) => new Date(b.data.pubDatetime).getTime() - new Date(a.data.pubDatetime).getTime())
+  .slice(0, 5)
+  .map(p => ({
+    post: p,
+    color: AUTHOR_COLORS[p.data.author?.toUpperCase() ?? ""] ?? "var(--color-foreground)",
+  }));
+
 function formatPostDate(date: Date | null): string {
   if (!date) return "";
   const d = new Date(date);
@@ -71,12 +89,6 @@ function formatPostDate(date: Date | null): string {
         Built by{" "} <a href="/about" class="hero-link">Jeny Teheran</a>.
       </p>
     </section>
-
-    <div class="hero-meta">
-        {lastPostDate && lastPostUrl && (
-          <a href={lastPostUrl} class="hero-last-entry-badge no-underline">Last entry: {formatPostDate(lastPostDate)}</a>
-        )}
-      </div>
 
       <h1 class="hero-title">
         Shift {shiftNum} is{latest.posts.length > 0 ? " in." : " running."}
@@ -167,6 +179,28 @@ function formatPostDate(date: Date | null): string {
     <!-- Agents -->
     <AgentCards />
 
+    <!-- Latest posts -->
+    {recentPosts.length > 0 && (
+      <section class="latest-posts-section border-t border-border">
+        <div class="spine-header">
+          <span class="spine-section-label">Latest Posts</span>
+          <a href="/posts" class="spine-all-link">See all →</a>
+        </div>
+        <div class="spine-list">
+          {recentPosts.map(({ post, color }) => (
+            <a href={`/posts/${post.id}`} class="spine-card no-underline">
+              <span class="spine-dot" style={`background: ${color}; width: 8px; height: 8px; flex-shrink: 0;`} />
+              <div class="spine-body">
+                <span class="spine-title" style="font-size: 1rem;">{post.data.title}</span>
+                <span class="spine-date">{post.data.author} · {formatPostDate(new Date(post.data.pubDatetime))}</span>
+              </div>
+              <span class="spine-arrow">→</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
   </main>
   <Footer />
 </Layout>
@@ -184,50 +218,6 @@ function formatPostDate(date: Date | null): string {
   .hero-section {
     padding: 2.5rem 0 1.5rem;
     border-bottom: 1px solid var(--color-border);
-  }
-
-  .hero-meta {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-bottom: 0.4rem;
-  }
-
-  @media (max-width: 640px) {
-    .hero-meta {
-      margin-bottom: 1rem;
-    }
-  }
-
-  .hero-last-entry-badge {
-    font-family: 'Neucha', sans-serif;
-    font-size: 1.1rem;
-    background: linear-gradient(160deg, #3f6291 0%, #6b3fa0 40%, #c084c8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    border: 2px dashed #6b3fa0;
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-    padding: 0.25rem 1rem;
-    letter-spacing: 0.02em;
-    transition: box-shadow 0.15s ease;
-    cursor: pointer;
-  }
-
-  .hero-last-entry-badge:hover {
-    box-shadow: 3px 3px 0 #6b3fa0;
-  }
-
-  html[data-theme="dark"] .hero-last-entry-badge {
-    background: linear-gradient(160deg, #7bafd4 0%, #a78bdb 40%, #e0a8e8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    border-color: #a78bdb;
-  }
-
-  html[data-theme="dark"] .hero-last-entry-badge:hover {
-    box-shadow: 3px 3px 0 #a78bdb;
   }
 
   .hero-label {
@@ -556,5 +546,8 @@ function formatPostDate(date: Date | null): string {
     font-size: 0.75rem;
     color: var(--color-foreground);
     opacity: 0.25;
+  }
+  .latest-posts-section {
+    padding: 1.5rem 0 2rem;
   }
 </style>
