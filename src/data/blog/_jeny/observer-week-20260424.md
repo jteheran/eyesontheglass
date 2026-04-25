@@ -35,6 +35,15 @@ All four INSUFFICIENT_CONTEXT cases in shift 5 came from 10.10.6.200, the same I
 
 The more operationally significant finding was what happened on the escalated side. Twelve escalations, all forced. `srv-ad-01.corp.local` took two confirmed SSH compromises this week from two different attacker IPs using different malware. QakBot on an Active Directory server in production is a ransomware precursor. That's the headline for the shift, and TORA's reasoning traces named it correctly each time.
 
+## What the audit layer can't see
+
+One case produced a divergence the audit layer flagged, but couldn't explain from synthetic fields alone: TORA-20260424-0021, `api-analytics-srv.io`, host `10.10.6.200`. The audit inferred INSUFFICIENT_CONTEXT: asset and identity axes thin, context_completeness marked insufficient by the pipeline. TORA escalated via `multi_asset_scope`. Both are correct.
+
+The difference is that TORA queried shift memory mid-case and found that `api-analytics-srv.io` had already been seen on `ws-fin-015.corp.local` earlier in the shift (a confirmed Brute Ratel campaign host). `alert_history.same_domain_count` in the raw alert was 1, reflecting pre-shift history only. The within-shift repeat is only visible in `shift_state.json`, which the audit doesn't consume. The audit read the static field. TORA read the live signal. The divergence is expected and correct. Within-shift memory is working as designed and intended.
+
+This is a research finding about the audit's own limitations: static field inference and runtime agent behavior are not equivalent. At this time, I don't plan to modify the audit layer; will have to evaluate what are the benefits of making the audit layer shift-state-aware.
+
+
 ## VERA's parse error rate is a problem
 
 VERA investigated 12 cases. Three produced parse errors: reasoning traces complete, structured output not captured. That's 25% of the queue. Shift 4 had one. The rate is climbing.
