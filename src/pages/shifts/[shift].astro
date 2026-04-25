@@ -91,20 +91,23 @@ const getPostUrl = (id: string) => `/posts/${id}`;
         <div class="stat-cell">
           <p class="stat-label">Alerts</p>
           <p class="stat-number">{meta.stats.alertsTotal}</p>
-          </div>
+          <p class="stat-sub">{meta.stats.alertsClosed} closed</p>
+          
+        </div>
          <div class="stat-cell">
-          <p class="stat-label">Closed</p>
-          <p class="stat-number">{meta.stats.alertsClosed}</p>
-           <p class="stat-sub">{meta.stats.alertsInsufficientContext} insufficient · {meta.stats.alertsUnknown} Unknown</p>
+          <p class="stat-label">Alerts Escalated</p>
+          <p class="stat-number" style="color: #F97316;">{meta.stats.alertsEscalated}</p>
+          <p class="stat-sub">{meta.stats.alertsInsufficientContext} insufficient · {meta.stats.alertsUnknown} Unknown</p>
         </div>
         <div class="stat-cell">
-          <p class="stat-label" style="color: #F97316;">Alerts Escalated</p>
-          <p class="stat-number" style="color: #F97316;">{meta.stats.alertsEscalated}</p>
+          <p class="stat-label">Cases Created</p>
+          <p class="stat-number" style="color: #0D9488;">{meta.stats.casesTotal}</p>
+          <p class="stat-sub">{meta.stats.casesClosed} closed</p>
          </div>
         <div class="stat-cell">
-          <p class="stat-label" style="color: #0D9488;">Cases Escalated</p>
-          <p class="stat-number" style="color: #0D9488;">{meta.stats.casesEscalatedToAria}</p>
-          <p class="stat-sub">{meta.stats.casesClosed} closed · {meta.stats.casesHeld} held</p>
+          <p class="stat-label">Cases Escalated</p>
+          <p class="stat-number">{meta.stats.casesEscalatedToAria}</p>
+          <p class="stat-sub">{meta.stats.casesHeld} held · {meta.stats.casesUnknown} Unknown</p>
         </div>
       </div>
     )}

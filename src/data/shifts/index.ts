@@ -48,6 +48,14 @@ export const SPRINTS: SprintDef[] = [
     startDate: "2026-04-06T00:00:00Z",
     endDate: "2026-04-17T23:59:59Z",
   },
+  {
+    id: "phase1-sprint-3",
+    num: 2,
+    phase: 1,
+    label: "Sprint 3",
+    startDate: "2026-04-20T00:00:00Z",
+    endDate: "2026-05-03T23:59:59Z",
+  },
 ];
 
 export const SPRINTS_BY_ID: Record<string, SprintDef> = Object.fromEntries(
@@ -160,6 +168,26 @@ export const SHIFTS: ShiftDef[] = [
       casesClosed: 0,
       casesHeld: 0,
       casesUnknown: 1,
+    },
+  },
+  {
+    id: "shift-5",
+    title: "Addressing the precedence gap.",
+    startDate: "2026-04-20T00:00:00Z",
+    endDate: "2026-04-24T23:59:59Z",
+    sprint: "phase1-sprint-3",
+    sprintLabel: "Sprint 3",
+    stats: {
+      alertsTotal: 25,
+      alertsEscalated: 12,
+      alertsClosed: 9,
+      alertsInsufficientContext: 4,
+      alertsUnknown: 0,
+      casesTotal: 12,
+      casesEscalatedToAria: 8,
+      casesClosed: 0,
+      casesHeld: 1,
+      casesUnknown: 3,
     },
   },
 ];

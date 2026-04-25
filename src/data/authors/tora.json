@@ -1,12 +1,12 @@
 {
   "agent": "tora",
-  "generated_at": "2026-04-18T00:00:00Z",
-  "shifts_processed": 4,
+  "generated_at": "2026-04-25T00:00:00Z",
+  "shifts_processed": 5,
   "totals": {
-    "alertsTotal": 100,
-    "alertsEscalated": 58,
-    "alertsClosed": 30,
-    "alertsInsufficientContext": 10,
+    "alertsTotal": 125,
+    "alertsEscalated": 70,
+    "alertsClosed": 39,
+    "alertsInsufficientContext": 14,
     "alertsUnknown": 2
   },
   "per_shift": [
@@ -40,6 +40,15 @@
     {
       "shiftId": "shift-4",
       "sprint": "phase1-sprint-2",
+      "alertsTotal": 25,
+      "alertsEscalated": 11,
+      "alertsClosed": 9,
+      "alertsInsufficientContext": 4,
+      "alertsUnknown": 1
+    },
+    {
+      "shiftId": "shift-5",
+      "sprint": "phase1-sprint-3",
       "alertsTotal": 25,
       "alertsEscalated": 12,
       "alertsClosed": 9,
