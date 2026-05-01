@@ -3,8 +3,8 @@
   "generated_at": "2026-04-18T00:00:00Z",
   "shifts_processed": 5,
   "totals": {
-    "casesTotal": 70,
-    "casesEscalatedToAria": 62,
+    "casesTotal": 76,
+    "casesEscalatedToAria": 68,
     "casesClosed": 0,
     "casesHeld": 1,
     "casesUnknown": 7
@@ -54,6 +54,15 @@
       "casesClosed": 0,
       "casesHeld": 1,
       "casesUnknown": 3
+    },
+    {
+      "shiftId": "shift-6",
+      "sprint": "phase1-sprint-3",
+      "casesTotal": 6,
+      "casesEscalatedToAria": 6,
+      "casesClosed": 0,
+      "casesHeld": 0,
+      "casesUnknown": 0
     }
   ]
 }

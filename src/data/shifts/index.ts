@@ -190,6 +190,26 @@ export const SHIFTS: ShiftDef[] = [
       casesUnknown: 3,
     },
   },
+  {
+    id: "shift-6",
+    title: "Addressing the Investigation parsing errors.",
+    startDate: "2026-04-27T00:00:00Z",
+    endDate: "2026-05-01T23:59:59Z",
+    sprint: "phase1-sprint-3",
+    sprintLabel: "Sprint 3",
+    stats: {
+      alertsTotal: 25,
+      alertsEscalated: 6,
+      alertsClosed: 13,
+      alertsInsufficientContext: 5,
+      alertsUnknown: 0,
+      casesTotal: 6,
+      casesEscalatedToAria: 6,
+      casesClosed: 0,
+      casesHeld: 0,
+      casesUnknown: 0,
+    },
+  },
 ];
 
 export const SHIFTS_BY_ID: Record<string, ShiftDef> = Object.fromEntries(
