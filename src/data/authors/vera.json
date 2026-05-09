@@ -1,7 +1,7 @@
 {
   "agent": "vera",
   "generated_at": "2026-04-18T00:00:00Z",
-  "shifts_processed": 5,
+  "shifts_processed": 6,
   "totals": {
     "casesTotal": 76,
     "casesEscalatedToAria": 68,
