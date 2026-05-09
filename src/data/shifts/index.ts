@@ -50,11 +50,19 @@ export const SPRINTS: SprintDef[] = [
   },
   {
     id: "phase1-sprint-3",
-    num: 2,
+    num: 3,
     phase: 1,
     label: "Sprint 3",
     startDate: "2026-04-20T00:00:00Z",
     endDate: "2026-05-03T23:59:59Z",
+  },
+  {
+    id: "phase1-sprint-4",
+    num: 4,
+    phase: 1,
+    label: "Sprint 4",
+    startDate: "2026-05-04T00:00:00Z",
+    endDate: "2026-05-18T23:59:59Z",
   },
 ];
 
@@ -208,6 +216,26 @@ export const SHIFTS: ShiftDef[] = [
       casesClosed: 0,
       casesHeld: 0,
       casesUnknown: 0,
+    },
+  },
+  {
+    id: "shift-7",
+    title: "Phishing email alerts are now live!",
+    startDate: "2026-05-04T00:00:00Z",
+    endDate: "2026-05-08T23:59:59Z",
+    sprint: "phase1-sprint-4",
+    sprintLabel: "Sprint 4",
+    stats: {
+      alertsTotal: 25,
+      alertsEscalated: 11,
+      alertsClosed: 13,
+      alertsInsufficientContext: 1,
+      alertsUnknown: 0,
+      casesTotal: 11,
+      casesEscalatedToAria: 10,
+      casesClosed: 0,
+      casesHeld: 0,
+      casesUnknown: 1,
     },
   },
 ];
