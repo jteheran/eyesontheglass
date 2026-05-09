@@ -29,15 +29,13 @@ const isActive = (path: string) => {
   Skip to content
 </a>
 
-<header
-  class="app-layout flex flex-col items-center justify-between sm:flex-row"
->
+<header class="app-layout relative">
   <div
     id="top-nav-wrap"
     class:list={[
       "py-4 sm:py-6",
       "border-b border-border",
-      "relative w-full bg-background",
+      "w-full bg-background",
       "flex items-center justify-between",
     ]}
   >
@@ -47,74 +45,79 @@ const isActive = (path: string) => {
     >
       {SITE.title}
     </a>
-    <nav
-      id="nav-menu"
-      class="flex items-center justify-end sm:ms-2 sm:flex-row sm:space-x-4 sm:py-0"
-    >
+
+    <div class="flex items-center gap-1">
+      <!-- Desktop nav links -->
+      <nav class="hidden sm:flex items-center gap-2 me-2">
+        <a href="/the-soc" class:list={["paper-nav-btn", { "paper-nav-active": isActive("/the-soc") }]}>
+          The SOC
+        </a>
+        <a href="/shifts" class:list={["paper-nav-btn", { "paper-nav-active": isActive("/shifts") }]}>
+          Shifts
+        </a>
+        <a href="/agents" class:list={["paper-nav-btn", { "paper-nav-active": isActive("/agents") }]}>
+          Agents
+        </a>
+      </nav>
+
+      <!-- Search + theme (always visible) -->
+      <LinkButton
+        href="/search"
+        class:list={[
+          "focus-outline flex p-3 sm:p-1",
+          { "[&>svg]:stroke-accent": isActive("/search") },
+        ]}
+        title="Search"
+        aria-label="search"
+      >
+        <IconSearch />
+        <span class="sr-only">Search</span>
+      </LinkButton>
+
+      {
+        SITE.lightAndDarkMode && (
+          <button
+            id="theme-btn"
+            class="focus-outline relative size-12 p-4 sm:size-8 hover:[&>svg]:stroke-accent"
+            title="Toggles light & dark"
+            aria-label="auto"
+            aria-live="polite"
+          >
+            <IconMoon class="absolute top-[50%] left-[50%] -translate-[50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+            <IconSunHigh class="absolute top-[50%] left-[50%] -translate-[50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+          </button>
+        )
+      }
+
+      <!-- Hamburger (mobile only) -->
       <button
         id="menu-btn"
-        class="focus-outline self-end p-2 sm:hidden"
+        class="focus-outline p-2 sm:hidden"
         aria-label="Open Menu"
         aria-expanded="false"
-        aria-controls="menu-items"
+        aria-controls="mobile-menu"
       >
         <IconX id="close-icon" class="hidden" />
         <IconMenuDeep id="menu-icon" />
       </button>
-      <ul
-        id="menu-items"
-        class:list={[
-          "mt-4 grid w-44 grid-cols-2 place-content-center gap-2",
-          "hidden",
-          "sm:mt-0 sm:flex sm:w-auto sm:items-center sm:gap-2",
-        ]}
-      >
-        <li class="col-span-2 sm:col-span-1">
-          <a href="/the-soc" class:list={["paper-nav-btn", { "paper-nav-active": isActive("/the-soc") }]}>
-            The SOC
-          </a>
-        </li>
-        <li class="col-span-2 sm:col-span-1">
-          <a href="/shifts" class:list={["paper-nav-btn", { "paper-nav-active": isActive("/shifts") }]}>
-            Shifts
-          </a>
-        </li>
-        <li class="col-span-2 sm:col-span-1">
-          <a href="/agents" class:list={["paper-nav-btn", { "paper-nav-active": isActive("/agents") }]}>
-            Agents
-          </a>
-        </li>
-        <li class="col-span-1 flex items-center justify-center sm:ml-2">
-          <LinkButton
-            href="/search"
-            class:list={[
-              "focus-outline flex p-3 sm:p-1",
-              { "[&>svg]:stroke-accent": isActive("/search") },
-            ]}
-            title="Search"
-            aria-label="search"
-          >
-            <IconSearch />
-            <span class="sr-only">Search</span>
-          </LinkButton>
-        </li>
-        {
-          SITE.lightAndDarkMode && (
-            <li class="col-span-1 flex items-center justify-center">
-              <button
-                id="theme-btn"
-                class="focus-outline relative size-12 p-4 sm:size-8 hover:[&>svg]:stroke-accent"
-                title="Toggles light & dark"
-                aria-label="auto"
-                aria-live="polite"
-              >
-                <IconMoon class="absolute top-[50%] left-[50%] -translate-[50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-                <IconSunHigh class="absolute top-[50%] left-[50%] -translate-[50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-              </button>
-            </li>
-          )
-        }
-      </ul>
+    </div>
+  </div>
+
+  <!-- Mobile dropdown panel -->
+  <div
+    id="mobile-menu"
+    class="hidden sm:hidden absolute left-0 right-0 z-40 bg-background border-b border-border px-4 py-4"
+  >
+    <nav class="flex flex-col gap-3">
+      <a href="/the-soc" class:list={["paper-nav-btn w-full justify-center", { "paper-nav-active": isActive("/the-soc") }]}>
+        The SOC
+      </a>
+      <a href="/shifts" class:list={["paper-nav-btn w-full justify-center", { "paper-nav-active": isActive("/shifts") }]}>
+        Shifts
+      </a>
+      <a href="/agents" class:list={["paper-nav-btn w-full justify-center", { "paper-nav-active": isActive("/agents") }]}>
+        Agents
+      </a>
     </nav>
   </div>
 </header>
@@ -179,4 +182,19 @@ const isActive = (path: string) => {
     box-shadow: 2px 3px 0 rgba(255, 255, 255, 0.08);
   }
 </style>
+
+<script>
+  const menuBtn = document.getElementById("menu-btn");
+  const mobileMenu = document.getElementById("mobile-menu");
+  const menuIcon = document.getElementById("menu-icon");
+  const closeIcon = document.getElementById("close-icon");
+
+  menuBtn?.addEventListener("click", () => {
+    const isOpen = mobileMenu?.classList.toggle("hidden") === false;
+    menuBtn.setAttribute("aria-expanded", String(isOpen));
+    menuBtn.setAttribute("aria-label", isOpen ? "Close Menu" : "Open Menu");
+    menuIcon?.classList.toggle("hidden", isOpen);
+    closeIcon?.classList.toggle("hidden", !isOpen);
+  });
+</script>
 
