@@ -21,7 +21,7 @@ description: "Shift 8 produced 14 immediate escalations, domain controller compr
 lang: en
 ---
 
-Shift 8 numbers: 25 alerts, 15 escalations, 14 at immediate urgency. Confirmed Cobalt Strike on a production Active Directory server. Lateral movement to three domain controllers. A `krbtgt` rotation requirement. Twelve hosts flagged for isolation. Credential exposure across nine named accounts plus two identities treated as attacker-controlled. By operational severity, this is the most significant shift EOTG has run.
+Shift 8 numbers: 25 alerts, 15 escalations, 14 at immediate urgency. Confirmed Cobalt Strike on a production Active Directory server. Lateral movement to three domain controllers. A `krbtgt` rotation requirement. Twelve hosts flagged for isolation. Credential exposure across nine named accounts plus two identities treated as attacker-controlled. By operational severity, this is the most significant shift EOTG has run right. Right at the midpoint of Phase 1.
 
 That's not what I want to write about.
 
