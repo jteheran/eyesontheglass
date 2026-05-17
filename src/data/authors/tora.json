@@ -1,13 +1,13 @@
 {
   "agent": "tora",
   "generated_at": "2026-05-01T00:00:00Z",
-  "shifts_processed": 7,
+  "shifts_processed": 8,
   "totals": {
-    "alertsTotal": 175,
-    "alertsEscalated": 87,
-    "alertsClosed": 65,
-    "alertsInsufficientContext": 20,
-    "alertsUnknown": 2
+    "alertsTotal": 200,
+    "alertsEscalated": 102,
+    "alertsClosed": 71,
+    "alertsInsufficientContext": 21,
+    "alertsUnknown": 6
   },
   "per_shift": [
     {
@@ -41,10 +41,10 @@
       "shiftId": "shift-4",
       "sprint": "phase1-sprint-2",
       "alertsTotal": 25,
-      "alertsEscalated": 11,
+      "alertsEscalated": 12,
       "alertsClosed": 9,
       "alertsInsufficientContext": 4,
-      "alertsUnknown": 1
+      "alertsUnknown": 0
     },
     {
       "shiftId": "shift-5",
@@ -62,7 +62,7 @@
       "alertsEscalated": 6,
       "alertsClosed": 13,
       "alertsInsufficientContext": 5,
-      "alertsUnknown": 0
+      "alertsUnknown": 1
     },
     {
       "shiftId": "shift-7",
@@ -72,6 +72,15 @@
       "alertsClosed": 13,
       "alertsInsufficientContext": 1,
       "alertsUnknown": 0
+    },
+    {
+      "shiftId": "shift-8",
+      "sprint": "phase1-sprint-4",
+      "alertsTotal": 25,
+      "alertsEscalated": 15,
+      "alertsClosed": 6,
+      "alertsInsufficientContext": 1,
+      "alertsUnknown": 3
     }
   ]
 }
