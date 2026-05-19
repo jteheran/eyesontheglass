@@ -15,7 +15,6 @@ section: soc
 description: My account of building an agentic SOC from scratch. What the calibration run Sprint revealed and how those findings carried out in Sprint 2.
 lang: en
 ---
-# My approach to agentic AI implementation
 
 Building an agentic AI system is a discovery process. When I started running this experiment, I had a brief charter for EOTG: an autonomous SOC with a hierarchical multi-agent system. Every architectural decision in EOTG came from what the system revealed about itself in operation and building the components one at a time. Discovering what each agent needs to achieve its own goal and to contribute to EOTG's shared operational goal sparks my curiosity on every shift.
 
