@@ -258,6 +258,26 @@ export const SHIFTS: ShiftDef[] = [
       casesUnknown: 1,
     },
   },
+  {
+    id: "shift-9",
+    title: "This is the second half of Phase 1.",
+    startDate: "2026-06-01T00:00:00Z",
+    endDate: "2026-06-05T23:59:59Z",
+    sprint: "phase1-sprint-5",
+    sprintLabel: "Sprint 5",
+    stats: {
+      alertsTotal: 30,
+      alertsEscalated: 13,
+      alertsClosed: 14,
+      alertsInsufficientContext: 1,
+      alertsUnknown: 2,
+      casesTotal: 13,
+      casesEscalatedToAria: 13,
+      casesClosed: 0,
+      casesHeld: 0,
+      casesUnknown: 0,
+    },
+  },
 ];
 
 export const SHIFTS_BY_ID: Record<string, ShiftDef> = Object.fromEntries(
