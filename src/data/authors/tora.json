@@ -1,7 +1,7 @@
 {
   "agent": "tora",
-  "generated_at": "2026-06-05T00:00:00Z",
-  "shifts_processed": 9,
+  "generated_at": "2026-06-14T00:00:00Z",
+  "shifts_processed": 10,
   "totals": {
     "alertsTotal": 260,
     "alertsEscalated": 128,

@@ -1,7 +1,7 @@
 {
   "agent": "vera",
-  "generated_at": "2026-06-05T00:00:00Z",
-  "shifts_processed": 9,
+  "generated_at": "2026-06-14T00:00:00Z",
+  "shifts_processed": 10,
   "totals": {
     "casesTotal": 128,
     "casesEscalatedToAria": 118,
@@ -99,6 +99,6 @@
       "casesClosed": 0,
       "casesHeld": 0,
       "casesUnknown": 0
-    },
+    }
   ]
 }
