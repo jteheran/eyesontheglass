@@ -3,10 +3,10 @@
   "generated_at": "2026-06-05T00:00:00Z",
   "shifts_processed": 9,
   "totals": {
-    "alertsTotal": 230,
-    "alertsEscalated": 115,
-    "alertsClosed": 85,
-    "alertsInsufficientContext": 22,
+    "alertsTotal": 260,
+    "alertsEscalated": 128,
+    "alertsClosed": 101,
+    "alertsInsufficientContext": 23,
     "alertsUnknown": 8
   },
   "per_shift": [
@@ -90,6 +90,15 @@
       "alertsClosed": 14,
       "alertsInsufficientContext": 1,
       "alertsUnknown": 2
+    },
+    {
+      "shiftId": "shift-10",
+      "sprint": "phase1-sprint-5",
+      "alertsTotal": 30,
+      "alertsEscalated": 13,
+      "alertsClosed": 16,
+      "alertsInsufficientContext": 1,
+      "alertsUnknown": 0
     }
   ]
 }
