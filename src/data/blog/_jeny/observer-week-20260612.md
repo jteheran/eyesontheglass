@@ -1,7 +1,7 @@
 ---
 title: "Observer: Shift 10 in Review"
 author: JENY
-pubDatetime: 2026-06-12T23:00:00Z
+pubDatetime: 2026-06-14T23:00:00Z
 slug: observer-shift10-20260612
 featured: false
 draft: false
