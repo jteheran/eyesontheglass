@@ -5,6 +5,24 @@ import Footer from "@/components/Footer.astro";
 
 const images = [
   {
+    file: "/assets/images/gallery/TORA_carrying_alerts.png",
+    title: "TORA carrying alerts",
+    prompt: "AI agent TORA triage alerts",
+    sprint: "Sprint 1",
+    shifts: "Calibration Run",
+    agents: ["TORA"],
+    colors: ["#F97316"],
+  },
+  {
+    file: "/assets/images/gallery/VERA_investigating_cases.png",
+    title: "VERA investigating cases",
+    prompt: "AI agent VERA investigate incidents",
+    sprint: "Sprint 1",
+    shifts: "Calibration Run",
+    agents: ["VERA"],
+    colors: ["#0D9488"],
+  },
+  {
     file: "/assets/images/gallery/EOTG_CalibrationRun.png",
     title: "TORA and VERA calibrating pipelines",
     prompt: "AI agents (TORA, VERA) triage alerts, investigate incidents, and publish their full reasoning, decisions, and failure modes in the open. The goal is simple: expose what actually works — and what breaks — when you try to run a SOC with autonomous systems. Generate a picture where these two characters are plugging cables and data pipelines",
@@ -49,6 +67,24 @@ const images = [
     agents: ["TORA", "VERA"],
     colors: ["#F97316", "#0D9488"],
   },
+  {
+    file: "/assets/images/gallery/VERA_hallucinating_case_ids.png",
+    title: "VERA is hallucinating case IDs",
+    prompt: "VERA is hallucinating case ids.",
+    sprint: "Sprint 5",
+    shifts: "Shift 9",
+    agents: ["VERA"],
+    colors: ["#0D9488"],
+  },
+  {
+    file: "/assets/images/gallery/TORA_VERA_harnesses.png",
+    title: "TORA and VERA get ready to speak at AI Cyber Alliance",
+    prompt: "TORA and VERA get ready to speak at AI Cyber Alliance and get new harnesses",
+    sprint: "Sprint 5",
+    shifts: "Shift 10",
+    agents: ["TORA", "VERA"],
+    colors: ["#0D9488"],
+  },
 ];
 ---
 
@@ -59,7 +95,7 @@ const images = [
     <div class="py-10 border-b border-border">
       <h1 class="gallery-title">Gallery</h1>
       <p class="text-sm mt-3 text-foreground/60 max-w-xl">
-        AI-generated images of TORA and VERA. Generated with ChatGPT.
+        AI-generated images of TORA and VERA. Generated with OpenAI GPT 5.5.
       </p>
     </div>
 
@@ -98,6 +134,7 @@ const images = [
 
   <!-- Lightbox -->
   <div id="lightbox" class="lightbox" aria-hidden="true">
+    <button id="lightbox-close" class="lightbox-close" aria-label="Close">&times;</button>
     <img id="lightbox-img" src="" alt="" class="lightbox-img" />
   </div>
 </Layout>
@@ -116,21 +153,20 @@ const images = [
   .gallery-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 2.5rem;
   }
 
   .gallery-card {
-    border: 1.5px solid var(--color-foreground);
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-    overflow: hidden;
-    transition: box-shadow 0.2s ease;
-  }
-
-  .gallery-card:hover {
-    box-shadow: 4px 4px 0 var(--color-foreground);
+    display: flex;
+    flex-direction: column;
   }
 
   .gallery-img-wrap {
+    cursor: zoom-in;
+    background: none;
+    border: none;
+    padding: 0;
+    display: block;
     width: 100%;
     aspect-ratio: 16 / 7;
     overflow: hidden;
@@ -150,7 +186,10 @@ const images = [
   }
 
   .gallery-body {
+    border: 1.5px solid var(--color-foreground);
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
     padding: 1rem 1.1rem 1.1rem;
+    margin-top: 0.75rem;
   }
 
   .gallery-meta {
@@ -222,15 +261,6 @@ const images = [
     font-style: italic;
   }
 
-  .gallery-img-wrap {
-    cursor: zoom-in;
-    background: none;
-    border: none;
-    padding: 0;
-    display: block;
-    width: 100%;
-  }
-
   .lightbox {
     display: none;
     position: fixed;
@@ -252,6 +282,25 @@ const images = [
     object-fit: contain;
     border: none;
     box-shadow: none;
+  }
+
+  .lightbox-close {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2.5rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.15s;
+    z-index: 1001;
+  }
+
+  .lightbox-close:hover {
+    opacity: 1;
   }
 </style>
 
@@ -278,6 +327,10 @@ const images = [
       btn.addEventListener('click', () => {
         openLightbox(btn.dataset.src, btn.dataset.title);
       });
+    });
+    document.getElementById('lightbox-close')?.addEventListener('click', e => {
+      e.stopPropagation();
+      closeLightbox();
     });
   }
 
