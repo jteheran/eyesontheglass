@@ -117,6 +117,15 @@
       "alertsClosed": 4,
       "alertsInsufficientContext": 0,
       "alertsUnknown": 0
+    },
+    {
+      "shiftId": "shift-13",
+      "sprint": "phase1-sprint-7",
+      "alertsTotal": 30,
+      "alertsEscalated": 16,
+      "alertsClosed": 14,
+      "alertsInsufficientContext": 0,
+      "alertsUnknown": 0
     }
   ]
 }

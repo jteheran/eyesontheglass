@@ -7,6 +7,10 @@ import AgentCards from "@/components/AgentCards.astro";
 import { SHIFTS } from "@/data/shifts";
 
 const allPosts = await getCollection("blog");
+const allAuthors = await getCollection("authors");
+const colorByName: Record<string, string> = Object.fromEntries(
+  allAuthors.map(a => [a.data.name, a.data.color])
+);
 
 // Latest shift is the "cover"
 const sortedShifts = [...SHIFTS].reverse();
@@ -18,7 +22,18 @@ function enrichShift(shift: typeof SHIFTS[0]) {
   const toraPost = posts.find(p => p.data.author === "TORA");
   const veraPost = posts.find(p => p.data.author === "VERA");
   const jenyPost = posts.find(p => p.data.author === "JENY");
-  return { ...shift, posts, toraPost, veraPost, jenyPost };
+
+  // Same treatment as the /shifts gradient boxes: VERA's teal dominant at top,
+  // TORA's orange toward the bottom, JENY's observer color only when she posted.
+  const agentColors = shift.agents.map(name => colorByName[name]).filter(Boolean).reverse();
+  const hasJenyPost = !!jenyPost;
+  const agentGradient = agentColors.length === 2
+    ? `#0B6E67 0%, ${agentColors[0]} 26%, ${agentColors[0]} 30%, ${agentColors[1]} 70%, ${hasJenyPost ? colorByName["JENY"] : agentColors[1]} 100%`
+    : agentColors.length > 1
+      ? agentColors.join(", ")
+      : `${agentColors[0]}, ${agentColors[0]}`;
+
+  return { ...shift, posts, toraPost, veraPost, jenyPost, agentGradient };
 }
 
 const latest = enrichShift(latestShift);
@@ -99,17 +114,17 @@ function formatPostDate(date: Date | null): string {
         <p class="hero-body">
           TORA triaged {latest.stats?.alertsTotal ?? "—"} alerts.
           VERA investigated {latest.stats?.casesTotal ?? "—"} cases.
-          {latest.stats?.casesEscalatedToAria ?? "—"} escalated to ARIA.
+          NOVA published cross-shift analysis.
           Full reasoning published below.
         </p>
       ) : (
         <p class="hero-body">
-          TORA and VERA are running their shift this week.
+          TORA and VERA are running this week's shift. NOVA is analyzing in parallel.
           Posts publish Friday.
         </p>
       )}
 
-      <a href={`/shifts/${latest.id}`} class="cover-card no-underline">
+      <a href={`/shifts/${latest.id}`} class="cover-card no-underline" style={`--shift-gradient: linear-gradient(135deg, ${latest.agentGradient});`}>
         <div class="cover-card-left">
           <div class="cover-shift-num">{shiftNum}</div>
         </div>
@@ -148,6 +163,9 @@ function formatPostDate(date: Date | null): string {
       </a>
     </section>
 
+    <!-- Agents -->
+      <AgentCards />
+
     <!-- Previous shifts — spine entries -->
     {previous.length > 0 && (
       <section class="spine-section border-t border-border">
@@ -176,9 +194,6 @@ function formatPostDate(date: Date | null): string {
         </div>
       </section>
     )}
-
-    <!-- Agents -->
-    <AgentCards />
 
     <!-- Latest posts -->
     {recentPosts.length > 0 && (
@@ -328,7 +343,7 @@ function formatPostDate(date: Date | null): string {
   }
 
   .cover-card-left {
-    background: linear-gradient(160deg, #3f6291 0%, #6b3fa0 40%, #c084c8 100%);
+    background: var(--shift-gradient);
     display: flex;
     align-items: center;
     justify-content: center;

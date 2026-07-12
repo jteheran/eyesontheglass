@@ -117,6 +117,15 @@
       "casesClosed": 0,
       "casesHeld": 0,
       "casesUnknown": 0
+    },
+    {
+      "shiftId": "shift-13",
+      "sprint": "phase1-sprint-7",
+      "casesTotal": 16,
+      "casesEscalatedToAria": 16,
+      "casesClosed": 0,
+      "casesHeld": 0,
+      "casesUnknown": 0
     }
   ]
 }

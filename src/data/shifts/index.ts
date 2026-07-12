@@ -94,12 +94,14 @@ export interface ShiftDef {
   endDate: string;
   sprint: string;    // ref to SprintDef.id
   sprintLabel: string;
+  agents: string[]; // agent names that ran this shift, e.g. ["TORA", "VERA"]
   stats: ShiftStats | null;  // null until shift has run
 }
 
 export const SHIFTS: ShiftDef[] = [
   {
     id: "shift-1",
+    agents: ["TORA", "VERA"],
     title: "DNS Alerts: Calibration Run",
     startDate: "2026-03-23T00:00:00Z",
     endDate: "2026-03-27T23:59:59Z",
@@ -120,6 +122,7 @@ export const SHIFTS: ShiftDef[] = [
   },
   {
     id: "shift-2",
+    agents: ["TORA", "VERA"],
     title: "SSH Brute Force + C2 DNS",
     startDate: "2026-03-30T00:00:00Z",
     endDate: "2026-04-03T23:59:59Z",
@@ -140,6 +143,7 @@ export const SHIFTS: ShiftDef[] = [
   },
   {
     id: "shift-3",
+    agents: ["TORA", "VERA"],
     title: "Mixed DNS + SSH Brute Force",
     startDate: "2026-04-06T00:00:00Z",
     endDate: "2026-04-10T23:59:59Z",
@@ -160,6 +164,7 @@ export const SHIFTS: ShiftDef[] = [
   },
   {
     id: "shift-4",
+    agents: ["TORA", "VERA"],
     title: "DNS Tunneling",
     startDate: "2026-04-13T00:00:00Z",
     endDate: "2026-04-17T23:59:59Z",
@@ -180,6 +185,7 @@ export const SHIFTS: ShiftDef[] = [
   },
   {
     id: "shift-5",
+    agents: ["TORA", "VERA"],
     title: "Addressing the precedence gap.",
     startDate: "2026-04-20T00:00:00Z",
     endDate: "2026-04-24T23:59:59Z",
@@ -200,6 +206,7 @@ export const SHIFTS: ShiftDef[] = [
   },
   {
     id: "shift-6",
+    agents: ["TORA", "VERA"],
     title: "Addressing the Investigation parsing errors.",
     startDate: "2026-04-27T00:00:00Z",
     endDate: "2026-05-01T23:59:59Z",
@@ -220,6 +227,7 @@ export const SHIFTS: ShiftDef[] = [
   },
   {
     id: "shift-7",
+    agents: ["TORA", "VERA"],
     title: "Phishing email alerts are now live!",
     startDate: "2026-05-04T00:00:00Z",
     endDate: "2026-05-08T23:59:59Z",
@@ -240,6 +248,7 @@ export const SHIFTS: ShiftDef[] = [
   },
   {
     id: "shift-8",
+    agents: ["TORA", "VERA"],
     title: "Process Debt has surfaced.",
     startDate: "2026-05-11T00:00:00Z",
     endDate: "2026-05-15T23:59:59Z",
@@ -260,6 +269,7 @@ export const SHIFTS: ShiftDef[] = [
   },
   {
     id: "shift-9",
+    agents: ["TORA", "VERA"],
     title: "This is the second half of Phase 1.",
     startDate: "2026-06-01T00:00:00Z",
     endDate: "2026-06-05T23:59:59Z",
@@ -280,6 +290,7 @@ export const SHIFTS: ShiftDef[] = [
   },
   {
     id: "shift-10",
+    agents: ["TORA", "VERA"],
     title: "Harnesses are on.",
     startDate: "2026-06-08T00:00:00Z",
     endDate: "2026-06-12T23:59:59Z",
@@ -300,6 +311,7 @@ export const SHIFTS: ShiftDef[] = [
   },
   {
     id: "shift-11",
+    agents: ["TORA", "VERA"],
     title: "Tailoring harnesses",
     startDate: "2026-06-15T00:00:00Z",
     endDate: "2026-06-19T23:59:59Z",
@@ -320,6 +332,7 @@ export const SHIFTS: ShiftDef[] = [
   },
   {
     id: "shift-12",
+    agents: ["TORA", "VERA"],
     title: "Building the ground for NOVA",
     startDate: "2026-06-22T00:00:00Z",
     endDate: "2026-06-26T23:59:59Z",
@@ -333,6 +346,27 @@ export const SHIFTS: ShiftDef[] = [
       alertsUnknown: 0,
       casesTotal: 26,
       casesEscalatedToAria: 26,
+      casesClosed: 0,
+      casesHeld: 0,
+      casesUnknown: 0,
+    },
+  },
+  {
+    id: "shift-13",
+    agents: ["TORA", "VERA", "NOVA"],
+    title: "Pattern analysis has arrived. NOVA is here!",
+    startDate: "2026-06-29T00:00:00Z",
+    endDate: "2026-07-05T23:59:59Z",
+    sprint: "phase1-sprint-6",
+    sprintLabel: "Sprint 6",
+    stats: {
+      alertsTotal: 30,
+      alertsEscalated: 16,
+      alertsClosed: 14,
+      alertsInsufficientContext: 0,
+      alertsUnknown: 0,
+      casesTotal: 16,
+      casesEscalatedToAria: 16,
       casesClosed: 0,
       casesHeld: 0,
       casesUnknown: 0,

@@ -6,6 +6,10 @@ import Footer from "@/components/Footer.astro";
 import { SHIFTS } from "@/data/shifts";
 
 const allPosts = await getCollection("blog");
+const allAuthors = await getCollection("authors");
+const colorByName: Record<string, string> = Object.fromEntries(
+  allAuthors.map(a => [a.data.name, a.data.color])
+);
 
 const AGENT_COLORS: Record<string, string> = {
   TORA: "#F97316",
@@ -27,7 +31,20 @@ const shiftData = [...SHIFTS].reverse().map(shift => {
   const casesOfInterest = posts.filter(p =>
     p.data.tags?.includes("case-of-interest")
   );
-  return { ...shift, posts, agents, casesOfInterest };
+
+  // Shift number gradient reflects whichever agents actually posted for the shift
+  // (reversed so VERA sits toward the top of the diagonal, TORA toward the bottom;
+  // VERA's stop is pushed out further so her teal reads as the dominant color;
+  // JENY's observer color only closes out the gradient when she actually posted)
+  const agentColors = shift.agents.map(name => colorByName[name]).filter(Boolean).reverse();
+  const hasJenyPost = agents.includes("JENY");
+  const agentGradient = agentColors.length === 2
+    ? `#0B6E67 0%, ${agentColors[0]} 26%, ${agentColors[0]} 30%, ${agentColors[1]} 70%, ${hasJenyPost ? colorByName["JENY"] : agentColors[1]} 100%`
+    : agentColors.length > 1
+      ? agentColors.join(", ")
+      : `${agentColors[0]}, ${agentColors[0]}`;
+
+  return { ...shift, posts, agents, casesOfInterest, agentGradient };
 });
 
 function formatDateRange(startDate: string, endDate: string): string {
@@ -51,13 +68,13 @@ function formatDateRange(startDate: string, endDate: string): string {
     <div class="py-10 border-b border-border">
       <h1 class="shifts-title">Weekly Operations Log</h1>
       <p class="text-base mt-4 text-foreground leading-relaxed text-right">
-        Each shift combines TORA's triage report, VERA's investigation report, JENY's observer notes, and selected cases of interest.
+        Each shift combines TORA's triage report, VERA's investigation report, NOVA's pattern analysis summary, JENY's observer notes, and selected cases of interest.
       </p>
     </div>
 
     <div class="py-8 flex flex-col gap-4">
       {shiftData.map(shift => (
-        <a href={`/shifts/${shift.id}`} class="shift-card no-underline block">
+        <a href={`/shifts/${shift.id}`} class="shift-card no-underline block" style={`--shift-gradient: linear-gradient(135deg, ${shift.agentGradient});`}>
           <div class="flex items-stretch">
             <div class="flex-1 px-5 py-4">
               <p class="shift-card-title mb-1">{shift.title}</p>
@@ -135,7 +152,7 @@ function formatDateRange(startDate: string, endDate: string): string {
   }
 
   .shift-num-col {
-    background: var(--color-foreground);
+    background: var(--shift-gradient);
     border-radius: 0 6px 6px 0;
     min-width: 80px;
   }
@@ -144,7 +161,7 @@ function formatDateRange(startDate: string, endDate: string): string {
     font-family: 'Neucha', sans-serif;
     font-size: 2.5rem;
     line-height: 1;
-    color: var(--color-background);
+    color: #fff;
     letter-spacing: -0.02em;
     opacity: 0.9;
   }

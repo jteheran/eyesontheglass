@@ -1,120 +1,218 @@
-<svg id="creature" width="120" height="200" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+<svg id="tora" width="120" height="200" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
 
   <defs>
-    <!-- Body Gradient -->
-    <radialGradient id="bodyGrad" cx="40%" cy="30%" r="70%">
+
+    <!-- NEW TORA FIRE GRADIENT -->
+    <linearGradient id="bodyGrad"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%">
+
       <stop offset="0%" stop-color="#FFB347"/>
-      <stop offset="60%" stop-color="#F97316"/>
-      <stop offset="100%" stop-color="#C2410C"/>
+      <stop offset="38%" stop-color="#F97316"/>
+      <stop offset="72%" stop-color="#DC2626"/>
+      <stop offset="100%" stop-color="#7F1D1D"/>
+
+    </linearGradient>
+
+    <!-- Warm face -->
+    <radialGradient id="faceWarm"
+                    cx="40%"
+                    cy="30%"
+                    r="70%">
+
+      <stop offset="0%" stop-color="#FFF4E6"/>
+      <stop offset="100%" stop-color="#F5D0A9"/>
+
     </radialGradient>
 
-    <!-- Eye Gradient -->
-    <radialGradient id="eyeGrad" cx="45%" cy="35%" r="65%">
-      <stop offset="0%" stop-color="#FFFFFF"/>
-      <stop offset="70%" stop-color="#F4F4F4"/>
-      <stop offset="100%" stop-color="#DCDCDC"/>
-    </radialGradient>
+    <!-- Eye depth -->
+    <radialGradient id="pupilGrad"
+                    cx="40%"
+                    cy="35%"
+                    r="60%">
 
-    <!-- Pupil Gradient -->
-    <radialGradient id="pupilGrad" cx="35%" cy="35%" r="65%">
-      <stop offset="0%" stop-color="#444"/>
+      <stop offset="0%" stop-color="#2A2A2A"/>
       <stop offset="100%" stop-color="#000000"/>
+
     </radialGradient>
 
-    <!-- Blur -->
-    <filter id="blur">
-      <feGaussianBlur stdDeviation="6"/>
+    <!-- Soft blur -->
+    <filter id="softBlur">
+      <feGaussianBlur stdDeviation="0.6"/>
     </filter>
+
+    <!-- Ground shadow -->
+    <filter id="shadowBlur">
+      <feGaussianBlur stdDeviation="1.8"/>
+    </filter>
+
   </defs>
 
-  <!-- Master group -->
-  <g>
+  <!-- Ground shadow -->
+  <ellipse cx="60"
+           cy="170"
+           rx="35"
+           ry="6"
+           fill="#000"
+           opacity="0.14"
+           filter="url(#shadowBlur)"/>
 
-    <!-- Bounce -->
+  <!-- CHARACTER -->
+  <g id="character">
+
+    <!-- Energetic bounce -->
     <animateTransform attributeName="transform"
       type="translate"
-      values="0,0; 0,-4; 0,0"
-      keyTimes="0;0.5;1"
-      dur="2.6s"
+      values="0,0; 0,-5; 0,0"
+      dur="2.5s"
       repeatCount="indefinite"/>
 
-    <!-- Head tilt (very subtle, synced loosely with bounce) -->
+    <!-- Alert tilt -->
     <animateTransform attributeName="transform"
       type="rotate"
       values="0 60 100; 1.5 60 100; 0 60 100; -1.2 60 100; 0 60 100"
-      keyTimes="0;0.25;0.5;0.75;1"
-      dur="2.6s"
+      dur="2.5s"
       repeatCount="indefinite"
       additive="sum"/>
 
     <!-- Antenna -->
-    <line x1="60" y1="20" x2="60" y2="45" stroke="#C2410C" stroke-width="3" stroke-linecap="round"/>
-    <circle cx="60" cy="18" r="4" fill="#FFB347"/>
+    <path d="M60,43 Q45,25 50,13"
+          stroke="#F97316"
+          stroke-width="3"
+          fill="none"
+          stroke-linecap="round"/>
+
+    <circle cx="49"
+            cy="10"
+            r="5"
+            fill="url(#bodyGrad)"/>
 
     <!-- Body -->
-    <ellipse cx="60" cy="115" rx="42" ry="36" fill="url(#bodyGrad)"/>
+    <ellipse cx="60"
+             cy="115"
+             rx="42"
+             ry="36"
+             fill="url(#bodyGrad)"/>
 
     <!-- Head -->
-    <ellipse cx="60" cy="90" rx="36" ry="32" fill="url(#bodyGrad)"/>
+    <ellipse cx="60"
+             cy="90"
+             rx="34"
+             ry="30"
+             fill="url(#bodyGrad)"/>
 
-    <!-- Highlight -->
-    <ellipse cx="60" cy="78" rx="22" ry="10" fill="white" opacity="0.15" filter="url(#blur)"/>
+    <!-- Stronger head highlight -->
+    <ellipse cx="52"
+             cy="75"
+             rx="17"
+             ry="11"
+             fill="url(#bodyGrad)"/>
 
-    <!-- Eyes -->
-    <g>
+    <!-- Face plate -->
+    <ellipse cx="60"
+             cy="93"
+             rx="22"
+             ry="20"
+             fill="url(#faceWarm)"/>
+
+    <!-- EYES -->
+    <g id="eyes">
 
       <!-- Regular blink -->
       <animateTransform attributeName="transform"
         type="scale"
-        values="1,1; 1,1; 1,0.1; 1,1"
-        keyTimes="0; 0.88; 0.93; 1"
-        dur="3.4s"
-        begin="0.6s"
+        values="1,1;1,1;1,0.12;1,1"
+        keyTimes="0;0.9;0.95;1"
+        dur="3.2s"
+        begin="0.5s"
         repeatCount="indefinite"
         additive="sum"
-        origin="60 92"/>
+        origin="60 93"/>
 
-      <!-- Occasional long blink (~12s) -->
-      <animateTransform attributeName="transform"
-        type="scale"
-        values="1,1; 1,1; 1,0.05; 1,1"
-        keyTimes="0; 0.96; 0.98; 1"
-        dur="12s"
-        repeatCount="indefinite"
-        additive="sum"
-        origin="60 92"/>
+      <!-- LEFT eye -->
+      <g id="pupilLeftWrap">
 
-      <!-- Eye whites -->
-      <ellipse cx="60" cy="92" rx="26" ry="22" fill="url(#eyeGrad)"/>
-      <ellipse cx="60" cy="98" rx="26" ry="22" fill="black" opacity="0.08" filter="url(#blur)"/>
+        <ellipse cx="50.5"
+                 cy="92"
+                 rx="7.2"
+                 ry="6.8"
+                 fill="url(#pupilGrad)"/>
 
-      <!-- Pupils with tracking -->
-	  <!-- Left pupil -->
-	  <g id="pupilLeftWrap">
-	    <ellipse cx="51" cy="92" rx="8" ry="9" fill="url(#pupilGrad)"/>
-	  </g>
+      </g>
 
-	  <!-- Right pupil -->
-	  <g id="pupilRightWrap">
-	    <ellipse cx="68" cy="92" rx="8" ry="9" fill="url(#pupilGrad)"/>
-	  </g>
+      <!-- RIGHT eye -->
+      <g id="pupilRightWrap">
+
+        <ellipse cx="69.2"
+                 cy="92"
+                 rx="7"
+                 ry="6.5"
+                 fill="url(#pupilGrad)"/>
+
+      </g>
+
+      <!-- Eye softness -->
+      <ellipse cx="50.5"
+               cy="92"
+               rx="8"
+               ry="7.5"
+               fill="#000"
+               opacity="0.05"
+               filter="url(#softBlur)"/>
+
+      <ellipse cx="69.2"
+               cy="92"
+               rx="7.8"
+               ry="7.2"
+               fill="#000"
+               opacity="0.05"
+               filter="url(#softBlur)"/>
 
       <!-- Highlights -->
-      <circle cx="49" cy="88" r="3.5" fill="white" opacity="0.95"/>
-      <circle cx="65" cy="88" r="3.5" fill="white" opacity="0.95"/>
+      <circle cx="52.8"
+              cy="89.2"
+              r="1.7"
+              fill="#FFF"
+              opacity="0.95"/>
 
-      <circle cx="55" cy="98" r="2" fill="white" opacity="0.4"/>
-      <circle cx="71" cy="98" r="2" fill="white" opacity="0.4"/>
+      <circle cx="71"
+              cy="90"
+              r="1.4"
+              fill="#FFF"
+              opacity="0.9"/>
+
     </g>
 
-    <!-- Feet -->
-    <rect x="34" y="145" width="10" height="18" rx="5" fill="url(#bodyGrad)"/>
-    <rect x="48" y="147" width="10" height="16" rx="5" fill="url(#bodyGrad)"/>
-    <rect x="62" y="147" width="10" height="16" rx="5" fill="url(#bodyGrad)"/>
-    <rect x="76" y="145" width="10" height="18" rx="5" fill="url(#bodyGrad)"/>
+    <!-- Legs -->
+    <rect x="34"
+          y="143"
+          width="10"
+          height="18"
+          rx="5"
+          fill="url(#bodyGrad)"/>
 
-    <!-- Ground shadow -->
-    <ellipse cx="60" cy="175" rx="36" ry="6" fill="black" opacity="0.15" filter="url(#blur)"/>
+    <rect x="48"
+          y="145"
+          width="10"
+          height="16"
+          rx="5"
+          fill="url(#bodyGrad)"/>
+
+    <rect x="62"
+          y="145"
+          width="10"
+          height="16"
+          rx="5"
+          fill="url(#bodyGrad)"/>
+
+    <rect x="76"
+          y="143"
+          width="10"
+          height="18"
+          rx="5"
+          fill="url(#bodyGrad)"/>
 
   </g>
 

@@ -1,28 +1,234 @@
-<svg width="120" height="200" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
-  <!-- antenna - branching -->
-  <line x1="60" y1="43" x2="60" y2="23" stroke="#7C3AED" stroke-width="3" stroke-linecap="round"/>
-  <line x1="60" y1="27" x2="50" y2="15" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"/>
-  <line x1="60" y1="27" x2="70" y2="15" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"/>
-  <circle cx="50" cy="13" r="4" fill="#7C3AED"/>
-  <circle cx="70" cy="13" r="4" fill="#7C3AED"/>
-  <circle cx="60" cy="21" r="3" fill="#7C3AED" opacity="0.5"/>
-  <!-- body -->
-  <ellipse cx="60" cy="115" rx="42" ry="36" fill="#7C3AED"/>
-  <!-- head dome -->
-  <ellipse cx="60" cy="90" rx="34" ry="30" fill="#7C3AED"/>
-  <!-- face plate -->
-  <ellipse cx="60" cy="93" rx="22" ry="20" fill="white" opacity="0.95"/>
-  <!-- eyes - one larger -->
-  <ellipse cx="52" cy="91" rx="8" ry="8" fill="#1a1a1a"/>
-  <ellipse cx="68" cy="92" rx="5" ry="5" fill="#1a1a1a"/>
-  <!-- eye shine -->
-  <circle cx="54" cy="88" r="2.5" fill="white"/>
-  <circle cx="69" cy="90" r="1.5" fill="white"/>
-  <!-- legs -->
-  <rect x="34" y="143" width="10" height="18" rx="5" fill="#7C3AED"/>
-  <rect x="48" y="145" width="10" height="16" rx="5" fill="#7C3AED"/>
-  <rect x="62" y="145" width="10" height="16" rx="5" fill="#7C3AED"/>
-  <rect x="76" y="143" width="10" height="18" rx="5" fill="#7C3AED"/>
-  <!-- shadow -->
-  <ellipse cx="60" cy="167" rx="36" ry="5" fill="#7C3AED" opacity="0.15"/>
+<svg id="nova" width="120" height="200" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+
+  <defs>
+
+    <!-- NEW NOVA GRADIENT -->
+    <linearGradient id="bodyGrad"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%">
+
+      <stop offset="0%" stop-color="#3f6291"/>
+      <stop offset="40%" stop-color="#6b3fa0"/>
+      <stop offset="100%" stop-color="#c084c8"/>
+
+    </linearGradient>
+
+    <!-- Warm face -->
+    <radialGradient id="faceWarm" cx="40%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFF4E6"/>
+      <stop offset="100%" stop-color="#F5D0A9"/>
+    </radialGradient>
+
+    <!-- Deep pupils -->
+    <radialGradient id="pupilGrad" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#2A2A2A"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+
+    <!-- Soft blur -->
+    <filter id="softBlur">
+      <feGaussianBlur stdDeviation="0.6"/>
+    </filter>
+
+    <!-- Shadow blur -->
+    <filter id="shadowBlur">
+      <feGaussianBlur stdDeviation="1.8"/>
+    </filter>
+
+  </defs>
+
+  <!-- Ground shadow -->
+  <ellipse cx="60"
+           cy="170"
+           rx="34"
+           ry="6"
+           fill="#000"
+           opacity="0.11"
+           filter="url(#shadowBlur)"/>
+
+  <!-- CHARACTER -->
+  <g id="character">
+
+    <!-- Gentle analytical bounce -->
+    <animateTransform attributeName="transform"
+      type="translate"
+      values="0,0; 0,-3; 0,0"
+      dur="3.4s"
+      repeatCount="indefinite"/>
+
+    <!-- Slow thoughtful tilt -->
+    <animateTransform attributeName="transform"
+      type="rotate"
+      values="0 60 100; 1.4 60 100; 0 60 100; -0.8 60 100; 0 60 100"
+      dur="4.2s"
+      repeatCount="indefinite"
+      additive="sum"/>
+
+    <!-- Antenna network -->
+    <line x1="60"
+          y1="43"
+          x2="60"
+          y2="23"
+          stroke="#6b3fa0"
+          stroke-width="3"
+          stroke-linecap="round"/>
+
+    <line x1="60"
+          y1="27"
+          x2="50"
+          y2="15"
+          stroke="#6b3fa0"
+          stroke-width="2"
+          stroke-linecap="round"/>
+
+    <line x1="60"
+          y1="27"
+          x2="70"
+          y2="15"
+          stroke="#6b3fa0"
+          stroke-width="2"
+          stroke-linecap="round"/>
+
+    <circle cx="50" cy="13" r="4" fill="#c084c8"/>
+    <circle cx="70" cy="13" r="4" fill="#c084c8"/>
+
+    <!-- subtle signal node -->
+    <circle cx="60"
+            cy="21"
+            r="3"
+            fill="#FFFFFF"
+            opacity="0.45"
+            filter="url(#softBlur)"/>
+
+    <!-- Body -->
+    <ellipse cx="60"
+             cy="115"
+             rx="42"
+             ry="36"
+             fill="url(#bodyGrad)"/>
+
+    <!-- Head -->
+    <ellipse cx="60"
+             cy="90"
+             rx="34"
+             ry="30"
+             fill="url(#bodyGrad)"/>
+
+    <!-- Top-left highlight -->
+    <ellipse cx="52"
+             cy="75"
+             rx="16"
+             ry="10"
+             fill="#FFF"
+             opacity="0.16"
+             filter="url(#softBlur)"/>
+
+    <!-- Face -->
+    <ellipse cx="60"
+             cy="93"
+             rx="22"
+             ry="20"
+             fill="url(#faceWarm)"/>
+
+    <!-- EYES -->
+    <g id="eyes">
+
+      <!-- Irregular blink -->
+      <animateTransform attributeName="transform"
+        type="scale"
+        values="1,1;1,1;1,0.10;1,1"
+        keyTimes="0;0.88;0.94;1"
+        dur="4.6s"
+        begin="0.8s"
+        repeatCount="indefinite"
+        additive="sum"
+        origin="60 93"/>
+
+      <!-- LEFT EYE (dominant observer eye) -->
+      <g id="pupilLeftWrap">
+
+        <ellipse cx="50.8"
+                 cy="91.5"
+                 rx="7.8"
+                 ry="7.4"
+                 fill="url(#pupilGrad)"/>
+
+      </g>
+
+      <!-- RIGHT EYE (smaller analytical eye) -->
+      <g id="pupilRightWrap">
+
+        <ellipse cx="69.5"
+                 cy="92.5"
+                 rx="5.4"
+                 ry="5.0"
+                 fill="url(#pupilGrad)"/>
+
+      </g>
+
+      <!-- Soft eye halos -->
+      <ellipse cx="50.8"
+               cy="91.5"
+               rx="8.8"
+               ry="8.2"
+               fill="#000"
+               opacity="0.05"
+               filter="url(#softBlur)"/>
+
+      <ellipse cx="69.5"
+               cy="92.5"
+               rx="6.2"
+               ry="5.8"
+               fill="#000"
+               opacity="0.05"
+               filter="url(#softBlur)"/>
+
+      <!-- Highlights -->
+      <circle cx="53.2"
+              cy="88.6"
+              r="1.8"
+              fill="#FFF"
+              opacity="0.95"/>
+
+      <circle cx="70.8"
+              cy="90.5"
+              r="1.1"
+              fill="#FFF"
+              opacity="0.88"/>
+
+    </g>
+
+    <!-- Legs -->
+    <rect x="34"
+          y="143"
+          width="10"
+          height="18"
+          rx="5"
+          fill="url(#bodyGrad)"/>
+
+    <rect x="48"
+          y="145"
+          width="10"
+          height="16"
+          rx="5"
+          fill="url(#bodyGrad)"/>
+
+    <rect x="62"
+          y="145"
+          width="10"
+          height="16"
+          rx="5"
+          fill="url(#bodyGrad)"/>
+
+    <rect x="76"
+          y="143"
+          width="10"
+          height="18"
+          rx="5"
+          fill="url(#bodyGrad)"/>
+
+  </g>
+
 </svg>

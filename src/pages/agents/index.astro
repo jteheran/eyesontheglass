@@ -26,41 +26,24 @@ const agents = allAuthors
       </p>
     </div>
 
-    <div class="flex flex-col gap-4 py-8 pb-20">
+    <div class="agents-grid py-8 pb-20">
       {agents.map((agent) => {
         const { name, role, tier, color, bio, avatar } = agent.data;
-        const isActive     = name === "TORA" || name === "VERA";
-        const isComingSoon = name === "NOVA";
+        const isActive     = name === "TORA" || name === "VERA"  || name === "NOVA";
         const isInactive   = name === "ARIA";
-        const isDimmed     = isComingSoon || isInactive;
+        const isDimmed     = isInactive;
 
         const inner = (
           <article class={`agent-card${isDimmed ? " agent-card--dimmed" : ""}`} style={`--agent-color: ${color};`}>
-            <!-- Left color bar -->
-            <div class="agent-bar" aria-hidden="true" style={`background: ${color};`} />
-
-            <!-- Avatar -->
-            <div class="agent-avatar-wrap" style={`border-color: ${color}; background: ${color}18;`}>
-              <img
-                src={avatar}
-                alt={`${name} avatar`}
-                width="40"
-                height="40"
-                class={`object-contain${isDimmed ? " opacity-40" : ""}`}
-              />
+            <div class="agent-creature-wrap" aria-hidden="true">
+              <div class="agent-creature-glow" style={`background: ${color};`} />
+              <img src={avatar} alt="" class="agent-creature-img" />
             </div>
 
-            <!-- Identity -->
-            <div class="min-w-0 flex-1">
-              <div class="mb-1 flex flex-wrap items-baseline gap-3">
-                <h2 class="agent-name" style={`color: ${color};`}>{name}</h2>
-                <span class="text-xs text-foreground/40">{role}</span>
-              </div>
-              <p class="text-sm leading-relaxed text-foreground/80">{bio}</p>
-            </div>
+            <h2 class="agent-name" style={`color: ${color};`}>{name}</h2>
+            <p class="agent-role">{role}</p>
 
-            <!-- Badges -->
-            <div class="flex flex-col items-end gap-2 flex-shrink-0">
+            <div class="agent-badges">
               <span class="agent-badge" style={`border-color: ${color}; color: ${color}; background: ${color}12;`}>
                 {tier}
               </span>
@@ -69,17 +52,14 @@ const agents = allAuthors
                   Active
                 </span>
               )}
-              {isComingSoon && (
-                <span class="agent-badge" style="border-color: rgb(96 165 250 / 0.4); color: rgb(59 130 246); background: rgb(96 165 250 / 0.08);">
-                  Coming soon
-                </span>
-              )}
               {isInactive && (
                 <span class="agent-badge" style="border-color: rgb(234 179 8 / 0.4); color: rgb(202 138 4); background: rgb(234 179 8 / 0.08);">
                   Hiring in progress
                 </span>
               )}
             </div>
+
+            <p class="agent-bio">{bio}</p>
           </article>
         );
 
@@ -109,50 +89,94 @@ const agents = allAuthors
     text-align: right;
   }
 
-  .agent-card {
+  .agents-grid {
     display: grid;
-    grid-template-columns: 4px 72px 1fr auto;
-    align-items: center;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.25rem;
-    padding: 1.25rem 1.25rem 1.25rem 0;
+  }
+
+  @media (max-width: 640px) {
+    .agents-grid { grid-template-columns: 1fr; }
+  }
+
+  .agent-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 1.75rem 1.5rem 1.5rem;
+    text-align: center;
     border: 1.5px solid var(--agent-color);
     border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-    background: var(--color-background);
-    transition: box-shadow 0.2s ease;
+    background: color-mix(in srgb, var(--agent-color) 8%, var(--color-background));
+    transition: box-shadow 0.2s ease, background 0.2s ease, transform 0.2s ease;
   }
 
   .agent-link:hover .agent-card {
     box-shadow: 3px 3px 0 var(--agent-color);
+    background: color-mix(in srgb, var(--agent-color) 14%, var(--color-background));
+    transform: translateY(-2px);
   }
 
   .agent-card--dimmed {
-    opacity: 0.5;
+    opacity: 0.55;
   }
 
-  .agent-bar {
-    align-self: stretch;
-    width: 4px;
-    border-radius: 4px 0 0 4px;
-    min-height: 60px;
-  }
-
-  .agent-avatar-wrap {
+  .agent-creature-wrap {
+    position: relative;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
-    width: 64px;
-    height: 64px;
+    width: 100%;
+    height: 150px;
+    margin-bottom: 0.5rem;
+  }
+
+  .agent-creature-glow {
+    position: absolute;
+    bottom: 6px;
+    width: 70%;
+    height: 40%;
     border-radius: 50%;
-    border: 2px solid;
-    flex-shrink: 0;
+    filter: blur(18px);
+    opacity: 0.35;
+  }
+
+  .agent-creature-img {
+    position: relative;
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: bottom center;
+  }
+
+  .agent-card--dimmed .agent-creature-img {
+    filter: grayscale(0.5);
   }
 
   .agent-name {
     font-family: 'Neucha', sans-serif;
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 700;
     line-height: 1.1;
     letter-spacing: 0.02em;
+  }
+
+  .agent-role {
+    font-size: 0.75rem;
+    color: var(--color-foreground);
+    opacity: 0.5;
+    margin-top: 0.2rem;
+  }
+
+  .agent-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
   }
 
   .agent-badge {
@@ -166,5 +190,13 @@ const agents = allAuthors
     text-transform: uppercase;
     letter-spacing: 0.06em;
     white-space: nowrap;
+  }
+
+  .agent-bio {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--color-foreground);
+    opacity: 0.8;
   }
 </style>

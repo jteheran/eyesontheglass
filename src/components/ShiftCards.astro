@@ -3,6 +3,10 @@ import { getCollection } from "astro:content";
 import { SHIFTS } from "@/data/shifts";
 
 const allPosts = await getCollection("blog");
+const allAuthors = await getCollection("authors");
+const colorByName: Record<string, string> = Object.fromEntries(
+  allAuthors.map(a => [a.data.name, a.data.color])
+);
 
 const recentShifts = [...SHIFTS].reverse().slice(0, 3);
 
@@ -11,7 +15,15 @@ const shiftData = recentShifts.map(shift => {
   const toraPost = posts.find(p => p.data.author === "TORA");
   const veraPost = posts.find(p => p.data.author === "VERA");
   const jenyPost = posts.find(p => p.data.author === "JENY");
-  return { ...shift, posts, toraPost, veraPost, jenyPost };
+
+  // The shift number is colored by whichever agents actually ran the shift —
+  // two-tone through Shift 12, three-tone from Shift 13 on once NOVA joins.
+  const agentColors = shift.agents.map(name => colorByName[name]).filter(Boolean);
+  const agentGradient = agentColors.length > 1
+    ? agentColors.join(", ")
+    : `${agentColors[0]}, ${agentColors[0]}`;
+
+  return { ...shift, posts, toraPost, veraPost, jenyPost, agentGradient };
 });
 
 function formatDateRange(startDate: string, endDate: string): string {
@@ -33,7 +45,7 @@ function formatDateRange(startDate: string, endDate: string): string {
 
   <div class="shifts-grid">
     {shiftData.map((shift, i) => (
-      <a href={`/shifts/${shift.id}`} class={`shift-home-card no-underline${i === 0 ? " shift-home-card--latest" : ""}`}>
+      <a href={`/shifts/${shift.id}`} class={`shift-home-card no-underline${i === 0 ? " shift-home-card--latest" : ""}`} style={`--shift-gradient: linear-gradient(135deg, ${shift.agentGradient});`}>
         <div class="shift-card-top">
           <span class="shift-sprint-badge" style={i === 0 ? "border-color: #F97316; color: #F97316; opacity: 1;" : ""}>
             {shift.sprintLabel}
@@ -171,8 +183,13 @@ function formatDateRange(startDate: string, endDate: string): string {
   .shift-num-small {
     font-family: 'Neucha', sans-serif;
     font-size: 1.1rem;
-    color: var(--color-foreground);
-    opacity: 0.2;
+    font-weight: 700;
+    background: var(--shift-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    opacity: 0.85;
   }
 
   .shift-home-title {

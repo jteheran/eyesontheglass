@@ -1,11 +1,12 @@
 ---
 import { getCollection } from "astro:content";
 
+const ORDER = ["TORA", "VERA", "NOVA"];
+
 const authors = await getCollection("authors");
 const agents = authors
-  .filter(a => a.data.name === "TORA" || a.data.name === "VERA")
-  .sort((a, b) => a.data.name === "TORA" ? -1 : 1);
-
+  .filter(a => ORDER.includes(a.data.name))
+  .sort((a, b) => ORDER.indexOf(a.data.name) - ORDER.indexOf(b.data.name));
 ---
 
 <section id="agents" class="agents-section">
@@ -19,17 +20,16 @@ const agents = authors
       const { name, color, avatar, tier, role } = agent.data;
       return (
         <a href={`/agents/${name.toLowerCase()}`} class="agent-home-card no-underline" style={`--agent-color: ${color};`}>
+          <div class="agent-creature-wrap" aria-hidden="true">
+            <div class="agent-creature-glow" style={`background: ${color};`} />
+            <img src={avatar} alt="" class="agent-creature-img" />
+          </div>
           <div class="agent-card-content">
-            <div class="agent-home-top">
-              <span class="agent-home-badge" style={`color: ${color};`}>
-                {tier} · Active
-              </span>
-            </div>
             <h3 class="agent-home-name" style={`color: ${color};`}>{name}</h3>
             <p class="agent-home-role">{role}</p>
-          </div>
-          <div class="agent-creature-wrap">
-            <img src={avatar} alt={name} class="agent-creature-img" />
+            <span class="agent-home-badge" style={`color: ${color}; border-color: ${color};`}>
+              {tier} · Active
+            </span>
           </div>
         </a>
       );
@@ -77,72 +77,86 @@ const agents = authors
 
   .agents-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 640px) {
     .agents-grid { grid-template-columns: 1fr; }
   }
 
   .agent-home-card {
     display: flex;
-    align-items: stretch;
+    flex-direction: column;
+    align-items: center;
     position: relative;
     overflow: hidden;
     border: 2px solid var(--agent-color);
     border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-    min-height: 140px;
+    padding: 1.5rem 1rem 1.35rem;
+    text-align: center;
     background: color-mix(in srgb, var(--agent-color) 8%, var(--color-background));
-    transition: box-shadow 0.2s ease, background 0.2s ease;
+    transition: box-shadow 0.2s ease, background 0.2s ease, transform 0.2s ease;
   }
 
   .agent-home-card:hover {
     box-shadow: 3px 3px 0 var(--agent-color);
     background: color-mix(in srgb, var(--agent-color) 14%, var(--color-background));
-  }
-
-  .agent-card-content {
-    flex: 1;
-    padding: 1.1rem 1.2rem;
-    padding-right: 0;
-    min-width: 0;
+    transform: translateY(-2px);
   }
 
   .agent-creature-wrap {
+    position: relative;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    width: 35%;
-    flex-shrink: 0;
-    padding-bottom: 0.5rem;
-    padding-right: 0.5rem;
+    width: 100%;
+    height: 130px;
+    margin-bottom: 0.5rem;
+  }
+
+  .agent-creature-glow {
+    position: absolute;
+    bottom: 6px;
+    width: 70%;
+    height: 40%;
+    border-radius: 50%;
+    filter: blur(18px);
+    opacity: 0.35;
   }
 
   .agent-creature-img {
-    width: 100%;
+    position: relative;
     height: 100%;
-    max-height: 130px;
+    width: auto;
+    max-width: 100%;
     object-fit: contain;
     object-position: bottom center;
   }
 
-  .agent-home-top {
-    margin-bottom: 0.75rem;
+  .agent-card-content {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
   }
 
   .agent-home-badge {
-    font-size: 0.6rem;
+    margin-top: 0.4rem;
+    border: 1.5px solid;
+    border-radius: 200px 8px 180px 8px / 8px 180px 8px 200px;
+    font-size: 0.62rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    padding: 0.15rem 0.5rem;
+    padding: 0.15rem 0.6rem;
     font-family: 'Neucha', sans-serif;
   }
 
   .agent-home-name {
     font-family: 'Neucha', sans-serif;
-    font-size: 1.75rem;
+    font-size: 1.85rem;
     font-weight: 700;
     line-height: 1;
   }
@@ -151,6 +165,6 @@ const agents = authors
     font-size: 0.72rem;
     color: var(--color-foreground);
     opacity: 0.55;
-    line-height: 1.5;
+    line-height: 1.4;
   }
 </style>
