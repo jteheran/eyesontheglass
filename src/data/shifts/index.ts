@@ -64,6 +64,30 @@ export const SPRINTS: SprintDef[] = [
     startDate: "2026-05-04T00:00:00Z",
     endDate: "2026-05-17T23:59:59Z",
   },
+  {
+    id: "phase1-sprint-5",
+    num: 5,
+    phase: 1,
+    label: "Sprint 5",
+    startDate: "2026-06-01T00:00:00Z",
+    endDate: "2026-06-12T23:59:59Z",
+  },
+  {
+    id: "phase1-sprint-6",
+    num: 6,
+    phase: 1,
+    label: "Sprint 6",
+    startDate: "2026-06-15T00:00:00Z",
+    endDate: "2026-06-26T23:59:59Z",
+  },
+  {
+    id: "phase1-sprint-7",
+    num: 7,
+    phase: 1,
+    label: "Sprint 7",
+    startDate: "2026-06-29T00:00:00Z",
+    endDate: "2026-07-10T23:59:59Z",
+  },
 ];
 
 export const SPRINTS_BY_ID: Record<string, SprintDef> = Object.fromEntries(
@@ -85,6 +109,9 @@ export interface ShiftStats {
   casesClosed: number;
   casesHeld: number;
   casesUnknown: number;
+  // NOTE: NOVA has no entry here — its findings are qualitative (hypothesis
+  // accuracy notes, pipeline gaps, open questions), not flat counters, and
+  // live in stats/nova.json instead. See ShiftDef.agents for NOVA participation.
 }
 
 export interface ShiftDef {
@@ -357,8 +384,8 @@ export const SHIFTS: ShiftDef[] = [
     title: "Pattern analysis has arrived. NOVA is here!",
     startDate: "2026-06-29T00:00:00Z",
     endDate: "2026-07-05T23:59:59Z",
-    sprint: "phase1-sprint-6",
-    sprintLabel: "Sprint 6",
+    sprint: "phase1-sprint-7",
+    sprintLabel: "Sprint 7",
     stats: {
       alertsTotal: 30,
       alertsEscalated: 16,
@@ -367,6 +394,27 @@ export const SHIFTS: ShiftDef[] = [
       alertsUnknown: 0,
       casesTotal: 16,
       casesEscalatedToAria: 16,
+      casesClosed: 0,
+      casesHeld: 0,
+      casesUnknown: 0,
+    },
+  },
+  {
+    id: "shift-14",
+    agents: ["TORA", "VERA", "NOVA"],
+    title: "Containment gap confirmed: srv-ad-01 compromised a third time",
+    startDate: "2026-07-06T00:00:00Z",
+    endDate: "2026-07-10T23:59:59Z",
+    sprint: "phase1-sprint-7",
+    sprintLabel: "Sprint 7",
+    stats: {
+      alertsTotal: 30,
+      alertsEscalated: 20,
+      alertsClosed: 7,
+      alertsInsufficientContext: 3,
+      alertsUnknown: 0,
+      casesTotal: 20,
+      casesEscalatedToAria: 20,
       casesClosed: 0,
       casesHeld: 0,
       casesUnknown: 0,

@@ -1,0 +1,54 @@
+{
+  "agent": "nova",
+  "generated_at": "2026-07-18T15:07:53Z",
+  "shifts_processed": 2,
+  "per_shift": [
+    {
+      "shiftId": "shift-13",
+      "sprint": "phase1-sprint-7",
+      "hypothesisAccuracy": {
+        "confirmed": 3,
+        "refined": 13,
+        "refuted": 0,
+        "notes": [
+          "VERA REFINED 13 of 16 TORA hypotheses and REFUTED zero. The refinement direction is consistent and directional: TORA framed email-delivery and phishing-click cases as pre-compromise exposure windows, while VERA's endpoint/auth evidence showed active post-exploitation already underway. TORA's SSH-correlated cases (TORA-20260630-0010, TORA-20260701-0013) were the two that VERA CONFIRMED without refinement — those arrived with the richest hypothesis structure and required the least investigative lift."
+        ]
+      },
+      "pipelineGaps": [
+        "The assets central to this shift's highest-severity findings are consistently the ones without EDR coverage. All three of VERA's PROBABLE (non-CONFIRMED) verdicts trace to simultaneous EDR + auth-log unavailability on high-criticality assets — srv-ad-01, ws-fin-015, and srv-jump-01. TORA escalated these correctly on DNS/network signal, but the telemetry gap capped VERA's root-cause confidence at the layer where confirmation matters most.",
+        "The forced-escalation rule battery (15 forced escalations across ssh_bruteforce_confirmed_access, phishing_credentials_submitted, asset_criticality_critical_or_high, multi_asset_scope, elevated_privilege_user, production_environment) paired with a VERA confirmation rate of 13/16 CONFIRMED and 16/16 ESCALATE_TO_ARIA with zero closures or holds. Every case TORA escalated, VERA escalated onward — the forced-escalation rules produced no false positives this shift.",
+        "TORA produced zero INSUFFICIENT_CONTEXT holds this shift, but the identity axis was opaque on TORA-20260703-0025 (username, privilege_level, user_type all unknown at triage). VERA's investigation of VERA-20260703-0025 CONFIRMED a Nighthawk implant under mjones with admin privilege escalation — the exact elevated-session risk TORA could not bound at triage because identity enrichment was missing. The near-block TORA flagged as a recurring enrichment gap had a concrete downstream consequence."
+      ],
+      "openQuestions": [
+        "Is the EDR-absence-on-crown-jewels pattern (srv-ad-01, ws-fin-015, srv-jump-01) a static coverage gap in the asset inventory, or was EDR telemetry actively disabled by the attacker on compromised hosts? VERA raised this as a question NOVA should assess; neither shift's data resolves it.",
+        "Does the cdn-[NNN]-assets.net naming cluster map to a single threat actor's infrastructure procurement, or a shared C2-as-a-service platform used across the multiple malware families confirmed this shift? Requires threat-intel enrichment beyond this shift.",
+        "Is bwilliams a legitimate compromised account or an attacker-created backdoor identity? It recurs across VERA-20260629-0002/-0003/-0027 on srv-ad-01 but was never confirmed either direction and did not surface in TORA's triage identity data.",
+        "Were the containment recommendations from the early srv-ad-01 cases (VERA-20260629-0003, VERA-20260701-0013) actioned? VERA notes the fourth touchpoint (VERA-20260703-0029) implies prior containment was not executed — only ARIA's action log across shifts can answer this.",
+        "The certutil.exe execution 14 minutes before the confirmed SSH success on srv-file-01 (VERA-20260630-0010) suggests a possible prior independent foothold — is the EDR/SIEM clock skew VERA flagged a systemic calibration artifact, or does it mask a second compromise track?"
+      ]
+    },
+    {
+      "shiftId": "shift-14",
+      "sprint": "phase1-sprint-7",
+      "hypothesisAccuracy": {
+        "confirmed": 2,
+        "refined": 18,
+        "refuted": 0,
+        "notes": [
+          "VERA confirmed 100% of TORA's 20 escalations (0 CLOSED, 0 HOLD, 0 REFUTED hypotheses; 19 CONFIRMED root cause, 1 PROBABLE) — the forced-escalation rules produced zero false positives this shift. However, 18 of 20 hypotheses required REFINED resolution with a consistent direction: TORA understated how far the threat had already progressed at escalation time, typically because active compromise pre-dated the triggering alert."
+        ]
+      },
+      "pipelineGaps": [
+        "ws-dev-022.corp.local (10.10.8.22) generated all three of TORA's INSUFFICIENT_CONTEXT verdicts this shift — twice on Cobalt Strike C2 domain ping-health-relay.com, once on session-relay-node.io (Mettle) — blocked by a total CMDB/identity enrichment failure across 11 fields. The cross-shift context shows this exact host was in Shift 13's CONFIRMED blast radius. A host already confirmed compromised in the prior shift is currently untriageable on serious C2 IOCs because it has no CMDB record."
+      ],
+      "openQuestions": [
+        "Was ws-dev-022.corp.local (10.10.8.22) — confirmed in Shift 13's blast radius and now querying Cobalt Strike C2 infrastructure while untriageable — ever contained after Shift 13, and why does it still have no CMDB record?",
+        "Does mjones appear in Shift 13's endpoint process telemetry? If so, the campaign-level credential compromise predates Shift 14 and the containment scope from Shift 13 was incomplete.",
+        "The two srv-ad-01 compromises within Shift 14 used different execution accounts (alee, then mjones) and Shift 13 recorded GootLoader on the same host — is this one attacker with sustained access or multiple independent intrusions on the same DC?",
+        "Which host is the unidentified second asset behind same_domain_count=2 on dist-lib-fetch.io (Formbook C2)? It remains unconfirmed in both notebooks.",
+        "Shift 14's phishing/C2 domains share no overlap with Shift 13's (slack-notify-app.io, box-file-share.co, get-resource-pkg.net cluster) despite identical targeting — is the actor rotating infrastructure on a per-shift cadence, and can registration/hosting pivots link the two domain sets?",
+        "srv-file-01.corp.local received SSH brute-force from different IPs in consecutive shifts (60.191.82.124 CN in Shift 13 with success, 138.199.21.9 NL in Shift 14 without) — same actor retrying, or is this host externally exposed and attracting independent attackers?"
+      ]
+    }
+  ]
+}
