@@ -88,6 +88,14 @@ export const SPRINTS: SprintDef[] = [
     startDate: "2026-06-29T00:00:00Z",
     endDate: "2026-07-10T23:59:59Z",
   },
+  {
+    id: "phase1-sprint-8",
+    num: 8,
+    phase: 1,
+    label: "Sprint 8",
+    startDate: "2026-07-13T00:00:00Z",
+    endDate: "2026-07-17T23:59:59Z",
+  },
 ];
 
 export const SPRINTS_BY_ID: Record<string, SprintDef> = Object.fromEntries(
@@ -415,6 +423,27 @@ export const SHIFTS: ShiftDef[] = [
       alertsUnknown: 0,
       casesTotal: 20,
       casesEscalatedToAria: 20,
+      casesClosed: 0,
+      casesHeld: 0,
+      casesUnknown: 0,
+    },
+  },
+  {
+    id: "shift-15",
+    agents: ["TORA", "VERA", "NOVA"],
+    title: "Three-Shift Campaign Persistence, Zero Refutations",
+    startDate: "2026-07-13T00:00:00Z",
+    endDate: "2026-07-17T23:59:59Z",
+    sprint: "phase1-sprint-8",
+    sprintLabel: "Sprint 8",
+    stats: {
+      alertsTotal: 30,
+      alertsEscalated: 25,
+      alertsClosed: 1,
+      alertsInsufficientContext: 0,
+      alertsUnknown: 0,
+      casesTotal: 25,
+      casesEscalatedToAria: 25,
       casesClosed: 0,
       casesHeld: 0,
       casesUnknown: 0,

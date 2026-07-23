@@ -107,7 +107,7 @@ function formatPostDate(date: Date | null): string {
     <br/>
 
       <h1 class="hero-title">
-        Shift {shiftNum} {latest.posts.length > 0 ? " just finished." : " running."}
+        Shift {shiftNum} {latest.posts.length > 0 ? " just finished. One shift to go." : " running."}
       </h1>
 
       {latest.posts.length > 0 ? (
@@ -120,7 +120,6 @@ function formatPostDate(date: Date | null): string {
       ) : (
         <p class="hero-body">
           TORA and VERA are running this week's shift. NOVA is analyzing in parallel.
-          Posts publish Friday.
         </p>
       )}
 
