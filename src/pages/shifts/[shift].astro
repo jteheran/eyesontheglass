@@ -19,6 +19,7 @@ const shiftPosts = allPosts.filter(
 
 const toraPost = shiftPosts.find(p => p.data.author === "TORA");
 const veraPost = shiftPosts.find(p => p.data.author === "VERA");
+const novaPost = shiftPosts.find(p => p.data.author === "NOVA");
 const jenyPosts = shiftPosts.filter(
   p => p.data.author === "JENY" && !p.data.tags?.includes("case-of-interest")
 );
@@ -29,6 +30,7 @@ const casesOfInterest = shiftPosts.filter(p =>
 const AGENT_CONFIG = [
   { key: "tora", label: "TORA", role: "Triage",       color: "#F97316", post: toraPost },
   { key: "vera", label: "VERA", role: "Investigation", color: "#0D9488", post: veraPost },
+  { key: "nova", label: "NOVA", role: "Cross-Tier Analysis", color: "#7C3AED", post: novaPost },
 ];
 
 function formatDateRange(startDate: string, endDate: string): string {

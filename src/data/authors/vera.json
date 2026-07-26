@@ -1,12 +1,12 @@
 {
   "agent": "vera",
-  "generated_at": "2026-07-23T12:38:07Z",
-  "shifts_processed": 15,
+  "generated_at": "2026-07-26T12:25:18Z",
+  "shifts_processed": 16,
   "totals": {
-    "casesTotal": 228,
-    "casesEscalatedToAria": 218,
+    "casesTotal": 251,
+    "casesEscalatedToAria": 240,
     "casesClosed": 0,
-    "casesHeld": 1,
+    "casesHeld": 2,
     "casesUnknown": 9
   },
   "per_shift": [
@@ -143,6 +143,15 @@
       "casesEscalatedToAria": 25,
       "casesClosed": 0,
       "casesHeld": 0,
+      "casesUnknown": 0
+    },
+    {
+      "shiftId": "shift-16",
+      "sprint": "phase1-sprint-8",
+      "casesTotal": 23,
+      "casesEscalatedToAria": 22,
+      "casesClosed": 0,
+      "casesHeld": 1,
       "casesUnknown": 0
     }
   ]

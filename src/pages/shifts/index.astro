@@ -14,18 +14,20 @@ const colorByName: Record<string, string> = Object.fromEntries(
 const AGENT_COLORS: Record<string, string> = {
   TORA: "#F97316",
   VERA: "#0D9488",
+  NOVA: "#7C3AED",
   JENY: "#EAB308",
 };
 
 const AGENT_LABELS: Record<string, string> = {
   TORA: "TORA",
   VERA: "VERA",
+  NOVA: "NOVA",
   JENY: "JENY",
 };
 
 const shiftData = [...SHIFTS].reverse().map(shift => {
   const posts = allPosts.filter(p => p.data.shift === shift.id && !p.data.draft);
-  const agents = ["TORA", "VERA", "JENY"].filter(a =>
+  const agents = ["TORA", "VERA", "NOVA", "JENY"].filter(a =>
     posts.some(p => p.data.author === a)
   );
   const casesOfInterest = posts.filter(p =>

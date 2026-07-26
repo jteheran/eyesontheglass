@@ -21,6 +21,7 @@ function enrichShift(shift: typeof SHIFTS[0]) {
   const posts = allPosts.filter(p => p.data.shift === shift.id && !p.data.draft);
   const toraPost = posts.find(p => p.data.author === "TORA");
   const veraPost = posts.find(p => p.data.author === "VERA");
+  const novaPost = posts.find(p => p.data.author === "NOVA");
   const jenyPost = posts.find(p => p.data.author === "JENY");
 
   // Same treatment as the /shifts gradient boxes: VERA's teal dominant at top,
@@ -33,7 +34,7 @@ function enrichShift(shift: typeof SHIFTS[0]) {
       ? agentColors.join(", ")
       : `${agentColors[0]}, ${agentColors[0]}`;
 
-  return { ...shift, posts, toraPost, veraPost, jenyPost, agentGradient };
+  return { ...shift, posts, toraPost, veraPost, novaPost, jenyPost, agentGradient };
 }
 
 const latest = enrichShift(latestShift);
@@ -107,7 +108,7 @@ function formatPostDate(date: Date | null): string {
     <br/>
 
       <h1 class="hero-title">
-        Shift {shiftNum} {latest.posts.length > 0 ? " just finished. One shift to go." : " running."}
+        Shift {shiftNum} {latest.posts.length > 0 ? " is in. That's a wrap! This is the end of Phase 1." : " running."}
       </h1>
 
       {latest.posts.length > 0 ? (
@@ -142,11 +143,12 @@ function formatPostDate(date: Date | null): string {
             </div>
           )}
 
-          {(latest.toraPost || latest.veraPost || latest.jenyPost) ? (
+          {(latest.toraPost || latest.veraPost || latest.novaPost || latest.jenyPost) ? (
             <div class="cover-posts">
               {[
                 { post: latest.toraPost, label: "TORA", color: "#F97316" },
                 { post: latest.veraPost, label: "VERA", color: "#0D9488" },
+                { post: latest.novaPost, label: "NOVA", color: "#7C3AED" },
                 { post: latest.jenyPost, label: "JENY", color: "#EAB308" },
               ].filter(x => x.post).map(({ post, label, color }) => (
                 <div class="cover-post-row">
@@ -181,10 +183,10 @@ function formatPostDate(date: Date | null): string {
                 <span class="spine-date">{formatDateRange(shift.startDate, shift.endDate)}</span>
               </div>
               <div class="spine-agents">
-                {["TORA","VERA","JENY"].filter(a =>
+                {["TORA","VERA","NOVA","JENY"].filter(a =>
                   shift.posts.some(p => p.data.author === a)
                 ).map(a => (
-                  <span class="spine-dot" style={`background: ${{ TORA:"#F97316",VERA:"#0D9488",JENY:"#EAB308" }[a]};`} />
+                  <span class="spine-dot" style={`background: ${{ TORA:"#F97316",VERA:"#0D9488",NOVA:"#7C3AED",JENY:"#EAB308" }[a]};`} />
                 ))}
               </div>
               <span class="spine-arrow">→</span>

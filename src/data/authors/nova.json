@@ -1,7 +1,7 @@
 {
   "agent": "nova",
-  "generated_at": "2026-07-23T12:38:07Z",
-  "shifts_processed": 3,
+  "generated_at": "2026-07-26T12:25:18Z",
+  "shifts_processed": 4,
   "per_shift": [
     {
       "shiftId": "shift-13",
@@ -72,6 +72,34 @@
         "VERA surfaced harvest domains and C2 IPs (okta-verify.co, login-microsofft-com.net, telemetry-cloud-api.com, cdn-NNN-assets.net family) absent from TORA's indicator set and left unverified due to check_reputation tool failures — what is the full campaign IOC set once a working reputation service is available?",
         "Twelve of 25 cases capped at PROBABLE for lack of dev-lan EDR coverage and initial-access telemetry — how did each confirmed host actually gain initial access, and is the entry path still usable?",
         "Do the recurring ransomware families (Royal, Play, Emotet) across shifts share any attacker infrastructure that would elevate P8 from commodity reuse to confirmed campaign continuity?"
+      ]
+    },
+    {
+      "shiftId": "shift-16",
+      "sprint": "phase1-sprint-8",
+      "hypothesisAccuracy": {
+        "confirmed": 0,
+        "refined": 19,
+        "refuted": 4,
+        "notes": [
+          "Not one TORA hypothesis survived investigation unchanged: tora_hypothesis_resolution_counts records CONFIRMED 0, REFINED 19, REFUTED 4 across 23 cases. The failure mode is uniform and is scope, not direction — TORA framed cases as phishing-campaign engagement, and VERA repeatedly found pre-existing independent host compromise that the phishing or DNS signal merely sat adjacent to, with the malicious execution chain starting before the triggering event in at least three cases (ws-fin-015 chain at 16:28:01Z, ~13 minutes before the earliest possible SSH success; srv-file-01 root process at 15:54:40Z, before the email event_time; ws-dev-022's NXDOMAIN query at 17:57:30Z falling inside an already-active intrusion window)."
+        ]
+      },
+      "pipelineGaps": [
+        "All four of TORA's INSUFFICIENT_CONTEXT dispositions (TORA-20260720-0003, TORA-20260722-0016, TORA-20260723-0022, TORA-20260724-0029) were the same host, ws-dev-022.corp.local, blocked on asset.criticality, asset.environment and the full identity block (identity.username, identity.user_type, identity.privilege_level, identity.risk_score — each frequency 4). Two of the four were NOERROR resolutions of Cobalt Strike C2 (task-queue-fetch.io 44/60 sources; ping-health-relay.com 12/60), and VERA later confirmed this host running an active implant with a 154s / 0.391% jitter beacon, a 'helper_dll' service persistence entry, anti-forensic deletion and SMB/SSH movement to 10.10.5.197 and 10.10.1.194.",
+        "VERA's shift-memory lookups returned is_new=true with no related_cases for indicators TORA had already recorded many times in the same shift — sso-verify-portal.net (10 TORA cases), okta-verify-now.net (5), adp-secure-portal.com (4), 194.165.16.71, and the asset ws-dev-022.corp.local. As a direct consequence VERA declined to attribute confirmed host compromises to the campaign: VERA-20260724-0030 states 'the host compromise is NOT attributed to the phishing campaign — attribution of initial access is unresolved', and VERA-20260721-0008 instructs that the host not be assumed part of an already-contained campaign.",
+        "No VERA-confirmed indicator reaches the cross-shift artifact. VERA's confirmed_attackers field is an empty object despite VERA's own case patterns naming attacker infrastructure (54.239.143.73 holding a successful bwilliams SSO session, 72.33.35.95 running six MFA pushes, C2 at 100.129.52.4:4444), and every key in the cross-shift attacker_ips map is prefixed 'tora:'. Four credential-harvest and C2 domains VERA discovered — okta-verify.co, login-microsofft-com.net, payroll-update.co, telemetry-cloud-api.com — appear in no shift's domain map, so they cannot be recognized as recurrence in any future shift.",
+        "Threat-intel enrichment for sso-verify-portal.net degraded across shifts while the campaign's scope grew. Shift 15 recorded it as 27/60 sources at IOC age 18 days over 7 cases; Shift 16 recorded 17/60 @14d decaying to 4/60 @108–120d across 10 cases spanning two event types and four assets, including its flip to confirmed-live inbound phishing infrastructure at TORA-20260723-0023. Compounding this, alert_history.same_domain_count reported 1 on all ten Shift 16 cases, making the multi_asset_scope forced-escalation rule structurally unreachable for the domain even where a single delivery carried recipient_count=11."
+      ],
+      "openQuestions": [
+        "Are ws-fin-015, srv-file-01, srv-backup-01 and ws-legal-077 appearing in four consecutive shifts' confirmed blast radius because prior-shift compromises were never eradicated, or because the same hosts are being freshly re-targeted each shift? Remediation status from ARIA for shifts 13–15 would settle this.",
+        "Who owns the CMDB and identity-to-host mapping for the 10.10.8.0/24 dev workstation range, and why has the ws-dev-022 enrichment gap survived shifts 14, 15 and 16 while that host was confirmed compromised in three of them?",
+        "Would restoring enrichment on ws-dev-022 have converted TORA-20260723-0022 (task-queue-fetch.io, 44/60, Cobalt Strike, NOERROR) and TORA-20260724-0029 (ping-health-relay.com, NOERROR) into escalations, and would VERA have reached the same confirmed-implant finding days earlier?",
+        "Do the masquerading execution chains VERA documented on ws-fin-015, srv-file-01, ws-dev-011, ws-dev-022 and ws-mktg-042 share a single malware family, and does any of them match Formbook, Emotet, Play, Royal or Sliver from shifts 13–15?",
+        "Who are the unenumerated recipients — 11 on the sso-verify-portal.net delivery (TORA-20260723-0023), 9 on corp-helpdesk-portal.io (TORA-20260723-0024), 11 on adp-secure-portal.com (TORA-20260724-0025), 3 on teams-notify-alert.net (TORA-20260723-0018) — and did any submit credentials?",
+        "Is 89.248.165.74's shift-over-shift change from phishing sender to SSH brute-forcer with confirmed auth success one actor broadening technique, or a shared host reused by unrelated operators?",
+        "Why does the gateway return gateway_verdict=malicious and gateway_action=delivered on six cases this shift (TORA-20260721-0007, 0722-0014, 0722-0015, 0723-0023, 0723-0024, 0724-0026), and is that the same 'gateway quarantine bypass' recorded against slack-notify-app.io in Shift 13?",
+        "Should VERA-confirmed indicators (54.239.143.73, 72.33.35.95, 100.129.52.4, okta-verify.co, login-microsofft-com.net, payroll-update.co, telemetry-cloud-api.com) be written into cross-shift memory, given that none of them can currently be recognized as recurrence in a future shift?"
       ]
     }
   ]
